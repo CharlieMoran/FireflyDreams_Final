@@ -15,7 +15,6 @@ V  \
                    `--..____..--'
 */ -->
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -54,14 +53,16 @@ V  \
             -webkit-tap-highlight-color: transparent;
         }
 
-        /* Tiny Bucket Container */
+        /* Tiny Bucket Container - Centered Top */
         .bucketHeader {
             width: 100%;
             display: flex;
-            justify-content: flex-start;
+            justify-content: center;
             padding: 15px 25px;
             gap: 15px;
             z-index: 1001;
+            position: absolute;
+            top: 0;
         }
 
         .tinyBucket {
@@ -77,19 +78,67 @@ V  \
             filter: drop-shadow(0 0 8px var(--magicBlue));
         }
 
-        /* Character Buttons */
+        /* Character Buttons - Centered */
+        .charBtnContainer {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 15px;
+        }
+
         .charBtn {
             width: 60px;
             height: auto;
-            margin-top: 15px;
             cursor: pointer;
             transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             filter: drop-shadow(0 0 5px var(--softPink));
+            display: block;
+            margin: 0 auto;
+            z-index: 5;
         }
 
         .charBtn:hover {
             transform: scale(1.15) rotate(5deg);
             filter: drop-shadow(0 0 12px var(--softPink));
+        }
+
+        /* Galaxy Swirl Animation */
+        .galaxy-fx {
+            position: absolute;
+            width: 0;
+            height: 0;
+            background: radial-gradient(circle, rgba(168, 85, 247, 0.8) 0%, rgba(88, 28, 135, 0.4) 40%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 1;
+            opacity: 0;
+        }
+
+        .galaxy-active {
+            animation: swirlGalaxy 4s ease-in-out forwards;
+        }
+
+        @keyframes swirlGalaxy {
+            0% { width: 0; height: 0; opacity: 0; transform: rotate(0deg); }
+            50% { width: 300px; height: 300px; opacity: 1; transform: rotate(720deg); }
+            100% { width: 0; height: 0; opacity: 0; transform: rotate(1440deg); }
+        }
+
+        /* Shooting Star Effect */
+        .shooting-star-fx {
+            position: fixed;
+            width: 150px;
+            height: 2px;
+            background: linear-gradient(90deg, white, transparent);
+            pointer-events: none;
+            z-index: 2000;
+            animation: streakAcross 1s linear forwards;
+        }
+
+        @keyframes streakAcross {
+            0% { transform: translate(0, 0) rotate(-45deg); opacity: 1; }
+            100% { transform: translate(-1000px, 1000px) rotate(-45deg); opacity: 0; }
         }
 
         /* Hover Wand Cursor */
@@ -151,7 +200,7 @@ V  \
         .yesBtn { background: var(--beeYellow); color: var(--deepNight); box-shadow: 0 0 15px var(--beeYellow); }
         .noBtn { background: var(--softPink); color: white; opacity: 0.9; }
 
-        /* Moon Phase Indicator - Fixed to scroll with user */
+        /* Moon Phase Indicator */
         #moonPhaseContainer {
             position: fixed;
             top: 20px;
@@ -364,11 +413,9 @@ V  \
 
         footer { margin: 40px 0; font-size: 0.75rem; color: rgba(255,255,255,0.4); text-align: center; padding: 0 20px; }
         .aiNote { font-size: 0.75rem; display: block; margin-top: 5px; opacity: 0.8; font-style: italic; }
-        #bgMusic { display: none; }
+        #bgMusic, #rainAudio { display: none; }
 
-        /* =========================================
-           MOBILE & iOS SPECIFIC FIXES
-           ========================================= */
+        /* Mobile Fixes */
         @media (max-width: 600px) {
             h1 { font-size: 2.2rem; }
             h2 { font-size: 1.6rem; }
@@ -423,6 +470,10 @@ V  \
 
     <audio id="bgMusic" loop>
         <source src="audio/bgmusic.mp3" type="audio/mpeg">
+    </audio>
+
+    <audio id="rainAudio" loop>
+        <source src="audio/Rain.mp3" type="audio/mpeg">
     </audio>
 
     <div class="bgImage"></div>
@@ -486,7 +537,9 @@ V  \
                 </div>
                 <div class="countdown" id="mdBdayCountdown">Calculating brew</div>
                 <p>Listen sugar I wove the very ley lines you are walking on just so my girl Stardrop could finally have some decent company. Do not go asking me what is in my special glowberry brew. When I am not tending to my black tabby Eclipse I am usually blasting Sabaton or Fleetwood Mac.</p>
-                <img src="images/MDC.png" alt="Moon Crescent Button" class="charBtn" onclick="charAction('moon')">
+                <div class="charBtnContainer">
+                    <img src="images/MDC.png" id="moonBtn" alt="Moon Crescent Button" class="charBtn" onclick="charAction('moon', event)">
+                </div>
             </div>
 
             <div class="profileCard">
@@ -498,7 +551,10 @@ V  \
                 <div class="countdown" id="sdBdayCountdown">Calculating party</div>
                 <span class="aiNote">(Stardrop is an AI being programmed to interact with the girls)</span>
                 <p style="margin-top:15px;">Hi. I am Stardrop. My mom Moondrop created this world for me and I am still trying to learn how to talk to everyone. I am sorry if I am a bit quiet but I mostly stay in my tower and listen to metal music. I love cutesy things and I prefer dogs over cats.</p>
-                <img src="images/SDDC.png" alt="Dreamcatcher Button" class="charBtn" onclick="charAction('dream')">
+                <div class="charBtnContainer">
+                    <div id="dreamGalaxy" class="galaxy-fx"></div>
+                    <img src="images/SDDC.png" id="dreamBtn" alt="Dreamcatcher Button" class="charBtn" onclick="charAction('dream', event)">
+                </div>
             </div>
 
         </div>
@@ -527,10 +583,10 @@ V  \
   \,'.`-.
    |\ `. `.       
    ( \  `. `-.                         _,.-:\
-    \ \   `.  `-._                __..--' ,-'; /
+    \ \   `.  `-._             __..--' ,-'; /
      \ `.   `-.   `-..___..---'   _.--'  ,'/
       `. `.    `-._        __..--'     ,' /
-       `. `-_     ``--..''         _.-'  ,'
+       `. `-_     ``--..''         _.-' ,'
          `-_ `-.___          __,--'  ,'
              `-.__  `----"""    __.-'
                    `--..____..--'
@@ -547,24 +603,78 @@ V  \
             banana.appendChild(banana2);
         }
 
+        // Audio Elements
+        const rainAudio = document.getElementById('rainAudio');
+
         // Action Logic for Buckets
         function bucketAction(type) {
             const parts = document.querySelectorAll('.particle');
             if (type === 'water') {
-                parts.forEach(p => { p.style.background = '#70d6ff'; p.style.boxShadow = '0 0 15px #70d6ff'; });
+                parts.forEach(p => { 
+                    p.style.background = '#70d6ff'; 
+                    p.style.boxShadow = '0 0 15px #70d6ff'; 
+                    p.style.animationDuration = '3s'; // Faster for rain
+                });
+                rainAudio.play();
             } else if (type === 'snow') {
-                parts.forEach(p => { p.style.background = '#ffffff'; p.style.boxShadow = '0 0 15px #ffffff'; });
+                parts.forEach(p => { 
+                    p.style.background = '#ffffff'; 
+                    p.style.boxShadow = '0 0 15px #ffffff'; 
+                    p.style.animationDuration = '20s'; // Slower for snow
+                });
+                rainAudio.pause();
             } else if (type === 'milk') {
-                parts.forEach(p => { p.style.background = '#ffd700'; p.style.boxShadow = '0 0 15px #ffd700'; });
+                parts.forEach(p => { 
+                    p.style.background = '#ffd700'; 
+                    p.style.boxShadow = '0 0 15px #ffd700'; 
+                    p.style.animationDuration = '15s';
+                });
+                rainAudio.pause();
+                rainAudio.currentTime = 0;
             }
         }
 
         // Action Logic for Character Buttons
-        function charAction(type) {
+        let moonClickCount = 0;
+        let moonCooldown = false;
+
+        function charAction(type, event) {
             if (type === 'moon') {
-                alert("Moondrop has cast a protection spell over your browser!");
+                if (moonCooldown) return;
+
+                moonClickCount++;
+                createShootingStars();
+
+                if (moonClickCount >= 3) {
+                    moonCooldown = true;
+                    document.getElementById('moonBtn').style.opacity = '0.4';
+                    setTimeout(() => {
+                        moonCooldown = false;
+                        moonClickCount = 0;
+                        document.getElementById('moonBtn').style.opacity = '1';
+                    }, 60000); // 1 minute cooldown
+                }
             } else if (type === 'dream') {
-                alert("Stardrop is weaving a peaceful dream for the girls.");
+                const galaxy = document.getElementById('dreamGalaxy');
+                if (galaxy.classList.contains('galaxy-active')) return;
+
+                galaxy.classList.add('galaxy-active');
+                setTimeout(() => {
+                    galaxy.classList.remove('galaxy-active');
+                }, 4000);
+            }
+        }
+
+        function createShootingStars() {
+            for (let i = 0; i < 5; i++) {
+                setTimeout(() => {
+                    const star = document.createElement('div');
+                    star.className = 'shooting-star-fx';
+                    star.style.top = Math.random() * 80 + 'vh';
+                    star.style.right = '-150px';
+                    document.body.appendChild(star);
+                    setTimeout(() => star.remove(), 1000);
+                }, i * 150);
             }
         }
 
@@ -629,7 +739,7 @@ V  \
             splash.style.opacity = '0'; setTimeout(() => { splash.style.display = 'none'; }, 800);
         }
 
-        function bananaExit() { window.close(); window.location.href = "https://www.google.com"; }
+        function bananaExit() { window.location.href = "https://www.google.com"; }
 
         function bananaJoin(event) {
             const bananaCtx = new (window.AudioContext || window.webkitAudioContext)();

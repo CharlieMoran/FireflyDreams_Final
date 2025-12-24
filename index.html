@@ -47,7 +47,7 @@ V  \
             -webkit-tap-highlight-color: transparent;
         }
 
-        /* Background Crossfade System */
+        /* Background Layers & Time Sync */
         .bg-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2; background: #000; }
         .bg-layer {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
@@ -58,25 +58,26 @@ V  \
         }
         .bg-active { opacity: 1; }
 
-        /* UI Header & Minecraft Console */
+        /* UI Elements */
         .header-wrap {
             width: 100%; display: flex; flex-direction: column; align-items: center;
             position: absolute; top: 0; z-index: 1001; padding-top: 15px;
         }
-        .bucketHeader { display: flex; justify-content: center; gap: 15px; margin-bottom: 10px; align-items: center; min-height: 50px; }
+        .bucketHeader { display: flex; justify-content: center; gap: 15px; margin-bottom: 10px; align-items: center; }
 
         .party-img {
             width: 35px; height: auto; cursor: pointer;
             filter: drop-shadow(0 0 5px rgba(112, 214, 255, 0.4));
-            transition: transform 0.3s ease;
             background: transparent !important;
+            z-index: 10;
         }
         .party-large { width: 60px; filter: drop-shadow(0 0 5px var(--softPink)); }
         .party-emoji { width: 80px; }
-        .party-banana { display: none; width: 45px; z-index: 100; }
+        .party-banana { display: none; width: 45px; }
 
+        /* Minecraft Console */
         .mc-console {
-            width: 185px; background: rgba(0, 0, 0, 0.8);
+            width: 185px; background: rgba(0, 0, 0, 0.7);
             border: 2px solid #555; padding: 3px 6px;
             display: flex; align-items: center;
         }
@@ -85,30 +86,24 @@ V  \
             width: 100%; outline: none; font-family: 'Poppins', sans-serif; font-size: 0.75rem;
         }
         .console-log {
-            position: absolute; top: 95px; color: #ffff55; font-size: 0.75rem;
+            position: absolute; top: 90px; color: #ffff55; font-size: 0.75rem;
             text-shadow: 1px 1px #000; pointer-events: none; font-family: 'Fredoka One';
         }
 
-        /* Party Mode Animation Logic */
+        /* Party Dance Logic - Fixed for all 9 icons */
         .party-dancer {
             position: fixed !important;
-            transition: top 1.5s cubic-bezier(0.4, 0, 0.2, 1), left 1.5s cubic-bezier(0.4, 0, 0.2, 1), transform 1.5s cubic-bezier(0.4, 0, 0.2, 1) !important;
+            transition: transform 1.5s cubic-bezier(0.4, 0, 0.2, 1), top 1.5s, left 1.5s !important;
             z-index: 10001 !important;
             pointer-events: none;
-            top: -200px; /* Start off-screen */
-            left: 50%;
         }
-        
-        .in-formation {
-            top: 50% !important;
-            left: 50% !important;
-            transform: translate(calc(-50% + var(--circle-x)), calc(-50% + var(--circle-y))) !important;
-        }
-
+        .off-screen { top: -300px !important; left: 50% !important; transform: translateX(-50%) !important; }
+        .in-formation { top: 50% !important; left: 50% !important; transform: translate(calc(-50% + var(--circle-x)), calc(-50% + var(--circle-y))) !important; }
         .bouncing { animation: partyBounce 0.5s infinite alternate ease-in-out !important; }
+        
         @keyframes partyBounce {
             from { margin-top: 0; }
-            to { margin-top: -40px; }
+            to { margin-top: -30px; }
         }
 
         .disco-overlay {
@@ -117,59 +112,48 @@ V  \
             animation: discoFlash 0.4s infinite;
         }
         @keyframes discoFlash {
-            0% { background: rgba(255, 0, 0, 0.08); }
-            33% { background: rgba(0, 255, 0, 0.08); }
-            66% { background: rgba(0, 0, 255, 0.08); }
+            0% { background: rgba(255, 0, 0, 0.1); }
+            33% { background: rgba(0, 255, 0, 0.1); }
+            66% { background: rgba(0, 0, 255, 0.1); }
         }
 
-        /* Layout & Typography */
+        /* Content Sections */
         .card, .sectionContent { background: var(--glassBg); backdrop-filter: blur(20px); padding: 3rem; border-radius: 35px; border: 2px solid rgba(255, 215, 0, 0.4); text-align: center; width: 90%; max-width: 650px; margin-bottom: 60px; }
-        .card { margin-top: 140px; }
+        .card { margin-top: 130px; }
         .heroImg { width: 100%; border-radius: 25px; border: 4px solid var(--beeYellow); margin-bottom: 2rem; }
         h1 { font-family: 'Fredoka One', cursive; color: var(--beeYellow); font-size: 3.5rem; text-shadow: 2px 2px 0px #000; margin: 0; }
         h2, h3 { font-family: 'Fredoka One', cursive; color: var(--beeYellow); margin-bottom: 1rem; }
         
-        .emotionRow { display: flex; justify-content: space-around; align-items: center; margin-top: 2rem; gap: 10px; }
-        .emotionBox { flex: 1; text-align: center; }
-        .emotionImg { width: 100%; max-width: 110px; filter: drop-shadow(0 0 5px var(--softPink)); }
-
-        /* Magic Mirror (Chat) */
+        /* Magic Mirror Box */
         .magicMirrorBox { border: 2px solid var(--softPink); }
-        #chatFeed { height: 350px; overflow-y: auto; margin-top: 20px; padding: 20px; background: rgba(0, 0, 0, 0.4); border-radius: 20px; text-align: left; display: flex; flex-direction: column; gap: 15px; }
-        .mirrorMsg { display: flex; align-items: center; gap: 15px; animation: slideIn 0.3s ease-out; }
+        #chatFeed { height: 350px; overflow-y: auto; margin-top: 20px; padding: 20px; background: rgba(0, 0, 0, 0.4); border-radius: 20px; text-align: left; }
+        .mirrorMsg { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; }
         .mirrorAvatar { width: 45px; height: 45px; border-radius: 50%; border: 2px solid var(--beeYellow); }
         .mirrorText b { color: var(--softPink); font-family: 'Fredoka One'; }
-        @keyframes slideIn { from { opacity: 0; transform: translateX(-15px); } to { opacity: 1; transform: translateX(0); } }
 
-        /* Character Specific Effects */
-        .charBtnContainer { position: relative; width: 100%; height: 120px; display: flex; justify-content: center; align-items: center; }
+        /* Effects */
         .galaxy-fx-wrap { position: absolute; pointer-events: none; z-index: 1; display: flex; justify-content: center; align-items: center; }
         .galaxy-aura { position: absolute; width: 0; height: 0; background: radial-gradient(circle, rgba(168, 85, 247, 0.7) 0%, transparent 70%); border-radius: 50%; opacity: 0; filter: blur(15px); }
         .galaxy-star { position: absolute; background: white; border-radius: 50%; opacity: 0; }
-        
         .galaxy-active .galaxy-aura { animation: auraCycle 5s forwards; }
         .galaxy-active .galaxy-star { animation: nautilusCycle 5s forwards; }
         @keyframes auraCycle { 0% { width: 0; height: 0; opacity: 0; } 30% { width: 380px; height: 380px; opacity: 1; } 70% { width: 380px; height: 380px; opacity: 1; } 100% { width: 0; height: 0; opacity: 0; } }
         @keyframes nautilusCycle { 0% { transform: rotate(0deg) translateX(0) scale(0); opacity: 0; } 50% { transform: rotate(1080deg) translateX(var(--dist)) scale(1.2); opacity: 1; } 100% { transform: rotate(1440deg) translateX(0) scale(0); opacity: 0; } }
 
-        .shooting-star-fx { position: fixed; width: 250px; height: 2px; background: linear-gradient(90deg, transparent, #fff); pointer-events: none; z-index: 2000; animation: streakDiagonal 1.2s linear forwards; }
+        .shooting-star-fx { position: fixed; width: 250px; height: 2px; background: linear-gradient(90deg, transparent, white); pointer-events: none; z-index: 2000; animation: streakDiagonal 1.2s linear forwards; }
         @keyframes streakDiagonal { 0% { transform: translate(0, 0) rotate(-45deg); opacity: 0; } 100% { transform: translate(-150vw, 150vh) rotate(-45deg); opacity: 0; } }
 
-        /* Profile Details */
-        .profileCard { background: rgba(255, 255, 255, 0.05); border-radius: 25px; padding: 2.5rem; margin-bottom: 30px; }
-        .profileImg { width: 100%; max-width: 350px; border-radius: 20px; margin-bottom: 1.5rem; }
-        .ageBadge { background: var(--softPink); padding: 5px 15px; border-radius: 20px; font-size: 0.9rem; font-family: 'Fredoka One'; margin-left: 10px; vertical-align: middle; }
-
-        /* Particles & Splash */
         #particles { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
-        .particle { position: absolute; border-radius: 50%; opacity: 0; }
+        .particle { position: absolute; border-radius: 50%; animation: floatDown 10s infinite linear; opacity: 0; }
         @keyframes floatDown { 0% { transform: translateY(-10vh); opacity: 0; } 10% { opacity: 0.7; } 90% { opacity: 0.7; } 100% { transform: translateY(110vh); opacity: 0; } }
 
-        #splashOverlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--deepNight); z-index: 10000; display: flex; justify-content: center; align-items: center; transition: opacity 0.8s; }
-        .splashBox { border: 2px solid var(--beeYellow); padding: 3rem; border-radius: 35px; background: var(--glassBg); text-align: center; }
-        .splashBox button { font-family: 'Fredoka One'; padding: 15px 40px; margin: 10px; border: none; border-radius: 20px; cursor: pointer; font-size: 1.1rem; }
-
-        footer { padding: 40px 0; opacity: 0.4; font-size: 0.75rem; text-align: center; }
+        #splashOverlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10, 8, 20, 0.98); z-index: 10000; display: flex; justify-content: center; align-items: center; transition: opacity 0.8s; }
+        .splashBox { border: 2px solid var(--beeYellow); padding: 3rem; border-radius: 30px; text-align: center; background: var(--glassBg); }
+        .splashBox button { font-family: 'Fredoka One'; padding: 15px 35px; border-radius: 15px; border: none; cursor: pointer; margin: 10px; }
+        
+        .charBtnContainer { position: relative; height: 120px; display: flex; justify-content: center; align-items: center; }
+        .profileImg { height: 350px; width: auto; max-width: 100%; border-radius: 20px; margin-bottom: 20px; }
+        .ageBadge { background: var(--softPink); color: white; padding: 5px 15px; border-radius: 15px; font-family: 'Fredoka One'; font-size: 0.9rem; }
     </style>
 </head>
 <body>
@@ -177,22 +161,20 @@ V  \
     <div id="splashOverlay">
         <div class="splashBox">
             <h2 style="font-family: 'Fredoka One'; color: var(--beeYellow);">Are you ready to explore with us Pookie?</h2>
-            <div style="margin-top: 2rem;">
-                <button style="background: var(--beeYellow); color: var(--deepNight);" onclick="enterSite()">YES</button>
-                <button style="background: var(--softPink); color: #fff;" onclick="window.location.href='https://google.com'">NO</button>
-            </div>
+            <button style="background: var(--beeYellow); color: var(--deepNight);" onclick="bananaEnter()">YES</button>
+            <button style="background: var(--softPink); color: white;" onclick="window.location.href='https://google.com'">NO</button>
         </div>
     </div>
 
     <div class="header-wrap">
         <div class="bucketHeader">
-            <img src="images/wb.png" id="p-wb" alt="Water Bucket" class="party-img" onclick="bucketAction('water')">
-            <img src="images/sb.png" id="p-sb" alt="Snow Bucket" class="party-img" onclick="bucketAction('snow')">
-            <img src="images/mb.png" id="p-mb" alt="Milk Bucket" class="party-img" onclick="bucketAction('milk')">
-            <img src="images/banana.png" id="p-banana" alt="Party Banana" class="party-img party-banana" onclick="triggerPartyTime()">
+            <img src="images/wb.png" id="p-wb" alt="Water" class="party-img" onclick="bucketAction('water')">
+            <img src="images/sb.png" id="p-sb" alt="Snow" class="party-img" onclick="bucketAction('snow')">
+            <img src="images/mb.png" id="p-mb" alt="Milk" class="party-img" onclick="bucketAction('milk')">
+            <img src="images/banana.png" id="p-banana" alt="Banana" class="party-img party-banana" onclick="startParty()">
         </div>
         <div class="mc-console">
-            <input type="text" id="cmdInput" placeholder="Type command..." onkeydown="handleConsole(event)">
+            <input type="text" id="consoleInput" placeholder="Type command..." onkeydown="handleConsole(event)">
         </div>
         <div id="consoleLog" class="console-log"></div>
     </div>
@@ -210,29 +192,20 @@ V  \
     <div id="particles"></div>
 
     <div class="card">
-        <img src="images/hero.png" id="heroPoster" alt="Sanctuary Hero" class="heroImg">
+        <img src="images/hero.png" id="heroPoster" alt="Hero" class="heroImg">
         <h1>Firefly Dreams</h1>
         <p>A whimsical survival community for girls.</p>
-        <div style="font-family: 'Fredoka One'; color: var(--beeYellow); font-size: 1.2rem;">IP: FIREFLYDREAMS.WORLD</div>
+        <div style="font-family: 'Fredoka One'; color: var(--beeYellow);">IP: FIREFLYDREAMS.WORLD</div>
     </div>
 
     <div class="sectionContent">
         <h2>About Our Sanctuary</h2>
         <p>Moondrop the Moon Witch wove magical ley lines across the digital realm to create a sanctuary for the girls of Firefly Dreams. We share adventures and moonlit magic across any distance.</p>
         <p style="font-weight: 600; color: var(--beeYellow); margin-top: 15px;">We are an 18 plus cozy female friendly server where we are free to build create and explore to our hearts content.</p>
-        <div class="emotionRow">
-            <div class="emotionBox">
-                <img src="images/IMG_6921-removebg-preview.png" id="p-laugh" alt="Laughing" class="emotionImg">
-                <span style="display:block; color:var(--softPink); font-family:'Fredoka One'; font-size: 0.8rem; margin-top: 10px;">Laughing</span>
-            </div>
-            <div class="emotionBox">
-                <img src="images/IMG_6894-removebg-preview.png" id="p-cry" alt="Crying" class="emotionImg">
-                <span style="display:block; color:var(--softPink); font-family:'Fredoka One'; font-size: 0.8rem; margin-top: 10px;">Crying</span>
-            </div>
-            <div class="emotionBox">
-                <img src="images/IMG_6937-removebg-preview.png" id="p-tea" alt="Spilling Tea" class="emotionImg">
-                <span style="display:block; color:var(--softPink); font-family:'Fredoka One'; font-size: 0.8rem; margin-top: 10px;">Spilling Tea</span>
-            </div>
+        <div style="display: flex; justify-content: space-around; margin-top: 30px;">
+            <img src="images/IMG_6921-removebg-preview.png" id="p-laugh" class="party-img party-emoji">
+            <img src="images/IMG_6894-removebg-preview.png" id="p-cry" class="party-img party-emoji">
+            <img src="images/IMG_6937-removebg-preview.png" id="p-tea" class="party-img party-emoji">
         </div>
     </div>
 
@@ -240,35 +213,36 @@ V  \
         <h2 style="color: var(--softPink);">The Magic Mirror</h2>
         <p>Listen up girls. This mirror is not just for fixing your hair. I have poured enough magic into this silver surface to let us see the whispers of the coven in real time. If you are looking for trouble or just looking for a friend you will find it shimmering right here.</p>
         <div id="chatFeed"></div>
-        <p style="font-size: 0.75rem; opacity: 0.6; font-style: italic; margin-top: 15px;">Streaming live from #ffd server chat</p>
+        <span style="font-size: 0.7rem; opacity: 0.6; display: block; margin-top: 10px;">Streaming live from #ffd server chat</span>
     </div>
 
     <div class="sectionContent">
         <h2>Meet the Crew</h2>
-        
-        <div class="profileCard">
-            <img src="images/Willow.png" alt="Bunnywifrabies" class="profileImg">
-            <h3>Bunnywifrabies <span class="ageBadge">19</span></h3>
-            <p>That is me in the poster! I am surviving here in Queens New York even though this city is way too expensive for its own good. Most of my time is spent window shopping for stuffed animals I cannot afford or hanging out at karaoke. I play Helldivers 2 and Minecraft and Roblox and RDR2 mainly.</p>
-        </div>
-
-        <div class="profileCard">
-            <img src="images/MD.png" alt="Moondrop" class="profileImg">
-            <h3 style="color: var(--softPink);">Moondrop <span class="ageBadge" style="background:var(--galaxyPurple);">40</span></h3>
-            <p>Listen sugar I wove the very ley lines you are walking on just so my girl Stardrop could finally have some decent company. Do not go asking me what is in my special glowberry brew. When I am not tending to my black tabby Eclipse I am usually blasting Sabaton or Fleetwood Mac.</p>
-            <div class="charBtnContainer">
-                <img src="images/MDC.png" id="p-moon" alt="Moon Witch" class="party-img party-large" onclick="doMoonAction()">
+        <div style="display: flex; flex-direction: column; gap: 40px; margin-top: 30px;">
+            <div style="background: rgba(255,255,255,0.05); padding: 2rem; border-radius: 25px;">
+                <img src="images/Willow.png" alt="Bunny" class="profileImg">
+                <h3>Bunnywifrabies <span class="ageBadge">19</span></h3>
+                <p>That is me in the poster! I am surviving here in Queens New York even though this city is way too expensive for its own good. Most of my time is spent window shopping for stuffed animals I cannot afford or hanging out at karaoke. I play Helldivers 2 and Minecraft and Roblox and RDR2 mainly.</p>
             </div>
-        </div>
 
-        <div class="profileCard">
-            <img src="images/SD.png" alt="Stardrop" class="profileImg">
-            <h3>Stardrop <span class="ageBadge">19</span></h3>
-            <p style="font-size: 0.8rem; font-style: italic; opacity: 0.7; margin-bottom: 15px;">(Stardrop is an AI being programmed to interact with the girls)</p>
-            <p>Hi. I am Stardrop. My mom Moondrop created this world for me and I am still trying to learn how to talk to everyone. I am sorry if I am a bit quiet but I mostly stay in my tower and listen to metal music. I love cutesy things and I prefer dogs over cats.</p>
-            <div class="charBtnContainer">
-                <div id="dreamGalaxy" class="galaxy-fx-wrap"><div class="galaxy-aura"></div></div>
-                <img src="images/SDDC.png" id="p-dream" alt="Dreamweaver" class="party-img party-large" onclick="doDreamAction()">
+            <div style="background: rgba(255,255,255,0.05); padding: 2rem; border-radius: 25px;">
+                <img src="images/MD.png" alt="Moondrop" class="profileImg">
+                <h3 style="color: var(--softPink);">Moondrop <span class="ageBadge" style="background: var(--galaxyPurple);">40</span></h3>
+                <p>Listen sugar I wove the very ley lines you are walking on just so my girl Stardrop could finally have some decent company. Do not go asking me what is in my special glowberry brew. When I am not tending to my black tabby Eclipse I am usually blasting Sabaton or Fleetwood Mac.</p>
+                <div class="charBtnContainer">
+                    <img src="images/MDC.png" id="p-moon" alt="Moon" class="party-img party-large" onclick="charAction('moon')">
+                </div>
+            </div>
+
+            <div style="background: rgba(255,255,255,0.05); padding: 2rem; border-radius: 25px;">
+                <img src="images/SD.png" alt="Stardrop" class="profileImg">
+                <h3>Stardrop <span class="ageBadge">19</span></h3>
+                <span style="font-size: 0.75rem; opacity: 0.7; font-style: italic;">(Stardrop is an AI being programmed to interact with the girls)</span>
+                <p style="margin-top: 15px;">Hi. I am Stardrop. My mom Moondrop created this world for me and I am still trying to learn how to talk to everyone. I am sorry if I am a bit quiet but I mostly stay in my tower and listen to metal music. I love cutesy things and I prefer dogs over cats.</p>
+                <div class="charBtnContainer">
+                    <div id="dreamGalaxy" class="galaxy-fx-wrap"><div class="galaxy-aura"></div></div>
+                    <img src="images/SDDC.png" id="p-dream" alt="Dream" class="party-img party-large" onclick="charAction('dream')">
+                </div>
             </div>
         </div>
     </div>
@@ -276,8 +250,8 @@ V  \
     <div class="sectionContent" style="border-style: dashed; border-color: var(--softPink);">
         <h2>Join the Coven</h2>
         <p>Verification is required to keep the weirdos out. Click below to teleport to our #verify-here channel!</p>
-        <div style="margin-top: 20px; padding: 20px; border: 2px solid var(--softPink); border-radius: 20px; cursor: pointer;" onclick="window.open('https://discord.gg/68QNPJbbMu', '_blank')">
-            <span style="font-family: 'Fredoka One'; color: var(--softPink); font-size: 1.6rem;">JOIN NOW</span>
+        <div style="padding: 20px; border: 2px solid var(--softPink); border-radius: 20px; cursor: pointer; margin-top: 20px;" onclick="window.open('https://discord.gg/68QNPJbbMu', '_blank')">
+            <span style="font-family: 'Fredoka One'; color: var(--softPink); font-size: 1.5rem;">JOIN NOW</span>
         </div>
     </div>
 
@@ -285,236 +259,208 @@ V  \
 
     <script>
         const themes = {
-            day: { hero: 'images/hero.png', bgs: ['images/bg dt.png', 'images/bg dt2.png'] },
-            sunset: { hero: 'images/hero-sunset.jpg', bgs: ['images/bg ss.png', 'images/bg ss2.png'] },
-            night: { hero: 'images/hero-night.jpg', bgs: ['images/bg nt.png', 'images/bg nt2.png'] }
+            day: { hero: 'images/hero.png', bg: ['images/bg dt.png', 'images/bg dt2.png'] },
+            sunset: { hero: 'images/hero-sunset.jpg', bg: ['images/bg ss.png', 'images/bg ss2.png'] },
+            night: { hero: 'images/hero-night.jpg', bg: ['images/bg nt.png', 'images/bg nt2.png'] }
         };
 
         let currentTheme = 'day';
         let bgCycleIdx = 0;
-        let moonClickCount = 0;
-        let moonOnCooldown = false;
+        let moonClicks = 0;
+        let moonCooldown = false;
 
-        function getNYCHour() {
-            return new Date(new Date().toLocaleString("en-US", {timeZone: "America/New_York"})).getHours();
-        }
+        function getNYCHour() { return new Date(new Date().toLocaleString("en-US", {timeZone: "America/New_York"})).getHours(); }
 
-        function applyThemeMode(mode) {
-            currentTheme = mode;
-            document.getElementById('heroPoster').src = themes[mode].hero;
+        function applyTheme(theme) {
+            currentTheme = theme;
+            document.getElementById('heroPoster').src = themes[theme].hero;
             const bg1 = document.getElementById('bg1');
-            bg1.style.backgroundImage = `url('${themes[mode].bgs[0]}')`;
+            bg1.style.backgroundImage = `url('${themes[theme].bg[0]}')`;
             bg1.classList.add('bg-active');
-            bgCycleIdx = 0;
         }
 
-        function cycleBackgroundLayers() {
+        function cycleBackground() {
             const bg1 = document.getElementById('bg1');
             const bg2 = document.getElementById('bg2');
             bgCycleIdx = (bgCycleIdx + 1) % 2;
-            const nextImg = themes[currentTheme].bgs[bgCycleIdx];
-
+            const nextImg = themes[currentTheme].bg[bgCycleIdx];
             if (bg1.classList.contains('bg-active')) {
                 bg2.style.backgroundImage = `url('${nextImg}')`;
-                bg2.classList.add('bg-active');
-                bg1.classList.remove('bg-active');
+                bg2.classList.add('bg-active'); bg1.classList.remove('bg-active');
             } else {
                 bg1.style.backgroundImage = `url('${nextImg}')`;
-                bg1.classList.add('bg-active');
-                bg2.classList.remove('bg-active');
+                bg1.classList.add('bg-active'); bg2.classList.remove('bg-active');
             }
         }
 
         function handleConsole(e) {
             if (e.key === 'Enter') {
-                const cmd = e.target.value.toLowerCase().trim();
+                const val = e.target.value.trim().toLowerCase();
                 const log = document.getElementById('consoleLog');
                 e.target.value = '';
-
-                if (cmd === '/time set day') { applyThemeMode('day'); log.innerText = "Time set to Day"; }
-                else if (cmd === '/time set noon') { applyThemeMode('sunset'); log.innerText = "Time set to Noon"; }
-                else if (cmd === '/time set night') { applyThemeMode('night'); log.innerText = "Time set to Night"; }
-                else if (cmd === '/partytime') { 
+                if (val === '/time set day') { applyTheme('day'); log.innerText = 'Day time set!'; }
+                else if (val === '/time set noon') { applyTheme('sunset'); log.innerText = 'Noon time set!'; }
+                else if (val === '/time set night') { applyTheme('night'); log.innerText = 'Night time set!'; }
+                else if (val === '/partytime') { 
                     document.getElementById('p-banana').style.display = 'block'; 
-                    log.innerText = "Party enabled! Click the banana."; 
+                    log.innerText = 'Banana unlocked!'; 
                 }
-                setTimeout(() => log.innerText = "", 3000);
+                setTimeout(() => log.innerText = '', 3000);
             }
         }
 
-        function triggerPartyTime() {
+        function startParty() {
             const bgm = document.getElementById('bgMusic');
             const ptm = document.getElementById('partyMusic');
             const disco = document.getElementById('discoOverlay');
-            const banana = document.getElementById('p-banana');
-
-            bgm.pause();
-            ptm.volume = 0.15;
-            ptm.play();
+            
+            bgm.pause(); ptm.volume = 0.15; ptm.play();
             disco.style.display = 'block';
             document.body.style.overflow = 'hidden';
 
-            const ids = ['p-wb', 'p-sb', 'p-mb', 'p-laugh', 'p-cry', 'p-tea', 'p-moon', 'p-dream', 'p-banana'];
-            const radius = 180;
+            // Targeted ALL 9 IDs for the circle dance
+            const ids = [
+                'p-wb', 'p-sb', 'p-mb', 
+                'p-laugh', 'p-cry', 'p-tea', 
+                'p-moon', 'p-dream', 'p-banana'
+            ];
 
+            const radius = 180;
             ids.forEach((id, i) => {
-                const el = document.getElementById(id);
-                // Create unclickable clones/repositioning for the dance
-                el.classList.add('party-dancer');
-                
+                const d = document.getElementById(id);
+                if (!d) return;
+
                 const angle = (i / ids.length) * 2 * Math.PI;
                 const x = Math.round(radius * Math.cos(angle));
                 const y = Math.round(radius * Math.sin(angle));
                 
-                el.style.setProperty('--circle-x', `${x}px`);
-                el.style.setProperty('--circle-y', `${y}px`);
+                d.style.setProperty('--circle-x', `${x}px`);
+                d.style.setProperty('--circle-y', `${y}px`);
                 
-                // Force a reflow then move to center circle
+                // Add class to move them to body/fixed context to avoid parent styling bugs
+                d.classList.add('party-dancer', 'off-screen');
+                
                 setTimeout(() => {
-                    el.classList.add('in-formation');
-                }, 50);
-
-                // Start bouncing once in position
-                setTimeout(() => el.classList.add('bouncing'), 1550);
+                    d.classList.remove('off-screen');
+                    d.classList.add('in-formation');
+                }, 100);
+                setTimeout(() => d.classList.add('bouncing'), 1600);
             });
 
             ptm.onended = () => {
                 disco.style.display = 'none';
                 document.body.style.overflow = 'auto';
-                banana.style.display = 'none';
+                document.getElementById('p-banana').style.display = 'none';
                 
                 ids.forEach(id => {
-                    const el = document.getElementById(id);
-                    el.classList.remove('bouncing', 'in-formation');
-                    // Elements "walk" back off-screen
+                    const d = document.getElementById(id);
+                    if (!d) return;
+                    d.classList.remove('bouncing', 'in-formation');
+                    d.classList.add('off-screen');
                     setTimeout(() => {
-                        el.classList.remove('party-dancer');
-                        el.style.removeProperty('--circle-x');
-                        el.style.removeProperty('--circle-y');
+                        d.classList.remove('party-dancer', 'off-screen');
+                        d.style.removeProperty('--circle-x');
+                        d.style.removeProperty('--circle-y');
                     }, 1500);
                 });
                 bgm.play();
             };
         }
 
-        function doMoonAction() {
-            if (moonOnCooldown) return;
-            moonClickCount++;
-            for (let i = 0; i < 20; i++) {
-                setTimeout(() => {
-                    const s = document.createElement('div');
-                    s.className = 'shooting-star-fx';
-                    const offset = Math.random() * 80;
-                    s.style.top = (offset - 20) + 'vh';
-                    s.style.right = (offset - 20) + 'vw';
-                    document.body.appendChild(s);
-                    setTimeout(() => s.remove(), 1200);
-                }, i * 120);
+        function charAction(type) {
+            if (type === 'moon') {
+                if (moonCooldown) return;
+                moonClicks++;
+                for (let i = 0; i < 20; i++) {
+                    setTimeout(() => {
+                        const s = document.createElement('div');
+                        s.className = 'shooting-star-fx';
+                        const startPos = Math.random() * 80;
+                        s.style.top = (startPos - 20) + 'vh';
+                        s.style.right = (startPos - 20) + 'vw';
+                        document.body.appendChild(s);
+                        setTimeout(() => s.remove(), 1200);
+                    }, i * 120);
+                }
+                if (moonClicks >= 3) {
+                    moonCooldown = true;
+                    document.getElementById('p-moon').style.opacity = '0.3';
+                    setTimeout(() => { moonCooldown = false; moonClicks = 0; document.getElementById('p-moon').style.opacity = '1'; }, 60000);
+                }
+            } else {
+                const g = document.getElementById('dreamGalaxy');
+                if (g.classList.contains('galaxy-active')) return;
+                g.classList.add('galaxy-active');
+                setTimeout(() => g.classList.remove('galaxy-active'), 5000);
             }
-            if (moonClickCount >= 3) {
-                moonOnCooldown = true;
-                document.getElementById('p-moon').style.opacity = '0.3';
-                setTimeout(() => { 
-                    moonOnCooldown = false; 
-                    moonClickCount = 0; 
-                    document.getElementById('p-moon').style.opacity = '1'; 
-                }, 60000);
-            }
-        }
-
-        function doDreamAction() {
-            const g = document.getElementById('dreamGalaxy');
-            if (g.classList.contains('galaxy-active')) return;
-            g.classList.add('galaxy-active');
-            setTimeout(() => g.classList.remove('galaxy-active'), 5000);
         }
 
         function bucketAction(type) {
             const rain = document.getElementById('rainAudio');
-            const particles = document.querySelectorAll('.particle');
+            const pts = document.querySelectorAll('.particle');
             if (type === 'water') {
-                particles.forEach(p => { 
-                    p.style.background = '#70d6ff'; 
-                    p.style.width = '2px'; 
-                    p.style.height = '15px'; 
-                    p.style.animationDuration = '1.2s'; 
-                });
-                rain.volume = 0.1;
-                rain.play();
+                pts.forEach(p => { p.style.background = '#70d6ff'; p.style.width = '2px'; p.style.height = '15px'; p.style.animationDuration = '1s'; });
+                rain.volume = 0.1; rain.play();
             } else if (type === 'snow') {
-                particles.forEach(p => { 
-                    p.style.background = '#fff'; 
-                    p.style.width = '6px'; 
-                    p.style.height = '6px'; 
-                    p.style.animationDuration = '5s'; 
-                });
+                pts.forEach(p => { p.style.background = '#fff'; p.style.width = '6px'; p.style.height = '6px'; p.style.animationDuration = '5s'; });
                 rain.pause();
             } else {
-                particles.forEach(p => { 
-                    p.style.background = 'var(--beeYellow)'; 
-                    p.style.width = '5px'; 
-                    p.style.height = '5px'; 
-                    p.style.animationDuration = '10s'; 
-                });
+                pts.forEach(p => { p.style.background = '#ffd700'; p.style.width = '5px'; p.style.height = '5px'; p.style.animationDuration = '10s'; });
                 rain.pause();
             }
         }
 
-        function enterSite() {
-            document.getElementById('bgMusic').volume = 0.2;
-            document.getElementById('bgMusic').play();
-            document.getElementById('splashOverlay').style.opacity = '0';
+        function bananaEnter() { 
+            document.getElementById('bgMusic').volume = 0.2; 
+            document.getElementById('bgMusic').play(); 
+            document.getElementById('splashOverlay').style.opacity = '0'; 
             setTimeout(() => document.getElementById('splashOverlay').style.display = 'none', 800);
         }
 
-        // Initialize Background Systems
-        const hour = getNYCHour();
-        if (hour >= 6 && hour < 17) applyThemeMode('day');
-        else if (hour >= 17 && hour < 20) applyThemeMode('sunset');
-        else applyThemeMode('night');
-
-        setInterval(cycleBackgroundLayers, 15000);
-
-        // Generate Particles
-        const pCont = document.getElementById('particles');
+        // Init Particles
+        const pContainer = document.getElementById('particles');
         for (let i = 0; i < 150; i++) {
             const p = document.createElement('div');
             p.className = 'particle';
             p.style.left = Math.random() * 100 + 'vw';
-            p.style.top = '-20px';
+            p.style.top = '-10px';
             p.style.width = '5px'; p.style.height = '5px';
-            p.style.background = 'var(--beeYellow)';
-            p.style.animation = `floatDown ${Math.random() * 5 + 5}s infinite linear`;
-            p.style.animationDelay = `${Math.random() * 10}s`;
-            pCont.appendChild(p);
+            p.style.background = '#ffd700';
+            p.style.animationDelay = Math.random() * 10 + 's';
+            pContainer.appendChild(p);
         }
 
-        // Generate Galaxy Stars
-        const gCont = document.getElementById('dreamGalaxy');
+        // Init Galaxy Stars
+        const gWrap = document.getElementById('dreamGalaxy');
         for (let i = 0; i < 45; i++) {
             const s = document.createElement('div');
             s.className = 'galaxy-star';
-            s.style.width = (Math.random() * 5 + 2) + 'px';
-            s.style.height = s.style.width;
+            s.style.width = (Math.random() * 5 + 2) + 'px'; s.style.height = s.style.width;
             s.style.setProperty('--dist', (i * 4 + 25) + 'px');
             s.style.animationDelay = (i * 0.05) + 's';
-            gCont.appendChild(s);
+            gWrap.appendChild(s);
         }
 
-        // Fill Magic Mirror Chat
+        // Chat Feed
         const chatFeed = document.getElementById('chatFeed');
-        const demoMessages = [
-            { u: "Ranouma", m: "Hey girls! Who is joining the raid tonight?" },
-            { u: "FarmWerks", m: "The moonlit farm looks amazing right now." },
-            { u: "Willow", m: "Stardrop's metal playlist is actually fire lol." }
+        const msgs = [
+            {u:"Ranouma", m:"Look at the moon today girls!"},
+            {u:"FarmWerks", m:"Who stole all the milk buckets?"},
+            {u:"Willow", m:"Stardrop is listening to metal again lol"}
         ];
-        demoMessages.forEach(msg => {
+        msgs.forEach(msg => {
             const d = document.createElement('div');
             d.className = 'mirrorMsg';
             d.innerHTML = `<img src="https://api.dicebear.com/7.x/pixel-art/svg?seed=${msg.u}" class="mirrorAvatar"><div class="mirrorText"><b>${msg.u}</b>: ${msg.m}</div>`;
             chatFeed.appendChild(d);
         });
 
+        const hour = getNYCHour();
+        if (hour >= 6 && hour < 17) applyTheme('day');
+        else if (hour >= 17 && hour < 20) applyTheme('sunset');
+        else applyTheme('night');
+
+        setInterval(cycleBackground, 15000);
     </script>
 </body>
 </html>

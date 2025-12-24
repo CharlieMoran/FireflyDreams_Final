@@ -4,16 +4,17 @@
 V  \
  \  \_
   \,'.`-.
-   |\ `. `.      
+   |\ `. `.       
    ( \  `. `-.                         _,.-:\
     \ \   `.  `-._             __..--' ,-'; /
      \ `.   `-.   `-..___..---'   _.--'  ,'/
       `. `.    `-._        __..--'     ,' /
-        `. `-_     ``--..''         _.-','
-          `-_ `-.___          __,--'  ,'
-              `-.__  `----"""    __.-'
+       `. `-_     ``--..''         _.-' ,'
+         `-_ `-.___          __,--'  ,'
+             `-.__  `----"""    __.-'
                    `--..____..--'
 */ -->
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -24,20 +25,390 @@ V  \
     <link rel="icon" type="image/png" href="images/FFDF.png">
     
     <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
     <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+    <style>
+        :root {
+            --beeYellow: #ffd700;
+            --softPink: #ff6b95;
+            --magicBlue: #70d6ff;
+            --deepNight: #0a0814;
+            --glassBg: rgba(15, 12, 30, 0.85);
+        }
+
+        /* Ensures borders stay inside the width on mobile */
+        * {
+            box-sizing: border-box;
+        }
+
+        /* Custom Wand Cursor */
+        body {
+            margin: 0; padding: 0;
+            font-family: 'Poppins', sans-serif;
+            color: #fff;
+            display: flex; flex-direction: column; align-items: center;
+            min-height: 100vh; 
+            overflow-y: auto; 
+            overflow-x: hidden;
+            background-color: var(--deepNight);
+            cursor: url('images/wand2.png'), auto;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* Tiny Bucket Container */
+        .bucketHeader {
+            width: 100%;
+            display: flex;
+            justify-content: flex-start;
+            padding: 15px 25px;
+            gap: 15px;
+            z-index: 1001;
+        }
+
+        .tinyBucket {
+            width: 35px;
+            height: auto;
+            cursor: pointer;
+            filter: drop-shadow(0 0 5px rgba(112, 214, 255, 0.4));
+            transition: transform 0.2s ease;
+        }
+
+        .tinyBucket:hover {
+            transform: scale(1.2) rotate(-10deg);
+            filter: drop-shadow(0 0 8px var(--magicBlue));
+        }
+
+        /* Character Buttons */
+        .charBtn {
+            width: 60px;
+            height: auto;
+            margin-top: 15px;
+            cursor: pointer;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            filter: drop-shadow(0 0 5px var(--softPink));
+        }
+
+        .charBtn:hover {
+            transform: scale(1.15) rotate(5deg);
+            filter: drop-shadow(0 0 12px var(--softPink));
+        }
+
+        /* Hover Wand Cursor */
+        a, button, .whitelistBox, .profileCard, .yesBtn, .noBtn {
+            cursor: url('images/wand1.png'), pointer !important;
+        }
+
+        /* Splash Screen Overlay */
+        #splashOverlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(10, 8, 20, 0.95);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            transition: opacity 0.8s ease;
+        }
+
+        .splashBox {
+            background: var(--glassBg);
+            padding: 2.5rem;
+            border-radius: 35px;
+            border: 2px solid var(--beeYellow);
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 0 50px rgba(0,0,0,0.8);
+        }
+
+        .splashBox h2 {
+            font-family: 'Fredoka One', cursive;
+            color: var(--beeYellow);
+            font-size: 1.8rem;
+            margin-bottom: 2rem;
+            line-height: 1.3;
+        }
+
+        .splashBtns {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .enterBtn {
+            font-family: 'Fredoka One', cursive;
+            padding: 15px 35px;
+            border-radius: 20px;
+            border: none;
+            font-size: 1.1rem;
+            transition: 0.3s;
+            min-width: 120px;
+        }
+
+        .yesBtn { background: var(--beeYellow); color: var(--deepNight); box-shadow: 0 0 15px var(--beeYellow); }
+        .noBtn { background: var(--softPink); color: white; opacity: 0.9; }
+
+        /* Moon Phase Indicator - Fixed to scroll with user */
+        #moonPhaseContainer {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 999;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 10px 15px;
+            border-radius: 50px;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: 'Fredoka One', cursive;
+            font-size: 0.9rem;
+            color: var(--beeYellow);
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+            pointer-events: none;
+        }
+
+        #moonIcon { font-size: 1.4rem; filter: drop-shadow(0 0 5px var(--beeYellow)); }
+
+        /* Main Page Layout */
+        .bgImage {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: url('images/background.png') no-repeat center center/cover;
+            filter: brightness(0.3) blur(2px); z-index: -2;
+        }
+
+        #particles {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1; pointer-events: none;
+        }
+
+        .particle {
+            position: absolute; width: 6px; height: 6px;
+            background: var(--beeYellow); border-radius: 50%;
+            box-shadow: 0 0 15px var(--beeYellow);
+            animation: float 15s infinite linear; opacity: 0.7;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(110vh) translateX(0); opacity: 0; }
+            20% { opacity: 1; }
+            100% { transform: translateY(-10vh) translateX(100px); opacity: 0; }
+        }
+
+        /* Cursor Trail Stars */
+        .trailStar {
+            position: absolute; width: 8px; height: 8px;
+            border-radius: 50%;
+            pointer-events: none; z-index: 100;
+            animation: starFade 1s linear forwards;
+        }
+
+        /* Explosion Burst Stars */
+        .burstStar {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: var(--beeYellow);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--beeYellow);
+            pointer-events: none;
+            z-index: 1000;
+            animation: burstFade 0.8s ease-out forwards;
+        }
+
+        @keyframes starFade {
+            0% { opacity: 1; transform: scale(1); }
+            100% { opacity: 0; transform: scale(0.3) translateY(20px); }
+        }
+
+        @keyframes burstFade {
+            0% { opacity: 1; transform: scale(1) translate(0, 0); }
+            100% { opacity: 0; transform: scale(0) translate(var(--x), var(--y)); }
+        }
+
+        .card, .sectionContent {
+            background: var(--glassBg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 3rem; border-radius: 35px;
+            border: 2px solid rgba(255, 215, 0, 0.4);
+            text-align: center; width: 90%; max-width: 650px;
+            box-shadow: 0 0 60px rgba(0,0,0,0.7);
+            transition: transform 0.3s ease;
+            margin-bottom: 60px;
+        }
+
+        .card { margin-top: 80px; }
+
+        .card:hover, .sectionContent:hover {
+            transform: translateY(-5px);
+            border-color: var(--beeYellow);
+        }
+
+        /* Enchanted 3D Cards */
+        .profileCard {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 25px;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+            transform-style: preserve-3d;
+            perspective: 1000px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .profileCard:hover {
+            transform: rotateY(10deg) rotateX(5deg) scale(1.02);
+            box-shadow: -10px 10px 30px rgba(0,0,0,0.5), 0 0 20px rgba(255, 107, 149, 0.2);
+        }
+
+        .heroImg {
+            width: 100%; border-radius: 25px;
+            border: 4px solid var(--beeYellow); margin-bottom: 2rem;
+            animation: rectangularBreathingGlow 4s infinite ease-in-out;
+        }
+
+        .profileImg {
+            height: 400px; width: auto; max-width: 100%;
+            display: block; margin: 0 auto 1.5rem auto;
+            object-fit: contain;
+            animation: imageOutlineGlowYellow 4s infinite ease-in-out;
+            transform: translateZ(50px);
+        }
+
+        .profileImg.pink-outline { animation: imageOutlineGlowPink 4s infinite ease-in-out; }
+
+        @keyframes rectangularBreathingGlow {
+            0%, 100% { box-shadow: 0 0 15px rgba(255, 215, 0, 0.3); border-color: rgba(255, 215, 0, 0.5); }
+            50% { box-shadow: 0 0 35px rgba(255, 215, 0, 0.7); border-color: var(--beeYellow); }
+        }
+
+        @keyframes imageOutlineGlowYellow {
+            0%, 100% { filter: drop-shadow(0 0 3px rgba(255, 215, 0, 0.8)); }
+            50% { filter: drop-shadow(0 0 10px var(--beeYellow)) brightness(1.1); }
+        }
+
+        @keyframes imageOutlineGlowPink {
+            0%, 100% { filter: drop-shadow(0 0 3px rgba(255, 107, 149, 0.8)); }
+            50% { filter: drop-shadow(0 0 10px var(--softPink)) brightness(1.1); }
+        }
+
+        h1, h2, h3 { font-family: 'Fredoka One', cursive; color: var(--beeYellow); margin: 0 0 1rem 0; }
+        h1 { font-size: 3.5rem; text-shadow: 2px 2px 0px #000; line-height: 1.1; }
+
+        .magicMirrorBox {
+            border: 2px solid var(--softPink);
+            box-shadow: 0 0 30px rgba(255, 107, 149, 0.2);
+            text-align: left;
+        }
+
+        #chatFeed {
+            height: 350px; overflow-y: auto; margin-top: 20px;
+            padding: 20px; background: rgba(0, 0, 0, 0.4);
+            border-radius: 20px; border: 1px solid rgba(255, 107, 149, 0.3);
+            display: flex; flex-direction: column; gap: 15px;
+        }
+
+        .mirrorMsg {
+            display: flex; align-items: center; gap: 15px;
+            animation: slideIn 0.4s ease-out forwards;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-15px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .mirrorAvatar {
+            width: 45px; height: 45px; border-radius: 50%;
+            border: 2px solid var(--beeYellow); box-shadow: 0 0 10px var(--beeYellow);
+        }
+
+        .mirrorText b { color: var(--softPink); font-family: 'Fredoka One'; }
+
+        .loreGrid { display: grid; grid-template-columns: 1fr; gap: 30px; margin-top: 2rem; text-align: left; }
+        .profileHeader { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; }
+        .ageBadge { background: var(--softPink); color: white; padding: 5px 12px; border-radius: 15px; font-size: 0.8rem; font-weight: bold; }
+        .countdown { font-size: 0.85rem; color: var(--softPink); margin-bottom: 15px; font-style: italic; display: block; text-align: center;}
+
+        .emotionRow { display: flex; justify-content: space-around; align-items: flex-end; margin-top: 2rem; gap: 10px; }
+        .emotionBox { flex: 1; text-align: center; }
+        .emotionImg { 
+            width: 100%; max-width: 120px; 
+            filter: drop-shadow(0 0 10px var(--softPink)); 
+            transition: 0.3s; 
+            animation: breathingGlowPink 5s infinite ease-in-out;
+        }
+        .emotionImg:hover { transform: scale(1.1) rotate(3deg); }
+
+        @keyframes breathingGlowPink {
+            0%, 100% { filter: drop-shadow(0 0 5px var(--softPink)); }
+            50% { filter: drop-shadow(0 0 20px var(--softPink)); }
+        }
+
+        .whitelistBox { 
+            background: rgba(255, 107, 149, 0.1); 
+            border: 2px dashed var(--softPink); 
+            padding: 2.5rem; border-radius: 25px;
+            transition: 0.3s; position: relative; overflow: hidden;
+        }
+        .whitelistBox:hover { background: rgba(255, 107, 149, 0.2); transform: scale(1.02); }
+        .discordHandle { display: block; margin-top: 10px; font-family: 'Fredoka One', cursive; color: var(--softPink); font-size: 1.8rem; text-shadow: 0 0 10px rgba(255, 107, 149, 0.5); }
+
+        footer { margin: 40px 0; font-size: 0.75rem; color: rgba(255,255,255,0.4); text-align: center; padding: 0 20px; }
+        .aiNote { font-size: 0.75rem; display: block; margin-top: 5px; opacity: 0.8; font-style: italic; }
+        #bgMusic { display: none; }
+
+        /* =========================================
+           MOBILE & iOS SPECIFIC FIXES
+           ========================================= */
+        @media (max-width: 600px) {
+            h1 { font-size: 2.2rem; }
+            h2 { font-size: 1.6rem; }
+            .card, .sectionContent { 
+                padding: 1.5rem; 
+                width: 90%; 
+                margin-top: 70px; 
+                margin-bottom: 30px;
+                border-radius: 25px;
+            }
+            .card { margin-top: 80px; }
+            #moonPhaseContainer { 
+                top: 10px; 
+                left: 10px; 
+                font-size: 0.7rem; 
+                padding: 6px 10px; 
+            }
+            #moonIcon { font-size: 1rem; }
+            .heroImg { margin-bottom: 1.5rem; border-width: 3px; }
+            .profileImg { height: 280px; }
+            .profileCard { padding: 1.5rem; }
+            .splashBox { padding: 2rem 1.5rem; }
+            .splashBox h2 { font-size: 1.4rem; }
+            .enterBtn { padding: 12px 25px; font-size: 1rem; min-width: 110px; }
+            .discordHandle { font-size: 1.3rem; }
+            .emotionImg { max-width: 75px; }
+        }
+    </style>
 </head>
 <body>
+
+    <div class="bucketHeader">
+        <img src="images/wb.png" alt="Water Bucket" class="tinyBucket" onclick="bucketAction('water')">
+        <img src="images/sb.png" alt="Snow Bucket" class="tinyBucket" onclick="bucketAction('snow')">
+        <img src="images/mb.png" alt="Milk Bucket" class="tinyBucket" onclick="bucketAction('milk')">
+    </div>
 
     <div id="moonPhaseContainer">
         <span id="moonIcon">🌑</span>
         <span id="moonLabel">Calculating...</span>
-    </div>
-
-    <div class="bucket-row">
-        <img src="images/wb.png" class="bucket-static" alt="Water Bucket">
-        <img src="images/sb.png" class="bucket-static" alt="Snow Bucket">
-        <img src="images/mb.png" class="bucket-static" alt="Milk Bucket">
     </div>
 
     <div id="splashOverlay">
@@ -66,28 +437,26 @@ V  \
 
     <div class="sectionContent">
         <h2>About Our Sanctuary</h2>
-        <p>Moondrop the Moon witch wove magical ley lines across the digital realm to create a sanctuary for the girls of Firefly Dreams. We share adventures and moonlit magic across any distance.</p>
+        <p>Moondrop the Moon Witch wove magical ley lines across the digital realm to create a sanctuary for the girls of Firefly Dreams. We share adventures and moonlit magic across any distance.</p>
         <p style="font-weight: 600; color: var(--beeYellow);">We are an 18 plus cozy female friendly server where we are free to build create and explore to our hearts content.</p>
         
         <div class="emotionRow">
             <div class="emotionBox">
                 <img src="images/IMG_6921-removebg-preview.png" alt="Laughing" class="emotionImg">
-                <span class="emotionLabel">Laughing</span>
+                <span style="display:block; color:var(--softPink); font-family:'Fredoka One'; margin-top: 10px; font-size: 0.8rem;">Laughing</span>
             </div>
             <div class="emotionBox">
                 <img src="images/IMG_6894-removebg-preview.png" alt="Crying" class="emotionImg">
-                <span class="emotionLabel">Crying</span>
+                <span style="display:block; color:var(--softPink); font-family:'Fredoka One'; margin-top: 10px; font-size: 0.8rem;">Crying</span>
             </div>
             <div class="emotionBox">
                 <img src="images/IMG_6937-removebg-preview.png" alt="Spilling Tea" class="emotionImg">
-                <span class="emotionLabel">Spilling Tea</span>
+                <span style="display:block; color:var(--softPink); font-family:'Fredoka One'; margin-top: 10px; font-size: 0.8rem;">Spilling Tea</span>
             </div>
         </div>
     </div>
 
     <div class="sectionContent magicMirrorBox">
-        <img src="images/Bell1.png" id="sunsetBell" alt="Sunset Bell">
-        
         <h2 style="color: var(--softPink);">The Magic Mirror</h2>
         <p>Listen up girls. This mirror is not just for fixing your hair. I have poured enough magic into this silver surface to let us see the whispers of the coven in real time. If you are looking for trouble or just looking for a friend you will find it shimmering right here.</p>
         
@@ -117,7 +486,7 @@ V  \
                 </div>
                 <div class="countdown" id="mdBdayCountdown">Calculating brew</div>
                 <p>Listen sugar I wove the very ley lines you are walking on just so my girl Stardrop could finally have some decent company. Do not go asking me what is in my special glowberry brew. When I am not tending to my black tabby Eclipse I am usually blasting Sabaton or Fleetwood Mac.</p>
-                <img src="images/MDC.jpg" class="charInteractBtn" onclick="triggerMoonMagic(event)" alt="Crescent Moon Button">
+                <img src="images/MDC.png" alt="Moon Crescent Button" class="charBtn" onclick="charAction('moon')">
             </div>
 
             <div class="profileCard">
@@ -129,7 +498,7 @@ V  \
                 <div class="countdown" id="sdBdayCountdown">Calculating party</div>
                 <span class="aiNote">(Stardrop is an AI being programmed to interact with the girls)</span>
                 <p style="margin-top:15px;">Hi. I am Stardrop. My mom Moondrop created this world for me and I am still trying to learn how to talk to everyone. I am sorry if I am a bit quiet but I mostly stay in my tower and listen to metal music. I love cutesy things and I prefer dogs over cats.</p>
-                <img src="images/SDDC.jpg" class="charInteractBtn" onclick="triggerDreamMagic(event)" alt="Dreamcatcher Button">
+                <img src="images/SDDC.png" alt="Dreamcatcher Button" class="charBtn" onclick="charAction('dream')">
             </div>
 
         </div>
@@ -149,7 +518,188 @@ V  \
         created by ChickenWifRabies with love for BunnyWifRabies. Fireflydreams ™ All rights reserved copyright 2025
     </footer>
 
-    <script src="script.js"></script>
+    <script>
+/*
+ _
+//\
+V  \
+ \  \_
+  \,'.`-.
+   |\ `. `.       
+   ( \  `. `-.                         _,.-:\
+    \ \   `.  `-._                __..--' ,-'; /
+     \ `.   `-.   `-..___..---'   _.--'  ,'/
+      `. `.    `-._        __..--'     ,' /
+       `. `-_     ``--..''         _.-'  ,'
+         `-_ `-.___          __,--'  ,'
+             `-.__  `----"""    __.-'
+                   `--..____..--'
+*/
+
+        // Particles
+        const banana = document.getElementById('particles');
+        for (let banana1 = 0; banana1 < 30; banana1++) {
+            const banana2 = document.createElement('div');
+            banana2.className = 'particle';
+            banana2.style.left = Math.random() * 100 + 'vw';
+            banana2.style.animationDelay = Math.random() * 10 + 's';
+            banana2.style.animationDuration = (Math.random() * 10 + 10) + 's';
+            banana.appendChild(banana2);
+        }
+
+        // Action Logic for Buckets
+        function bucketAction(type) {
+            const parts = document.querySelectorAll('.particle');
+            if (type === 'water') {
+                parts.forEach(p => { p.style.background = '#70d6ff'; p.style.boxShadow = '0 0 15px #70d6ff'; });
+            } else if (type === 'snow') {
+                parts.forEach(p => { p.style.background = '#ffffff'; p.style.boxShadow = '0 0 15px #ffffff'; });
+            } else if (type === 'milk') {
+                parts.forEach(p => { p.style.background = '#ffd700'; p.style.boxShadow = '0 0 15px #ffd700'; });
+            }
+        }
+
+        // Action Logic for Character Buttons
+        function charAction(type) {
+            if (type === 'moon') {
+                alert("Moondrop has cast a protection spell over your browser!");
+            } else if (type === 'dream') {
+                alert("Stardrop is weaving a peaceful dream for the girls.");
+            }
+        }
+
+        // Rainbow Wand Star Trail
+        const starColors = [ '#ffd700', '#ff6b95', '#70d6ff', '#ffffff', '#e0aaff' ];
+        document.addEventListener('mousemove', function(e) {
+            const star = document.createElement('div');
+            star.className = 'trailStar';
+            star.style.left = e.pageX + 'px'; 
+            star.style.top = e.pageY + 'px';
+            const randomColor = starColors[Math.floor(Math.random() * starColors.length)];
+            star.style.background = randomColor;
+            star.style.boxShadow = `0 0 10px ${randomColor}`;
+            document.body.appendChild(star);
+            setTimeout(() => { star.remove(); }, 1000);
+        });
+
+        // MOON PHASE LOGIC
+        function getMoonPhase() {
+            const date = new Date();
+            let year = date.getFullYear(), month = date.getMonth() + 1, day = date.getDate();
+            if (month < 3) { year--; month += 12; }
+            month++;
+            let c = 365.25 * year, e = 30.6 * month, jd = c + e + day - 694039.09;
+            jd /= 29.5305882;
+            let b = parseInt(jd); jd -= b; b = Math.round(jd * 8);
+            if (b >= 8) b = 0;
+            const phases = [
+                { icon: "🌑", label: "New Moon" }, { icon: "🌒", label: "Waxing Crescent" },
+                { icon: "🌓", label: "First Quarter" }, { icon: "🌔", label: "Waxing Gibbous" },
+                { icon: "🌕", label: "Full Moon" }, { icon: "🌖", label: "Waning Gibbous" },
+                { icon: "🌗", label: "Last Quarter" }, { icon: "🌘", label: "Waning Crescent" }
+            ];
+            document.getElementById('moonIcon').innerText = phases[b].icon;
+            document.getElementById('moonLabel').innerText = phases[b].label;
+        }
+        getMoonPhase();
+
+        // SPLASH SCREEN LOGIC
+        function bananaEnter(event) {
+            const bgAudio = document.getElementById('bgMusic');
+            bgAudio.volume = 0.2; bgAudio.play();
+
+            const bananaCtx = new (window.AudioContext || window.webkitAudioContext)();
+            const bananaOsc = bananaCtx.createOscillator();
+            const bananaGain = bananaCtx.createGain();
+            bananaOsc.connect(bananaGain); bananaGain.connect(bananaCtx.destination);
+            bananaOsc.type = 'sine'; bananaOsc.frequency.setValueAtTime(880, bananaCtx.currentTime);
+            bananaOsc.frequency.exponentialRampToValueAtTime(1320, bananaCtx.currentTime + 0.1);
+            bananaGain.gain.setValueAtTime(0.1, bananaCtx.currentTime);
+            bananaGain.gain.exponentialRampToValueAtTime(0.01, bananaCtx.currentTime + 0.5);
+            bananaOsc.start(); bananaOsc.stop(bananaCtx.currentTime + 0.5);
+
+            for (let i = 0; i < 20; i++) {
+                const bStar = document.createElement('div');
+                bStar.className = 'burstStar'; bStar.style.left = event.pageX + 'px'; bStar.style.top = event.pageY + 'px';
+                const x = (Math.random() - 0.5) * 400, y = (Math.random() - 0.5) * 400;
+                bStar.style.setProperty('--x', `${x}px`); bStar.style.setProperty('--y', `${y}px`);
+                document.body.appendChild(bStar); setTimeout(() => bStar.remove(), 800);
+            }
+            const splash = document.getElementById('splashOverlay');
+            splash.style.opacity = '0'; setTimeout(() => { splash.style.display = 'none'; }, 800);
+        }
+
+        function bananaExit() { window.close(); window.location.href = "https://www.google.com"; }
+
+        function bananaJoin(event) {
+            const bananaCtx = new (window.AudioContext || window.webkitAudioContext)();
+            const bananaOsc = bananaCtx.createOscillator();
+            const bananaGain = bananaCtx.createGain();
+            bananaOsc.connect(bananaGain); bananaGain.connect(bananaCtx.destination);
+            bananaOsc.type = 'sine'; bananaOsc.frequency.setValueAtTime(880, bananaCtx.currentTime);
+            bananaOsc.frequency.exponentialRampToValueAtTime(1320, bananaCtx.currentTime + 0.1);
+            bananaGain.gain.setValueAtTime(0.1, bananaCtx.currentTime);
+            bananaGain.gain.exponentialRampToValueAtTime(0.01, bananaCtx.currentTime + 0.5);
+            bananaOsc.start(); bananaOsc.stop(bananaCtx.currentTime + 0.5);
+
+            for (let i = 0; i < 15; i++) {
+                const bStar = document.createElement('div');
+                bStar.className = 'burstStar'; bStar.style.left = event.pageX + 'px'; bStar.style.top = event.pageY + 'px';
+                const x = (Math.random() - 0.5) * 300, y = (Math.random() - 0.5) * 300;
+                bStar.style.setProperty('--x', `${x}px`); bStar.style.setProperty('--y', `${y}px`);
+                document.body.appendChild(bStar); setTimeout(() => bStar.remove(), 800);
+            }
+            setTimeout(() => { window.open("https://discord.gg/68QNPJbbMu", "_blank"); }, 400);
+        }
+
+        // Update Birthdays
+        function bananaUpdateTimers() {
+            const now = new Date();
+            function calc(m, d, y, id, bId, skipAge = false) {
+                if (!skipAge && id) {
+                    let age = now.getFullYear() - y;
+                    const bday = new Date(now.getFullYear(), m - 1, d);
+                    if (now < bday) age--;
+                    document.getElementById(id).innerText = age + " Years Old";
+                }
+                let next = new Date(now.getFullYear(), m - 1, d);
+                if (now > next) next.setFullYear(now.getFullYear() + 1);
+                const diff = next - now;
+                const days = Math.floor(diff / (1000 * 60 * 60 * 24)), hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                document.getElementById(bId).innerText = `Next Birthday in ${days} days ${hours} hours`;
+            }
+            calc(3, 9, 2006, 'bunnyAge', 'bdayCountdown');
+            calc(10, 31, 1985, 'mdAge', 'mdBdayCountdown', true);
+            calc(7, 25, 2005, 'sdAge', 'sdBdayCountdown');
+        }
+        bananaUpdateTimers(); setInterval(bananaUpdateTimers, 3600000);
+
+        // Fake Chat
+        const chatScript = [
+            { name: "Ranouma", msg: "Hey has anyone seen the glowberry farm?" },
+            { name: "FarmWerks", msg: "It is near the portal Ranouma! Just look for the pink sparkles." },
+            { name: "BunnyWifRabies", msg: "Anyone want to go on a long walk in Queens later?" },
+            { name: "kiyoko_xx", msg: "I think I have some extra dye in the coven chest." },
+            { name: "enderpheb", msg: "I can help build the tower! I have deepslate ready." }
+        ];
+        const chatFeed = document.getElementById('chatFeed');
+        let currentIdx = 0;
+        function updateFakeChat() {
+            chatFeed.innerHTML = '';
+            const lines = chatScript.slice(currentIdx, currentIdx + 5);
+            lines.forEach((item) => {
+                const msgDiv = document.createElement('div');
+                msgDiv.className = 'mirrorMsg';
+                const av = `https://api.dicebear.com/7.x/bottts/svg?seed=${item.name}`;
+                msgDiv.innerHTML = `<img src="${av}" class="mirrorAvatar" style="border-color: var(--softPink); filter: hue-rotate(280deg);"><div class="mirrorText"><b>${item.name}</b>: ${item.msg}</div>`;
+                chatFeed.appendChild(msgDiv);
+            });
+            currentIdx = (currentIdx + 5) % chatScript.length;
+            chatFeed.scrollTop = chatFeed.scrollHeight;
+        }
+        updateFakeChat(); setInterval(updateFakeChat, 30000);
+
+    </script>
 </body>
 </html>
 
@@ -159,13 +709,13 @@ V  \
 V  \
  \  \_
   \,'.`-.
-   |\ `. `.      
+   |\ `. `.       
    ( \  `. `-.                         _,.-:\
     \ \   `.  `-._             __..--' ,-'; /
      \ `.   `-.   `-..___..---'   _.--'  ,'/
       `. `.    `-._        __..--'     ,' /
-        `. `-_     ``--..''         _.-','
-          `-_ `-.___          __,--'  ,'
-              `-.__  `----"""    __.-'
+       `. `-_     ``--..''         _.-' ,'
+         `-_ `-.___          __,--'  ,'
+             `-.__  `----"""    __.-'
                    `--..____..--'
 */ -->

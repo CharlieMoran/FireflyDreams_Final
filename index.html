@@ -104,26 +104,27 @@ V  \
         /* Party Mode FX */
         .disco-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: 9999; pointer-events: none; display: none;
+            z-index: 9998; pointer-events: none; display: none;
             animation: discoFlash 0.4s infinite;
         }
         @keyframes discoFlash {
             0% { background: rgba(255, 0, 0, 0.15); }
-            25% { background: rgba(0, 255, 0, 0.15); }
-            50% { background: rgba(0, 0, 255, 0.15); }
-            75% { background: rgba(255, 255, 0, 0.15); }
-            100% { background: rgba(255, 0, 255, 0.15); }
+            20% { background: rgba(0, 255, 0, 0.15); }
+            40% { background: rgba(0, 0, 255, 0.15); }
+            60% { background: rgba(255, 255, 0, 0.15); }
+            80% { background: rgba(255, 0, 255, 0.15); }
+            100% { background: rgba(0, 255, 255, 0.15); }
         }
 
-        .dancing { animation: bounceDance 0.5s infinite alternate ease-in-out !important; }
-        @keyframes bounceDance { from { transform: translateY(0); } to { transform: translateY(-30px); } }
-        
         .gathering {
             position: fixed !important; top: 50% !important; left: var(--target-x) !important;
             transform: translate(-50%, -50%) !important;
             margin: 0 !important; z-index: 10000 !important;
         }
 
+        .dancing { animation: bounceDance 0.5s infinite alternate ease-in-out !important; }
+        @keyframes bounceDance { from { transform: translate(-50%, -50%); } to { transform: translate(-50%, -85%); } }
+        
         /* Character Buttons & Galaxy */
         .charBtnContainer { position: relative; display: flex; justify-content: center; align-items: center; margin: 15px auto; width: 100%; height: 120px; }
         .charBtn { width: 60px; height: auto; cursor: pointer; transition: 0.3s; filter: drop-shadow(0 0 5px var(--softPink)); z-index: 10; }
@@ -136,7 +137,7 @@ V  \
         @keyframes nautilusCycle { 0% { transform: rotate(0deg) translateX(0) scale(0); opacity: 0; } 50% { transform: rotate(1080deg) translateX(var(--dist)) scale(1.2); opacity: 1; } 100% { transform: rotate(1440deg) translateX(0) scale(0); opacity: 0; } }
         
         .shooting-star-fx { position: fixed; width: 250px; height: 2px; background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), white); pointer-events: none; z-index: 2000; animation: streakDiagonal 1.2s linear forwards; }
-        @keyframes streakDiagonal { 0% { transform: translate(0, 0) rotate(-45deg); opacity: 0; } 100% { transform: translate(-150vw, 150vh) rotate(-45deg); opacity: 0; } }
+        @keyframes streakDiagonal { 0% { transform: translate(0, 0) rotate(-45deg); opacity: 0; } 10% { opacity: 1; } 100% { transform: translate(-150vw, 150vh) rotate(-45deg); opacity: 0; } }
 
         /* Main Content Styling */
         .card, .sectionContent { background: var(--glassBg); backdrop-filter: blur(20px); padding: 3rem; border-radius: 35px; border: 2px solid rgba(255, 215, 0, 0.4); text-align: center; width: 90%; max-width: 650px; margin-bottom: 60px; transition: 0.3s; }
@@ -146,13 +147,12 @@ V  \
         h1 { font-family: 'Fredoka One', cursive; color: var(--beeYellow); font-size: 3.5rem; text-shadow: 2px 2px 0px #000; margin: 0; }
         h2, h3 { font-family: 'Fredoka One', cursive; color: var(--beeYellow); margin: 0 0 1rem 0; }
         
-        /* About Us & Emotions */
+        /* About Us Emotions */
         .emotionRow { display: flex; justify-content: space-around; align-items: flex-end; margin-top: 2rem; gap: 10px; }
         .emotionBox { flex: 1; text-align: center; }
         .emotionImg { width: 100%; max-width: 120px; filter: drop-shadow(0 0 10px var(--softPink)); transition: 0.3s; animation: breathingGlowPink 5s infinite ease-in-out; }
-        .emotionImg:hover { transform: scale(1.1) rotate(3deg); }
 
-        /* Magic Mirror Chat */
+        /* Magic Mirror */
         .magicMirrorBox { border: 2px solid var(--softPink); box-shadow: 0 0 30px rgba(255, 107, 149, 0.2); text-align: left; }
         #chatFeed { height: 350px; overflow-y: auto; margin-top: 20px; padding: 20px; background: rgba(0, 0, 0, 0.4); border-radius: 20px; border: 1px solid rgba(255, 107, 149, 0.3); display: flex; flex-direction: column; gap: 15px; }
         .mirrorMsg { display: flex; align-items: center; gap: 15px; animation: slideIn 0.4s ease-out forwards; }
@@ -171,7 +171,7 @@ V  \
         .discordHandle { display: block; margin-top: 10px; font-family: 'Fredoka One'; color: var(--softPink); font-size: 1.8rem; }
         footer { margin: 40px 0; font-size: 0.75rem; color: rgba(255,255,255,0.4); text-align: center; }
 
-        /* Global FX & Overlays */
+        /* Global UI Elements */
         #particles { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
         .particle { position: absolute; width: 6px; height: 6px; background: var(--beeYellow); border-radius: 50%; animation: floatDown 10s infinite linear; opacity: 0; }
         @keyframes floatDown { 0% { transform: translateY(-10vh) translateX(0); opacity: 0; } 10% { opacity: 0.7; } 90% { opacity: 0.7; } 100% { transform: translateY(110vh) translateX(50px); opacity: 0; } }
@@ -182,20 +182,15 @@ V  \
         /* Animations */
         @keyframes rectangularBreathingGlow { 0%, 100% { box-shadow: 0 0 15px rgba(255, 215, 0, 0.3); border-color: rgba(255, 215, 0, 0.5); } 50% { box-shadow: 0 0 35px rgba(255, 215, 0, 0.7); border-color: var(--beeYellow); } }
         @keyframes imageOutlineGlowYellow { 0%, 100% { filter: drop-shadow(0 0 3px rgba(255, 215, 0, 0.8)); } 50% { filter: drop-shadow(0 0 10px var(--beeYellow)) brightness(1.1); } }
-        @keyframes imageOutlineGlowPink { 0%, 100% { filter: drop-shadow(0 0 3px rgba(255, 107, 149, 0.8)); } 50% { filter: drop-shadow(0 0 10px var(--softPink)) brightness(1.1); } }
         @keyframes breathingGlowPink { 0%, 100% { filter: drop-shadow(0 0 5px var(--softPink)); } 50% { filter: drop-shadow(0 0 20px var(--softPink)); } }
         @keyframes slideIn { from { opacity: 0; transform: translateX(-15px); } to { opacity: 1; transform: translateX(0); } }
-        .trailStar { position: absolute; width: 8px; height: 8px; border-radius: 50%; pointer-events: none; z-index: 100; animation: starFade 1s linear forwards; }
-        .burstStar { position: absolute; width: 8px; height: 8px; background: var(--beeYellow); border-radius: 50%; box-shadow: 0 0 10px var(--beeYellow); pointer-events: none; z-index: 1000; animation: burstFade 0.8s ease-out forwards; }
-        @keyframes starFade { 0% { opacity: 1; transform: scale(1); } 100% { opacity: 0; transform: scale(0.3) translateY(20px); } }
-        @keyframes burstFade { 0% { opacity: 1; transform: scale(1) translate(0, 0); } 100% { opacity: 0; transform: scale(0) translate(var(--x), var(--y)); } }
 
         @media (max-width: 600px) {
             h1 { font-size: 2.2rem; } h2 { font-size: 1.6rem; }
             .card, .sectionContent { padding: 1.5rem; width: 90%; margin-bottom: 30px; }
             .card { margin-top: 100px; }
             .heroImg { margin-bottom: 1.5rem; } .profileImg { height: 280px; } .profileCard { padding: 1.5rem; }
-            .emotionImg { max-width: 75px; } .discordHandle { font-size: 1.3rem; }
+            .discordHandle { font-size: 1.3rem; }
         }
     </style>
 </head>
@@ -230,7 +225,7 @@ V  \
         <div class="splashBox">
             <h2 style="font-family: 'Fredoka One'; color: var(--beeYellow);">Are you ready to explore with us Pookie?</h2>
             <div class="splashBtns" style="display:flex; justify-content:center; gap:15px; margin-top:2rem;">
-                <button style="font-family: 'Fredoka One'; padding: 15px 35px; border-radius: 20px; background: var(--beeYellow); color: var(--deepNight); cursor: pointer; border: none;" onclick="bananaEnter(event)">YES</button>
+                <button style="font-family: 'Fredoka One'; padding: 15px 35px; border-radius: 20px; background: var(--beeYellow); color: var(--deepNight); cursor: pointer; border: none;" onclick="bananaEnter()">YES</button>
                 <button style="font-family: 'Fredoka One'; padding: 15px 35px; border-radius: 20px; background: var(--softPink); color: white; cursor: pointer; border: none;" onclick="bananaExit()">NO</button>
             </div>
         </div>
@@ -251,8 +246,8 @@ V  \
 
     <div class="sectionContent">
         <h2>About Our Sanctuary</h2>
-        <p>Moondrop the moon witch wove magical ley lines across the digital realm to create a sanctuary for the girls of firefly dreams. we share adventures and moonlit magic across any distance.</p>
-        <p style="font-weight: 600; color: var(--beeYellow);">We are an 18 plus, cozy female friendly server where we are free to build create and explore to our hearts content.</p>
+        <p>Moondrop the Moon Witch wove magical ley lines across the digital realm to create a sanctuary for the girls of Firefly Dreams. We share adventures and moonlit magic across any distance.</p>
+        <p style="font-weight: 600; color: var(--beeYellow);">We are an 18 plus cozy female friendly server where we are free to build create and explore to our hearts content.</p>
         <div class="emotionRow">
             <div class="emotionBox">
                 <img src="images/IMG_6921-removebg-preview.png" id="laughing" alt="Laughing" class="emotionImg">
@@ -271,47 +266,47 @@ V  \
 
     <div class="sectionContent magicMirrorBox">
         <h2 style="color: var(--softPink);">The Magic Mirror</h2>
-        <p>Listen up girls. this mirror is not just for fixing your hair. i have poured enough magic into this silver surface to let us see the whispers of the coven in real time.</p>
+        <p>Listen up girls. This mirror is not just for fixing your hair. I have poured enough magic into this silver surface to let us see the whispers of the coven in real time. If you are looking for trouble or just looking for a friend you will find it shimmering right here.</p>
         <div id="chatFeed"></div>
-        <span class="aiNote">Streaming live from #ffd server chat</span>
+        <span style="font-size: 0.75rem; display: block; margin-top: 5px; opacity: 0.8; font-style: italic;">Streaming live from #ffd server chat</span>
     </div>
 
     <div class="sectionContent">
         <h2>Meet the Crew</h2>
         <div class="loreGrid">
-            <div class="profileCard" id="card-bunny">
+            <div class="profileCard">
                 <img src="images/Willow.png" alt="BunnyWifRabies" class="profileImg">
                 <div class="profileHeader">
                     <h3>Bunnywifrabies</h3>
                     <span class="ageBadge" id="bunnyAge">Loading</span>
                 </div>
                 <div class="countdown" id="bdayCountdown">Calculating party</div>
-                <p>That is me in the poster! I am surviving here in Queens New York even though this city is way too expensive for its own good. Most of my time is spent window shopping for stuffed animals i cannot afford or hanging out at karaoke. I play helldivers 2 and minecraft and roblox and rdr2 mainly.</p>
+                <p>That is me in the poster! I am surviving here in Queens New York even though this city is way too expensive for its own good. Most of my time is spent window shopping for stuffed animals I cannot afford or hanging out at karaoke. I play Helldivers 2 and Minecraft and Roblox and RDR2 mainly.</p>
             </div>
-            <div class="profileCard" id="card-moondrop">
-                <img src="images/MD.png" alt="Moondrop" class="profileImg pink-outline">
+            <div class="profileCard">
+                <img src="images/MD.png" alt="Moondrop" class="profileImg">
                 <div class="profileHeader">
                     <h3 style="color: var(--softPink);">Moondrop</h3>
                     <span class="ageBadge" id="mdAge" style="background: #7b1fa2;">40</span>
                 </div>
                 <div class="countdown" id="mdBdayCountdown">Calculating brew</div>
-                <p>Listen sugar i wove the very ley lines you are walking on just so my girl stardrop could finally have some decent company. Do not go asking me what is in my special glowberry brew. When i am not tending to my black tabby eclipse i am usually blasting sabaton or fleetwood mac.</p>
+                <p>Listen sugar I wove the very ley lines you are walking on just so my girl Stardrop could finally have some decent company. Do not go asking me what is in my special glowberry brew. When I am not tending to my black tabby Eclipse I am usually blasting Sabaton or Fleetwood Mac.</p>
                 <div class="charBtnContainer">
-                    <img src="images/MDC.png" id="moonBtn" alt="Moon" class="charBtn" onclick="charAction('moon', event)">
+                    <img src="images/MDC.png" id="moonBtn" alt="Moon" class="charBtn" onclick="charAction('moon')">
                 </div>
             </div>
-            <div class="profileCard" id="card-stardrop">
+            <div class="profileCard">
                 <img src="images/SD.png" alt="Stardrop" class="profileImg">
                 <div class="profileHeader">
                     <h3>Stardrop</h3>
                     <span class="ageBadge" id="sdAge">Loading</span>
                 </div>
                 <div class="countdown" id="sdBdayCountdown">Calculating party</div>
-                <span class="aiNote">(Stardrop is an AI being programmed to interact with the girls)</span>
-                <p style="margin-top:15px;">Hi. i am stardrop. My mom moondrop created this world for me and i am still trying to learn how to talk to everyone. I am sorry if i am a bit quiet but i mostly stay in my tower and listen to metal music. I love cutesy things and i prefer dogs over cats.</p>
+                <span style="font-size: 0.75rem; opacity: 0.8; font-style: italic;">(Stardrop is an AI being programmed to interact with the girls)</span>
+                <p style="margin-top:15px;">Hi. I am Stardrop. My mom Moondrop created this world for me and I am still trying to learn how to talk to everyone. I am sorry if I am a bit quiet but I mostly stay in my tower and listen to metal music. I love cutesy things and I prefer dogs over cats.</p>
                 <div class="charBtnContainer">
                     <div id="dreamGalaxy" class="galaxy-fx-wrap"><div class="galaxy-aura"></div></div>
-                    <img src="images/SDDC.png" id="dreamBtn" alt="Dreamcatcher" class="charBtn" onclick="charAction('dream', event)">
+                    <img src="images/SDDC.png" id="dreamBtn" alt="Dreamcatcher" class="charBtn" onclick="charAction('dream')">
                 </div>
             </div>
         </div>
@@ -320,17 +315,17 @@ V  \
     <div class="sectionContent" style="border-top-color: var(--softPink);">
         <h2>Join the Coven</h2>
         <p>Verification is required to keep the weirdos out. Click below to teleport to our #verify-here channel!</p>
-        <div class="whitelistBox" onclick="bananaJoin(event)">
+        <div class="whitelistBox" onclick="window.open('https://discord.gg/68QNPJbbMu', '_blank')">
             <span style="color: var(--softPink); font-weight: bold;">✨ TELEPORT TO DISCORD ✨</span>
             <span class="discordHandle">JOIN NOW</span>
-            <span id="hint" style="font-size:0.8rem; opacity:0.6;">Verification gate active</span>
+            <span style="font-size:0.8rem; opacity:0.6;">Verification gate active</span>
         </div>
     </div>
 
     <footer>created by ChickenWifRabies with love for BunnyWifRabies. fireflydreams ™ all rights reserved copyright 2025</footer>
 
     <script>
-        // --- NYC Time & Theme Engine ---
+        // --- Theme Management ---
         const themes = {
             day: { hero: 'images/hero.png', bg: ['images/bg dt.png', 'images/bg dt2.png'] },
             sunset: { hero: 'images/hero-sunset.jpg', bg: ['images/bg ss.png', 'images/bg ss2.png'] },
@@ -339,8 +334,8 @@ V  \
 
         let currentTheme = 'day';
         let bgCycleIdx = 0;
-        let moonCooldown = false;
         let moonClicks = 0;
+        let moonCooldown = false;
 
         function getNYCHour() {
             return new Date(new Date().toLocaleString("en-US", {timeZone: "America/New_York"})).getHours();
@@ -358,29 +353,24 @@ V  \
             const bg1 = document.getElementById('bg1');
             const bg2 = document.getElementById('bg2');
             const nextImg = themes[currentTheme].bg[bgCycleIdx];
-            
             if (bg1.classList.contains('bg-active')) {
                 bg2.style.backgroundImage = `url('${nextImg}')`;
-                bg2.classList.add('bg-active');
-                bg1.classList.remove('bg-active');
+                bg2.classList.add('bg-active'); bg1.classList.remove('bg-active');
             } else {
                 bg1.style.backgroundImage = `url('${nextImg}')`;
-                bg1.classList.add('bg-active');
-                bg2.classList.remove('bg-active');
+                bg1.classList.add('bg-active'); bg2.classList.remove('bg-active');
             }
             bgCycleIdx = (bgCycleIdx + 1) % 2;
         }
 
         function checkTime() {
-            const hour = getNYCHour();
-            let newTheme = 'night';
-            if (hour >= 6 && hour < 17) newTheme = 'day';
-            else if (hour >= 17 && hour < 20) newTheme = 'sunset';
-            
-            if (newTheme !== currentTheme) applyTheme(newTheme);
+            const h = getNYCHour();
+            let n = 'night';
+            if (h >= 6 && h < 17) n = 'day'; else if (h >= 17 && h < 20) n = 'sunset';
+            if (n !== currentTheme) applyTheme(n);
         }
 
-        // --- Console Logic ---
+        // --- Console ---
         function handleConsole(e) {
             if (e.key === 'Enter') {
                 const val = e.target.value.trim().toLowerCase();
@@ -394,57 +384,36 @@ V  \
             }
         }
 
-        // --- Party Time Sequence ---
+        // --- Party Time Logic ---
         function startParty() {
             const bgm = document.getElementById('bgMusic');
             const ptm = document.getElementById('partyMusic');
             const disco = document.getElementById('discoOverlay');
-            bgm.pause();
-            ptm.volume = 0.15;
-            ptm.play();
+            bgm.pause(); ptm.volume = 0.15; ptm.play();
             disco.style.display = 'block';
             document.body.style.overflow = 'hidden';
-            
+
             const dancers = [
                 document.getElementById('bucket-water'), document.getElementById('bucket-snow'), document.getElementById('bucket-milk'),
                 document.getElementById('moonBtn'), document.getElementById('dreamBtn'),
                 document.getElementById('laughing'), document.getElementById('crying'), document.getElementById('tea'),
                 document.getElementById('banana-party')
             ];
-            
+
             dancers.forEach((d, i) => {
                 d.classList.add('gathering', 'dancing');
                 d.style.setProperty('--target-x', `${(i + 1) * (100 / (dancers.length + 1))}%`);
             });
 
             ptm.onended = () => {
-                disco.style.display = 'none';
-                document.body.style.overflow = 'auto';
+                disco.style.display = 'none'; document.body.style.overflow = 'auto';
                 document.getElementById('banana-party').style.display = 'none';
-                dancers.forEach(d => {
-                    d.classList.remove('gathering', 'dancing');
-                    d.style.removeProperty('--target-x');
-                });
+                dancers.forEach(d => { d.classList.remove('gathering', 'dancing'); d.style.removeProperty('--target-x'); });
                 bgm.play();
             };
         }
 
-        // --- Magic Elements ---
-        function bucketAction(type) {
-            const rain = document.getElementById('rainAudio');
-            const pts = document.querySelectorAll('.particle');
-            if (type === 'water') {
-                pts.forEach(p => { p.style.background = '#70d6ff'; p.style.width = '2px'; p.style.height = '15px'; p.style.animationDuration = '1s'; });
-                rain.volume = 0.1; rain.play();
-            } else if (type === 'snow') {
-                pts.forEach(p => { p.style.background = '#fff'; p.style.width = '6px'; p.style.height = '6px'; p.style.animationDuration = '5s'; });
-                rain.pause();
-            } else {
-                pts.forEach(p => { p.style.background = '#ffd700'; p.style.width = '6px'; p.style.height = '6px'; p.style.animationDuration = '10s'; });
-                rain.pause();
-            }
-        }
-
+        // --- Interaction Logic ---
         function charAction(type) {
             if (type === 'moon') {
                 if (moonCooldown) return;
@@ -468,12 +437,27 @@ V  \
                 setTimeout(() => {
                     const s = document.createElement('div');
                     s.className = 'shooting-star-fx';
-                    const offset = Math.random() * 80;
-                    s.style.top = (offset - 20) + 'vh';
-                    s.style.right = (offset - 20) + 'vw';
+                    const off = Math.random() * 80;
+                    s.style.top = (off - 20) + 'vh';
+                    s.style.right = (off - 20) + 'vw';
                     document.body.appendChild(s);
                     setTimeout(() => s.remove(), 1200);
                 }, i * 120);
+            }
+        }
+
+        function bucketAction(type) {
+            const rain = document.getElementById('rainAudio');
+            const pts = document.querySelectorAll('.particle');
+            if (type === 'water') {
+                pts.forEach(p => { p.style.background = '#70d6ff'; p.style.width = '2px'; p.style.height = '15px'; p.style.animationDuration = '1s'; });
+                rain.volume = 0.1; rain.play();
+            } else if (type === 'snow') {
+                pts.forEach(p => { p.style.background = '#fff'; p.style.width = '6px'; p.style.height = '6px'; p.style.animationDuration = '5s'; });
+                rain.pause();
+            } else {
+                pts.forEach(p => { p.style.background = '#ffd700'; p.style.width = '6px'; p.style.height = '6px'; p.style.animationDuration = '10s'; });
+                rain.pause();
             }
         }
 
@@ -555,21 +539,15 @@ V  \
             });
         }
 
-        function bananaEnter(event) { 
+        function bananaEnter() { 
             document.getElementById('bgMusic').volume = 0.2; document.getElementById('bgMusic').play(); 
             document.getElementById('splashOverlay').style.opacity = '0'; 
             setTimeout(() => document.getElementById('splashOverlay').style.display = 'none', 800);
         }
         function bananaExit() { window.location.href = "https://www.google.com"; }
-        function bananaJoin(event) { window.open("https://discord.gg/68QNPJbbMu", "_blank"); }
 
-        checkTime();
-        getMoonPhase();
-        bananaUpdateTimers();
-        updateFakeChat();
-        setInterval(checkTime, 60000);
-        setInterval(cycleBackground, 15000);
-        setInterval(bananaUpdateTimers, 3600000);
+        checkTime(); getMoonPhase(); bananaUpdateTimers(); updateFakeChat();
+        setInterval(checkTime, 60000); setInterval(cycleBackground, 15000); setInterval(bananaUpdateTimers, 3600000);
     </script>
 </body>
 </html>

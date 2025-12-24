@@ -109,23 +109,23 @@ V  \
         }
         @keyframes discoFlash {
             0% { background: rgba(255, 0, 0, 0.15); }
-            20% { background: rgba(0, 255, 0, 0.15); }
-            40% { background: rgba(0, 0, 255, 0.15); }
-            60% { background: rgba(255, 255, 0, 0.15); }
-            80% { background: rgba(255, 0, 255, 0.15); }
-            100% { background: rgba(0, 255, 255, 0.15); }
+            25% { background: rgba(0, 255, 0, 0.15); }
+            50% { background: rgba(0, 0, 255, 0.15); }
+            75% { background: rgba(255, 255, 0, 0.15); }
+            100% { background: rgba(255, 0, 255, 0.15); }
         }
 
         .dancing { animation: bounceDance 0.5s infinite alternate ease-in-out !important; }
         @keyframes bounceDance { from { transform: translateY(0); } to { transform: translateY(-30px); } }
         
         .gathering {
-            position: fixed !important; top: 50% !important; left: 50% !important;
+            position: fixed !important; top: 50% !important; left: var(--target-x) !important;
+            transform: translate(-50%, -50%) !important;
             margin: 0 !important; z-index: 10000 !important;
         }
 
         /* Character Buttons & Galaxy */
-        .charBtnContainer { position: relative; display: flex; justify-content: center; align-items: center; margin-top: 15px; height: 120px; }
+        .charBtnContainer { position: relative; display: flex; justify-content: center; align-items: center; margin: 15px auto; width: 100%; height: 120px; }
         .charBtn { width: 60px; height: auto; cursor: pointer; transition: 0.3s; filter: drop-shadow(0 0 5px var(--softPink)); z-index: 10; }
         .galaxy-fx-wrap { position: absolute; top: 50%; left: 50%; width: 0; height: 0; transform: translate(-50%, -50%); pointer-events: none; z-index: 1; display: flex; justify-content: center; align-items: center; }
         .galaxy-aura { position: absolute; width: 0; height: 0; background: radial-gradient(circle, rgba(168, 85, 247, 0.7) 0%, rgba(88, 28, 135, 0.4) 50%, transparent 70%); border-radius: 50%; opacity: 0; filter: blur(15px); }
@@ -158,7 +158,6 @@ V  \
         .mirrorMsg { display: flex; align-items: center; gap: 15px; animation: slideIn 0.4s ease-out forwards; }
         .mirrorAvatar { width: 45px; height: 45px; border-radius: 50%; border: 2px solid var(--beeYellow); box-shadow: 0 0 10px var(--beeYellow); }
         .mirrorText b { color: var(--softPink); font-family: 'Fredoka One'; }
-        .aiNote { font-size: 0.75rem; display: block; margin-top: 5px; opacity: 0.8; font-style: italic; }
 
         /* Profiles */
         .loreGrid { display: grid; grid-template-columns: 1fr; gap: 30px; margin-top: 2rem; text-align: left; }
@@ -172,7 +171,7 @@ V  \
         .discordHandle { display: block; margin-top: 10px; font-family: 'Fredoka One'; color: var(--softPink); font-size: 1.8rem; }
         footer { margin: 40px 0; font-size: 0.75rem; color: rgba(255,255,255,0.4); text-align: center; }
 
-        /* Global UI Elements */
+        /* Global FX & Overlays */
         #particles { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
         .particle { position: absolute; width: 6px; height: 6px; background: var(--beeYellow); border-radius: 50%; animation: floatDown 10s infinite linear; opacity: 0; }
         @keyframes floatDown { 0% { transform: translateY(-10vh) translateX(0); opacity: 0; } 10% { opacity: 0.7; } 90% { opacity: 0.7; } 100% { transform: translateY(110vh) translateX(50px); opacity: 0; } }
@@ -230,9 +229,9 @@ V  \
     <div id="splashOverlay">
         <div class="splashBox">
             <h2 style="font-family: 'Fredoka One'; color: var(--beeYellow);">Are you ready to explore with us Pookie?</h2>
-            <div class="splashBtns">
-                <button class="enterBtn yesBtn" style="font-family: 'Fredoka One'; padding: 15px 35px; border-radius: 20px; background: var(--beeYellow); color: var(--deepNight); cursor: pointer; border: none;" onclick="bananaEnter(event)">YES</button>
-                <button class="enterBtn noBtn" style="font-family: 'Fredoka One'; padding: 15px 35px; border-radius: 20px; background: var(--softPink); color: white; cursor: pointer; border: none;" onclick="bananaExit()">NO</button>
+            <div class="splashBtns" style="display:flex; justify-content:center; gap:15px; margin-top:2rem;">
+                <button style="font-family: 'Fredoka One'; padding: 15px 35px; border-radius: 20px; background: var(--beeYellow); color: var(--deepNight); cursor: pointer; border: none;" onclick="bananaEnter(event)">YES</button>
+                <button style="font-family: 'Fredoka One'; padding: 15px 35px; border-radius: 20px; background: var(--softPink); color: white; cursor: pointer; border: none;" onclick="bananaExit()">NO</button>
             </div>
         </div>
     </div>
@@ -256,15 +255,15 @@ V  \
         <p style="font-weight: 600; color: var(--beeYellow);">We are an 18 plus, cozy female friendly server where we are free to build create and explore to our hearts content.</p>
         <div class="emotionRow">
             <div class="emotionBox">
-                <img src="images/IMG_6921-removebg-preview.png" alt="Laughing" class="emotionImg">
+                <img src="images/IMG_6921-removebg-preview.png" id="laughing" alt="Laughing" class="emotionImg">
                 <span style="display:block; color:var(--softPink); font-family:'Fredoka One'; margin-top: 10px; font-size: 0.8rem;">Laughing</span>
             </div>
             <div class="emotionBox">
-                <img src="images/IMG_6894-removebg-preview.png" alt="Crying" class="emotionImg">
+                <img src="images/IMG_6894-removebg-preview.png" id="crying" alt="Crying" class="emotionImg">
                 <span style="display:block; color:var(--softPink); font-family:'Fredoka One'; margin-top: 10px; font-size: 0.8rem;">Crying</span>
             </div>
             <div class="emotionBox">
-                <img src="images/IMG_6937-removebg-preview.png" alt="Spilling Tea" class="emotionImg">
+                <img src="images/IMG_6937-removebg-preview.png" id="tea" alt="Spilling Tea" class="emotionImg">
                 <span style="display:block; color:var(--softPink); font-family:'Fredoka One'; margin-top: 10px; font-size: 0.8rem;">Spilling Tea</span>
             </div>
         </div>
@@ -331,7 +330,7 @@ V  \
     <footer>created by ChickenWifRabies with love for BunnyWifRabies. fireflydreams ™ all rights reserved copyright 2025</footer>
 
     <script>
-        // --- NYC Time & Theme Mapping ---
+        // --- NYC Time & Theme Engine ---
         const themes = {
             day: { hero: 'images/hero.png', bg: ['images/bg dt.png', 'images/bg dt2.png'] },
             sunset: { hero: 'images/hero-sunset.jpg', bg: ['images/bg ss.png', 'images/bg ss2.png'] },
@@ -340,6 +339,8 @@ V  \
 
         let currentTheme = 'day';
         let bgCycleIdx = 0;
+        let moonCooldown = false;
+        let moonClicks = 0;
 
         function getNYCHour() {
             return new Date(new Date().toLocaleString("en-US", {timeZone: "America/New_York"})).getHours();
@@ -348,7 +349,9 @@ V  \
         function applyTheme(theme) {
             currentTheme = theme;
             document.getElementById('heroPoster').src = themes[theme].hero;
-            cycleBackground();
+            const bg1 = document.getElementById('bg1');
+            bg1.style.backgroundImage = `url('${themes[theme].bg[0]}')`;
+            bg1.classList.add('bg-active');
         }
 
         function cycleBackground() {
@@ -377,7 +380,7 @@ V  \
             if (newTheme !== currentTheme) applyTheme(newTheme);
         }
 
-        // Minecraft Command Console
+        // --- Console Logic ---
         function handleConsole(e) {
             if (e.key === 'Enter') {
                 const val = e.target.value.trim().toLowerCase();
@@ -391,7 +394,7 @@ V  \
             }
         }
 
-        // Party Time Sequence
+        // --- Party Time Sequence ---
         function startParty() {
             const bgm = document.getElementById('bgMusic');
             const ptm = document.getElementById('partyMusic');
@@ -404,33 +407,29 @@ V  \
             
             const dancers = [
                 document.getElementById('bucket-water'), document.getElementById('bucket-snow'), document.getElementById('bucket-milk'),
-                document.getElementById('moonBtn'), document.getElementById('dreamBtn'), document.getElementById('banana-party')
+                document.getElementById('moonBtn'), document.getElementById('dreamBtn'),
+                document.getElementById('laughing'), document.getElementById('crying'), document.getElementById('tea'),
+                document.getElementById('banana-party')
             ];
+            
             dancers.forEach((d, i) => {
                 d.classList.add('gathering', 'dancing');
-                d.style.marginLeft = `${(i - 2.5) * 60}px`;
+                d.style.setProperty('--target-x', `${(i + 1) * (100 / (dancers.length + 1))}%`);
             });
 
             ptm.onended = () => {
                 disco.style.display = 'none';
                 document.body.style.overflow = 'auto';
                 document.getElementById('banana-party').style.display = 'none';
-                dancers.forEach(d => d.classList.remove('gathering', 'dancing'));
+                dancers.forEach(d => {
+                    d.classList.remove('gathering', 'dancing');
+                    d.style.removeProperty('--target-x');
+                });
                 bgm.play();
             };
         }
 
-        // Weather Logic
-        const particleContainer = document.getElementById('particles');
-        for (let i = 0; i < 150; i++) {
-            const p = document.createElement('div');
-            p.className = 'particle';
-            p.style.left = Math.random() * 100 + 'vw';
-            p.style.animationDelay = Math.random() * 8 + 's';
-            p.style.animationDuration = (Math.random() * 3 + 2) + 's'; 
-            particleContainer.appendChild(p);
-        }
-
+        // --- Magic Elements ---
         function bucketAction(type) {
             const rain = document.getElementById('rainAudio');
             const pts = document.querySelectorAll('.particle');
@@ -446,11 +445,19 @@ V  \
             }
         }
 
-        // FX Logic
         function charAction(type) {
-            if (type === 'moon') createShootingStars();
-            else {
+            if (type === 'moon') {
+                if (moonCooldown) return;
+                moonClicks++;
+                createShootingStars();
+                if (moonClicks >= 3) {
+                    moonCooldown = true;
+                    document.getElementById('moonBtn').style.opacity = '0.4';
+                    setTimeout(() => { moonCooldown = false; moonClicks = 0; document.getElementById('moonBtn').style.opacity = '1'; }, 60000);
+                }
+            } else {
                 const g = document.getElementById('dreamGalaxy');
+                if (g.classList.contains('galaxy-active')) return;
                 g.classList.add('galaxy-active');
                 setTimeout(() => g.classList.remove('galaxy-active'), 5000);
             }
@@ -461,15 +468,26 @@ V  \
                 setTimeout(() => {
                     const s = document.createElement('div');
                     s.className = 'shooting-star-fx';
-                    s.style.top = (Math.random() * 60 - 20) + 'vh';
-                    s.style.right = '-250px';
+                    const offset = Math.random() * 80;
+                    s.style.top = (offset - 20) + 'vh';
+                    s.style.right = (offset - 20) + 'vw';
                     document.body.appendChild(s);
                     setTimeout(() => s.remove(), 1200);
                 }, i * 120);
             }
         }
 
-        // Galaxy Setup
+        // --- Core Init ---
+        const particleContainer = document.getElementById('particles');
+        for (let i = 0; i < 150; i++) {
+            const p = document.createElement('div');
+            p.className = 'particle';
+            p.style.left = Math.random() * 100 + 'vw';
+            p.style.animationDelay = Math.random() * 8 + 's';
+            p.style.animationDuration = (Math.random() * 3 + 2) + 's'; 
+            particleContainer.appendChild(p);
+        }
+
         const gWrap = document.getElementById('dreamGalaxy');
         for (let i = 0; i < 45; i++) {
             const s = document.createElement('div');
@@ -481,7 +499,6 @@ V  \
             gWrap.appendChild(s);
         }
 
-        // Cursor Magic
         const starColors = [ '#ffd700', '#ff6b95', '#70d6ff', '#ffffff', '#e0aaff' ];
         document.addEventListener('mousemove', function(e) {
             const s = document.createElement('div');
@@ -493,7 +510,6 @@ V  \
             setTimeout(() => s.remove(), 1000);
         });
 
-        // UI & Phase Calculations
         function getMoonPhase() {
             const d = new Date();
             let y = d.getFullYear(), m = d.getMonth() + 1, dy = d.getDate();
@@ -505,7 +521,6 @@ V  \
             document.getElementById('moonIcon').innerText = phases[b].i;
             document.getElementById('moonLabel').innerText = phases[b].l;
         }
-        getMoonPhase();
 
         function bananaUpdateTimers() {
             const now = new Date();
@@ -526,7 +541,6 @@ V  \
             calc(10, 31, 1985, 'mdAge', 'mdBdayCountdown', true);
             calc(7, 25, 2005, 'sdAge', 'sdBdayCountdown');
         }
-        bananaUpdateTimers(); setInterval(bananaUpdateTimers, 3600000);
 
         function updateFakeChat() {
             const chatFeed = document.getElementById('chatFeed');
@@ -539,9 +553,7 @@ V  \
                 msgDiv.innerHTML = `<img src="${av}" class="mirrorAvatar" style="border-color: var(--softPink); filter: hue-rotate(280deg);"><div class="mirrorText"><b>${item.name}</b>: ${item.msg}</div>`;
                 chatFeed.appendChild(msgDiv);
             });
-            chatFeed.scrollTop = chatFeed.scrollHeight;
         }
-        updateFakeChat();
 
         function bananaEnter(event) { 
             document.getElementById('bgMusic').volume = 0.2; document.getElementById('bgMusic').play(); 
@@ -551,10 +563,13 @@ V  \
         function bananaExit() { window.location.href = "https://www.google.com"; }
         function bananaJoin(event) { window.open("https://discord.gg/68QNPJbbMu", "_blank"); }
 
-        // Start Intervals
         checkTime();
+        getMoonPhase();
+        bananaUpdateTimers();
+        updateFakeChat();
         setInterval(checkTime, 60000);
         setInterval(cycleBackground, 15000);
+        setInterval(bananaUpdateTimers, 3600000);
     </script>
 </body>
 </html>

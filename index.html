@@ -22,6 +22,7 @@ V  \
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Firefly Dreams | Official Sanctuary</title>
     <link rel="icon" type="image/png" href="images/FFDF.png">
+    
     <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
@@ -33,10 +34,10 @@ V  \
         <span id="moonLabel">Calculating...</span>
     </div>
 
-    <div class="bucket-header">
-        <img src="images/SB.png" alt="Snow Bucket" class="bucket-icon">
-        <img src="images/SB.png" alt="Snow Bucket" class="bucket-icon">
-        <img src="images/SB.png" alt="Snow Bucket" class="bucket-icon">
+    <div class="bucket-row">
+        <img src="images/wb.png" class="bucket-static" alt="Water Bucket">
+        <img src="images/sb.png" class="bucket-static" alt="Snow Bucket">
+        <img src="images/mb.png" class="bucket-static" alt="Milk Bucket">
     </div>
 
     <div id="splashOverlay">
@@ -65,7 +66,7 @@ V  \
 
     <div class="sectionContent">
         <h2>About Our Sanctuary</h2>
-        <p>Moondrop the Moon Witch wove magical ley lines across the digital realm to create a sanctuary for the girls of Firefly Dreams. We share adventures and moonlit magic across any distance.</p>
+        <p>Moondrop the Moon witch wove magical ley lines across the digital realm to create a sanctuary for the girls of Firefly Dreams. We share adventures and moonlit magic across any distance.</p>
         <p style="font-weight: 600; color: var(--beeYellow);">We are an 18 plus cozy female friendly server where we are free to build create and explore to our hearts content.</p>
         
         <div class="emotionRow">
@@ -85,9 +86,11 @@ V  \
     </div>
 
     <div class="sectionContent magicMirrorBox">
-        <img src="images/bell.png" id="sunsetBell" alt="Sunset Bell">
+        <img src="images/Bell1.png" id="sunsetBell" alt="Sunset Bell">
+        
         <h2 style="color: var(--softPink);">The Magic Mirror</h2>
         <p>Listen up girls. This mirror is not just for fixing your hair. I have poured enough magic into this silver surface to let us see the whispers of the coven in real time. If you are looking for trouble or just looking for a friend you will find it shimmering right here.</p>
+        
         <div id="chatFeed"></div>
         <span class="aiNote">Streaming live from #ffd server chat</span>
     </div>
@@ -95,6 +98,7 @@ V  \
     <div class="sectionContent">
         <h2>Meet the Crew</h2>
         <div class="loreGrid">
+            
             <div class="profileCard">
                 <img src="images/Willow.png" alt="BunnyWifRabies" class="profileImg">
                 <div class="profileHeader">
@@ -113,7 +117,7 @@ V  \
                 </div>
                 <div class="countdown" id="mdBdayCountdown">Calculating brew</div>
                 <p>Listen sugar I wove the very ley lines you are walking on just so my girl Stardrop could finally have some decent company. Do not go asking me what is in my special glowberry brew. When I am not tending to my black tabby Eclipse I am usually blasting Sabaton or Fleetwood Mac.</p>
-                <img src="images/MDC.jpg" class="charButton" onclick="moondropMagic(event)" alt="Crescent Moon">
+                <img src="images/MDC.jpg" class="charInteractBtn" onclick="triggerMoonMagic(event)" alt="Crescent Moon Button">
             </div>
 
             <div class="profileCard">
@@ -125,8 +129,9 @@ V  \
                 <div class="countdown" id="sdBdayCountdown">Calculating party</div>
                 <span class="aiNote">(Stardrop is an AI being programmed to interact with the girls)</span>
                 <p style="margin-top:15px;">Hi. I am Stardrop. My mom Moondrop created this world for me and I am still trying to learn how to talk to everyone. I am sorry if I am a bit quiet but I mostly stay in my tower and listen to metal music. I love cutesy things and I prefer dogs over cats.</p>
-                <img src="images/SDDC.jpg" class="charButton" onclick="stardropDream(event)" alt="Dreamcatcher">
+                <img src="images/SDDC.jpg" class="charInteractBtn" onclick="triggerDreamMagic(event)" alt="Dreamcatcher Button">
             </div>
+
         </div>
     </div>
 
@@ -164,4 +169,3 @@ V  \
               `-.__  `----"""    __.-'
                    `--..____..--'
 */ -->
-

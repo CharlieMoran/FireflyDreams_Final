@@ -26,6 +26,63 @@
             cursor: default;
         }
 
+        /* Splash Screen Overlay */
+        #splashOverlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(10, 8, 20, 0.9);
+            backdrop-filter: blur(15px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            transition: opacity 0.8s ease;
+        }
+
+        .splashBox {
+            background: var(--glassBg);
+            padding: 3rem;
+            border-radius: 35px;
+            border: 2px solid var(--beeYellow);
+            text-align: center;
+            max-width: 500px;
+            width: 85%;
+            box-shadow: 0 0 50px rgba(0,0,0,0.8);
+        }
+
+        .splashBox h2 {
+            font-family: 'Fredoka One', cursive;
+            color: var(--beeYellow);
+            font-size: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .splashBtns {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .enterBtn {
+            font-family: 'Fredoka One', cursive;
+            padding: 15px 40px;
+            border-radius: 20px;
+            border: none;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: 0.3s;
+            min-width: 140px;
+        }
+
+        .yesBtn { background: var(--beeYellow); color: var(--deepNight); box-shadow: 0 0 15px var(--beeYellow); }
+        .yesBtn:hover { transform: scale(1.1); box-shadow: 0 0 25px var(--beeYellow); }
+
+        .noBtn { background: var(--softPink); color: white; opacity: 0.8; }
+        .noBtn:hover { background: #ff4d7d; opacity: 1; }
+
+        /* Main Page Styles */
         .bgImage {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: url('images/background.png') no-repeat center center/cover;
@@ -58,7 +115,6 @@
             animation: starFade 1s linear forwards;
         }
 
-        /* Burst Star Styling */
         .burstStar {
             position: absolute;
             width: 8px;
@@ -211,15 +267,23 @@
             text-align: center; font-size: 0.7rem; color: var(--softPink);
             letter-spacing: 2px; margin-bottom: 10px; opacity: 0.6; font-weight: bold;
         }
-        /* Hide the audio player controls */
         #bgMusic { display: none; }
     </style>
 </head>
 <body>
 
+    <div id="splashOverlay">
+        <div class="splashBox">
+            <h2>Are you ready to explore with us girl?</h2>
+            <div class="splashBtns">
+                <button class="enterBtn yesBtn" onclick="bananaEnter(event)">YES</button>
+                <button class="enterBtn noBtn" onclick="bananaExit()">NO</button>
+            </div>
+        </div>
+    </div>
+
     <audio id="bgMusic" loop>
         <source src="audio/bgmusic.mp3" type="audio/mpeg">
-        Your browser does not support the audio element.
     </audio>
 
     <div class="bgImage"></div>
@@ -323,11 +387,11 @@ V  \
  \  \_
   \,'.`-.
    |\ `. `.       
-   ( \  `. `-.                         _,.-:\
-    \ \   `.  `-._                __..--' ,-';/
+   ( \  `. `-.                        _,.-:\
+    \ \   `.  `-._             __..--' ,-';/
      \ `.   `-.   `-..___..---'   _.--'  ,'/
       `. `.    `-._        __..--'     ,' /
-        `. `-_     ``--..''         _.-'  ,'
+        `. `-_     ``--..''         _.-','
           `-_ `-.___          __,--'  ,'
               `-.__  `----"""    __.-'
                    `--..____..--'
@@ -353,23 +417,59 @@ V  \
             setTimeout(() => { banana4.remove(); }, 1000);
         });
 
-        // === BACKGROUND MUSIC SETUP ===
-        const bgAudio = document.getElementById('bgMusic');
-        bgAudio.volume = 0.2; // Set volume to 20% (nice and low)
+        // === SPLASH SCREEN LOGIC ===
+        function bananaEnter(event) {
+            // Start background music
+            const bgAudio = document.getElementById('bgMusic');
+            bgAudio.volume = 0.2;
+            bgAudio.play();
 
-        // Try to autoplay (some browsers block this)
-        bgAudio.play().catch(error => {
-            console.log("Autoplay prevented by browser policy. Music will start on first interaction.");
-        });
+            // Trigger Chime
+            const bananaCtx = new (window.AudioContext || window.webkitAudioContext)();
+            const bananaOsc = bananaCtx.createOscillator();
+            const bananaGain = bananaCtx.createGain();
+            bananaOsc.connect(bananaGain);
+            bananaGain.connect(bananaCtx.destination);
+            bananaOsc.type = 'sine';
+            bananaOsc.frequency.setValueAtTime(880, bananaCtx.currentTime);
+            bananaOsc.frequency.exponentialRampToValueAtTime(1320, bananaCtx.currentTime + 0.1);
+            bananaGain.gain.setValueAtTime(0.1, bananaCtx.currentTime);
+            bananaGain.gain.exponentialRampToValueAtTime(0.01, bananaCtx.currentTime + 0.5);
+            bananaOsc.start();
+            bananaOsc.stop(bananaCtx.currentTime + 0.5);
 
-        // Join Logic: Burst, Sound, and ensure music starts
-        function bananaJoin(event) {
-            // Ensure background music is playing if it was blocked initially
-            if (bgAudio.paused) {
-                bgAudio.play();
+            // Burst Effect on the Yes button
+            for (let i = 0; i < 20; i++) {
+                const bStar = document.createElement('div');
+                bStar.className = 'burstStar';
+                bStar.style.left = event.pageX + 'px';
+                bStar.style.top = event.pageY + 'px';
+                const x = (Math.random() - 0.5) * 400;
+                const y = (Math.random() - 0.5) * 400;
+                bStar.style.setProperty('--x', `${x}px`);
+                bStar.style.setProperty('--y', `${y}px`);
+                document.body.appendChild(bStar);
+                setTimeout(() => bStar.remove(), 800);
             }
 
-            // Chime Effect using Web Audio
+            // Hide Splash
+            const splash = document.getElementById('splashOverlay');
+            splash.style.opacity = '0';
+            setTimeout(() => {
+                splash.style.display = 'none';
+            }, 800);
+        }
+
+        function bananaExit() {
+            // Attempt to close window
+            window.close();
+            // Fallback for most browsers: Redirect away
+            window.location.href = "https://www.google.com";
+        }
+
+        // Discord Join Logic
+        function bananaJoin(event) {
+            // Chime Effect
             const bananaCtx = new (window.AudioContext || window.webkitAudioContext)();
             const bananaOsc = bananaCtx.createOscillator();
             const bananaGain = bananaCtx.createGain();
@@ -397,7 +497,6 @@ V  \
                 setTimeout(() => bStar.remove(), 800);
             }
 
-            // Redirect after slight delay
             setTimeout(() => {
                 window.open("https://discord.gg/68QNPJbbMu", "_blank");
             }, 400);
@@ -431,17 +530,6 @@ V  \
         setInterval(bananaUpdateTimers, 3600000);
 
         // FAKE CHAT SYSTEM
-        const namesPool = [
-            "Ranouma", "FarmWerks", "Mynehuie", "ChknWRabies", "RinElixx", "emmaero", "meshpotato", 
-            ".Fancy_zombie932", "BunnyWifRabies", ".witchesbrew222", "kiyoko_xx", ".Dayanibee", 
-            "Queenioo", ".The_Shadow_3002", "enderpheb", "AustynnCraft", "j0li333", ".jordyartdancer", 
-            "ObStrawb", "iana_bells", "Peachlings_", "beebobebop", "Noveskaa", "KiwiGirl06", 
-            "dweebface1", "bbyBunny1", "opperrty", "veronicaca_", "HarleyQuinn002", ".Swooooosh6897", 
-            "HitlauraSS", ".Kitsunodawn9", "reignsore", "JennyGem", "PixieDust88", "GlazedDonut", 
-            "VelvetVixen", "StarryEyes", "MochiMelt", "LunarLace", "BubbleGumBabe", "HoneyBumble", 
-            "SilkSiren", "CherryCharm"
-        ];
-
         const chatScript = [
             { name: "Ranouma", msg: "Hey has anyone seen the glowberry farm? I think I am lost." },
             { name: "FarmWerks", msg: "It is near the portal Ranouma! Just look for the pink sparkles." },
@@ -500,13 +588,11 @@ V  \
 
         function updateFakeChat() {
             chatFeed.innerHTML = '';
-            // Get a slice of 10 messages
             const displayLines = chatScript.slice(currentIdx, currentIdx + 10);
             
             displayLines.forEach((item, i) => {
                 const msgDiv = document.createElement('div');
                 msgDiv.className = 'mirrorMsg';
-                // Fake avatars using a placeholder that looks like a witchy orb
                 const avatarUrl = `https://api.dicebear.com/7.x/bottts/svg?seed=${item.name}`;
                 
                 msgDiv.innerHTML = `
@@ -518,16 +604,14 @@ V  \
                 chatFeed.appendChild(msgDiv);
             });
 
-            // Advance the index by 10 for the next cycle
             currentIdx += 10;
             if (currentIdx >= chatScript.length) {
-                currentIdx = 0; // Loop back
+                currentIdx = 0;
             }
             
             chatFeed.scrollTop = chatFeed.scrollHeight;
         }
 
-        // Initial load and set interval to 30 seconds
         updateFakeChat();
         setInterval(updateFakeChat, 30000);
 
@@ -538,11 +622,11 @@ V  \
  \  \_
   \,'.`-.
    |\ `. `.       
-   ( \  `. `-.                         _,.-:\
-    \ \   `.  `-._                __..--' ,-';/
+   ( \  `. `-.                        _,.-:\
+    \ \   `.  `-._             __..--' ,-'; /
      \ `.   `-.   `-..___..---'   _.--'  ,'/
       `. `.    `-._        __..--'     ,' /
-        `. `-_     ``--..''         _.-'  ,'
+        `. `-_     ``--..''         _.-','
           `-_ `-.___          __,--'  ,'
               `-.__  `----"""    __.-'
                    `--..____..--'

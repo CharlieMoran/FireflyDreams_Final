@@ -4,7 +4,7 @@
 V  \
  \  \_
   \,'.`-.
-   |\ `. `.       
+   |\ `. `.      
    ( \  `. `-.                         _,.-:\
     \ \   `.  `-._             __..--' ,-'; /
      \ `.   `-.   `-..___..---'   _.--'  ,'/
@@ -205,6 +205,92 @@ V  \
  \  \_
   \,'.`-.
    |\ `. `.       
+   ( \  `. `-.                         _,.-:\
+    \ \   `.  `-._                __..--' ,-'; /
+     \ `.   `-.   `-..___..---'   _.--'  ,'/
+      `. `.    `-._        __..--'     ,' /
+       `. `-_     ``--..''         _.-'  ,'
+         `-_ `-.___          __,--'  ,'
+             `-.__  `----"""    __.-'
+                   `--..____..--'
+*/
+
+// Particles
+const partContainer = document.getElementById('particles');
+for (let i = 0; i < 30; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    p.style.left = Math.random() * 100 + 'vw';
+    p.style.animationDelay = Math.random() * 10 + 's';
+    p.style.animationDuration = (Math.random() * 10 + 10) + 's';
+    partContainer.appendChild(p);
+}
+
+// Moon Phase
+function getMoonPhase() {
+    const date = new Date();
+    let year = date.getFullYear(), month = date.getMonth() + 1, day = date.getDate();
+    if (month < 3) { year--; month += 12; }
+    month++;
+    let c = 365.25 * year, e = 30.6 * month, jd = c + e + day - 694039.09;
+    jd /= 29.5305882;
+    let b = parseInt(jd); jd -= b; b = Math.round(jd * 8);
+    if (b >= 8) b = 0;
+    const phases = [
+        { icon: "🌑", label: "New Moon" }, { icon: "🌒", label: "Waxing Crescent" },
+        { icon: "🌓", label: "First Quarter" }, { icon: "🌔", label: "Waxing Gibbous" },
+        { icon: "🌕", label: "Full Moon" }, { icon: "🌖", label: "Waning Gibbous" },
+        { icon: "🌗", label: "Last Quarter" }, { icon: "🌘", label: "Waning Crescent" }
+    ];
+    document.getElementById('moonIcon').innerText = phases[b].icon;
+    document.getElementById('moonLabel').innerText = phases[b].label;
+}
+getMoonPhase();
+
+// Sunset Bell
+function checkSunset() {
+    const hour = new Date().getHours();
+    const bell = document.getElementById('sunsetBell');
+    bell.style.display = (hour >= 17 && hour <= 20) ? 'block' : 'none';
+}
+checkSunset();
+setInterval(checkSunset, 60000);
+
+// Character Magic Interactions
+function moondropMagic(event) {
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = 'sine'; osc.frequency.setValueAtTime(440, audioCtx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.5);
+    gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.5);
+    osc.connect(gain); gain.connect(audioCtx.destination);
+    osc.start(); osc.stop(audioCtx.currentTime + 0.5);
+    alert("Moondrop has cast a protection spell over your browser!");
+}
+
+function stardropDream(event) {
+    alert("Stardrop is weaving a dream for you... Sleep well tonight.");
+}
+
+// Splash Screen
+function bananaEnter(event) {
+    const bgAudio = document.getElementById('bgMusic');
+    bgAudio.volume = 0.2; bgAudio.play();
+    document.getElementById('splashOverlay').style.opacity = '0';
+    setTimeout(() => { document.getElementById('splashOverlay').style.display = 'none'; }, 800);
+}
+
+function bananaExit() { window.location.href = "https://www.google.com"; }
+
+/*
+ _
+//\
+V  \
+ \  \_
+  \,'.`-.
+   |\ `. `.      
    ( \  `. `-.                         _,.-:\
     \ \   `.  `-._             __..--' ,-'; /
      \ `.   `-.   `-..___..---'   _.--'  ,'/

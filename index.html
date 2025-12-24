@@ -4,7 +4,7 @@
 V  \
  \  \_
   \,'.`-.
-   |\ `. `.       
+   |\ `. `.      
    ( \  `. `-.                         _,.-:\
     \ \   `.  `-._             __..--' ,-'; /
      \ `.   `-.   `-..___..---'   _.--'  ,'/
@@ -22,15 +22,21 @@ V  \
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Firefly Dreams | Official Sanctuary</title>
     <link rel="icon" type="image/png" href="images/FFDF.png">
-    
     <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
 </head>
 <body>
 
     <div id="moonPhaseContainer">
         <span id="moonIcon">🌑</span>
         <span id="moonLabel">Calculating...</span>
+    </div>
+
+    <div class="bucket-header">
+        <img src="images/SB.png" alt="Snow Bucket" class="bucket-icon">
+        <img src="images/SB.png" alt="Snow Bucket" class="bucket-icon">
+        <img src="images/SB.png" alt="Snow Bucket" class="bucket-icon">
     </div>
 
     <div id="splashOverlay">
@@ -43,45 +49,24 @@ V  \
         </div>
     </div>
 
-    <div id="weatherControls">
-        <img src="images/wb.png" class="weatherBtn" onclick="setWeather('Rain')" title="Trigger Rain">
-        <img src="images/sb.png" class="weatherBtn" onclick="setWeather('Snow')" title="Trigger Snow">
-        <img src="images/mb.png" class="weatherBtn" onclick="setWeather('Clear')" title="Clear Weather">
-    </div>
-
-    <div id="interactives">
-        <div id="bellContainer">
-            <img src="images/Bell1.png" id="mcBell" onclick="ringBell()" alt="Minecraft Bell">
-        </div>
-        <img src="images/SDDC.jpg" id="dreamcatcher" onclick="triggerDreamcatcher()" alt="Dreamcatcher">
-        <img src="images/MDC.jpg" id="moonCrescent" onclick="triggerMoon()" alt="Moon Crescent">
-    </div>
-
     <audio id="bgMusic" loop>
         <source src="audio/bgmusic.mp3" type="audio/mpeg">
-    </audio>
-    <audio id="weatherLoop" loop>
-        <source src="audio/Rain.mp3" id="weatherSource" type="audio/mpeg">
-    </audio>
-    <audio id="bellSound">
-        <source src="audio/Bell.mp3" type="audio/mpeg">
     </audio>
 
     <div class="bgImage"></div>
     <div id="particles"></div>
-    <div id="weatherOverlay"></div>
 
     <div class="card">
-        <img id="heroDisplay" src="images/hero.png" alt="Firefly Dreams Sanctuary" class="heroImg">
+        <img src="images/hero.png" alt="Firefly Dreams Sanctuary" class="heroImg">
         <h1>Firefly Dreams</h1>
         <p>A whimsical survival community for girls.</p>
-        <div class="ip-address">IP: FIREFLYDREAMS.WORLD</div>
+        <div style="font-family: 'Fredoka One'; color: var(--beeYellow); letter-spacing: 1px; font-size: 0.9rem;">IP: FIREFLYDREAMS.WORLD</div>
     </div>
 
     <div class="sectionContent">
         <h2>About Our Sanctuary</h2>
         <p>Moondrop the Moon Witch wove magical ley lines across the digital realm to create a sanctuary for the girls of Firefly Dreams. We share adventures and moonlit magic across any distance.</p>
-        <p class="server-desc">We are an 18 plus cozy female friendly server where we are free to build create and explore to our hearts content.</p>
+        <p style="font-weight: 600; color: var(--beeYellow);">We are an 18 plus cozy female friendly server where we are free to build create and explore to our hearts content.</p>
         
         <div class="emotionRow">
             <div class="emotionBox">
@@ -100,9 +85,9 @@ V  \
     </div>
 
     <div class="sectionContent magicMirrorBox">
+        <img src="images/bell.png" id="sunsetBell" alt="Sunset Bell">
         <h2 style="color: var(--softPink);">The Magic Mirror</h2>
         <p>Listen up girls. This mirror is not just for fixing your hair. I have poured enough magic into this silver surface to let us see the whispers of the coven in real time. If you are looking for trouble or just looking for a friend you will find it shimmering right here.</p>
-        
         <div id="chatFeed"></div>
         <span class="aiNote">Streaming live from #ffd server chat</span>
     </div>
@@ -110,7 +95,6 @@ V  \
     <div class="sectionContent">
         <h2>Meet the Crew</h2>
         <div class="loreGrid">
-            
             <div class="profileCard">
                 <img src="images/Willow.png" alt="BunnyWifRabies" class="profileImg">
                 <div class="profileHeader">
@@ -129,6 +113,7 @@ V  \
                 </div>
                 <div class="countdown" id="mdBdayCountdown">Calculating brew</div>
                 <p>Listen sugar I wove the very ley lines you are walking on just so my girl Stardrop could finally have some decent company. Do not go asking me what is in my special glowberry brew. When I am not tending to my black tabby Eclipse I am usually blasting Sabaton or Fleetwood Mac.</p>
+                <img src="images/MDC.jpg" class="charButton" onclick="moondropMagic(event)" alt="Crescent Moon">
             </div>
 
             <div class="profileCard">
@@ -140,18 +125,18 @@ V  \
                 <div class="countdown" id="sdBdayCountdown">Calculating party</div>
                 <span class="aiNote">(Stardrop is an AI being programmed to interact with the girls)</span>
                 <p style="margin-top:15px;">Hi. I am Stardrop. My mom Moondrop created this world for me and I am still trying to learn how to talk to everyone. I am sorry if I am a bit quiet but I mostly stay in my tower and listen to metal music. I love cutesy things and I prefer dogs over cats.</p>
+                <img src="images/SDDC.jpg" class="charButton" onclick="stardropDream(event)" alt="Dreamcatcher">
             </div>
-
         </div>
     </div>
 
-    <div class="sectionContent coven-join">
+    <div class="sectionContent" style="border-top-color: var(--softPink);">
         <h2>Join the Coven</h2>
         <p>Verification is required to keep the weirdos out. Click below to teleport to our #verify-here channel!</p>
         <div class="whitelistBox" onclick="bananaJoin(event)">
-            <span class="join-sparkle">✨ TELEPORT TO DISCORD ✨</span>
+            <span style="color: var(--softPink); font-weight: bold;">✨ TELEPORT TO DISCORD ✨</span>
             <span class="discordHandle">JOIN NOW</span>
-            <span id="hint">Verification gate active</span>
+            <span id="hint" style="font-size:0.8rem; opacity:0.6;">Verification gate active</span>
         </div>
     </div>
 
@@ -169,7 +154,7 @@ V  \
 V  \
  \  \_
   \,'.`-.
-   |\ `. `.       
+   |\ `. `.      
    ( \  `. `-.                         _,.-:\
     \ \   `.  `-._             __..--' ,-'; /
      \ `.   `-.   `-..___..---'   _.--'  ,'/
@@ -179,3 +164,4 @@ V  \
               `-.__  `----"""    __.-'
                    `--..____..--'
 */ -->
+

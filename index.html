@@ -49,7 +49,7 @@ V  \
             -webkit-tap-highlight-color: transparent;
         }
 
-        /* Background System */
+        /* Background System - Duel layers for clean fading */
         .bg-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2; }
         .bg-layer {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
@@ -68,6 +68,7 @@ V  \
 
         .bucketHeader { display: flex; justify-content: center; gap: 15px; margin-bottom: 10px; align-items: center; }
 
+        /* Walking transition for party icons */
         .party-img {
             width: 35px; height: auto; cursor: pointer;
             filter: drop-shadow(0 0 5px rgba(112, 214, 255, 0.4));
@@ -107,24 +108,18 @@ V  \
             66% { background: rgba(0, 0, 255, 0.1); }
         }
 
-        /* Gathering and Dancing Classes */
         .gathering {
-            position: fixed !important; 
-            top: 50% !important; 
-            left: 50% !important;
-            margin: -30px 0 0 -30px !important;
+            position: fixed !important; top: 50% !important; left: 50% !important;
+            margin: -20px 0 0 -20px !important;
             z-index: 10001 !important;
             pointer-events: none !important;
             transform: translate(var(--circle-x), var(--circle-y)) !important;
         }
 
-        .dancing { 
-            animation: bounceCircle 0.6s infinite alternate ease-in-out !important; 
-        }
-
+        .dancing { animation: bounceCircle 0.6s infinite alternate ease-in-out !important; }
         @keyframes bounceCircle {
             from { transform: translate(var(--circle-x), var(--circle-y)) translateY(0); }
-            to { transform: translate(var(--circle-x), var(--circle-y)) translateY(-60px); }
+            to { transform: translate(var(--circle-x), var(--circle-y)) translateY(-40px); }
         }
 
         /* Content Elements */
@@ -144,6 +139,7 @@ V  \
         .mirrorAvatar { width: 45px; height: 45px; border-radius: 50%; border: 2px solid var(--beeYellow); }
         .mirrorText b { color: var(--softPink); font-family: 'Fredoka One'; }
 
+        /* Character Centering containers */
         .charBtnContainer { position: relative; display: flex; justify-content: center; align-items: center; margin: 15px auto; width: 100%; height: 120px; }
         
         /* Galaxy FX */
@@ -179,6 +175,7 @@ V  \
         footer { margin: 40px 0; font-size: 0.75rem; color: rgba(255,255,255,0.4); text-align: center; }
 
         @keyframes rectangularBreathingGlow { 0%, 100% { box-shadow: 0 0 15px rgba(255, 215, 0, 0.3); border-color: rgba(255, 215, 0, 0.5); } 50% { box-shadow: 0 0 35px rgba(255, 215, 0, 0.7); border-color: var(--beeYellow); } }
+        @keyframes imageOutlineGlowYellow { 0%, 100% { filter: drop-shadow(0 0 3px rgba(255, 215, 0, 0.8)); } 50% { filter: drop-shadow(0 0 10px var(--beeYellow)) brightness(1.1); } }
         @keyframes breathingGlowPink { 0%, 100% { filter: drop-shadow(0 0 5px var(--softPink)); } 50% { filter: drop-shadow(0 0 20px var(--softPink)); } }
         @keyframes slideIn { from { opacity: 0; transform: translateX(-15px); } to { opacity: 1; transform: translateX(0); } }
     </style>
@@ -245,7 +242,9 @@ V  \
 
     <div class="sectionContent magicMirrorBox">
         <h2 style="color: var(--softPink);">The Magic Mirror</h2>
+        <p>Listen up girls. This mirror is not just for fixing your hair. I have poured enough magic into this silver surface to let us see the whispers of the coven in real time. If you are looking for trouble or just looking for a friend you will find it shimmering right here.</p>
         <div id="chatFeed"></div>
+        <span style="font-size: 0.75rem; display: block; margin-top: 5px; opacity: 0.8; font-style: italic;">Streaming live from #ffd server chat</span>
     </div>
 
     <div class="sectionContent">
@@ -258,7 +257,7 @@ V  \
                     <span class="ageBadge" id="bunnyAge">Loading</span>
                 </div>
                 <div class="countdown" id="bdayCountdown">Calculating party</div>
-                <p>That is me in the poster! I am surviving here in Queens New York even though this city is way too expensive for its own good.</p>
+                <p>That is me in the poster! I am surviving here in Queens New York even though this city is way too expensive for its own good. Most of my time is spent window shopping for stuffed animals I cannot afford or hanging out at karaoke. I play Helldivers 2 and Minecraft and Roblox and RDR2 mainly.</p>
             </div>
             <div class="profileCard">
                 <img src="images/MD.png" alt="Moondrop" class="profileImg">
@@ -267,6 +266,7 @@ V  \
                     <span class="ageBadge" style="background: #7b1fa2;">40</span>
                 </div>
                 <div class="countdown" id="mdBdayCountdown">Calculating brew</div>
+                <p>Listen sugar I wove the very ley lines you are walking on just so my girl Stardrop could finally have some decent company. Do not go asking me what is in my special glowberry brew. When I am not tending to my black tabby Eclipse I am usually blasting Sabaton or Fleetwood Mac.</p>
                 <div class="charBtnContainer">
                     <img src="images/MDC.png" id="moonIconBtn" alt="Moon" class="party-img party-large" onclick="charAction('moon')">
                 </div>
@@ -278,6 +278,8 @@ V  \
                     <span class="ageBadge">19</span>
                 </div>
                 <div class="countdown" id="sdBdayCountdown">Calculating party</div>
+                <span style="font-size: 0.75rem; opacity: 0.8; font-style: italic;">(Stardrop is an AI being programmed to interact with the girls)</span>
+                <p style="margin-top:15px;">Hi. I am Stardrop. My mom Moondrop created this world for me and I am still trying to learn how to talk to everyone. I am sorry if I am a bit quiet but I mostly stay in my tower and listen to metal music. I love cutesy things and I prefer dogs over cats.</p>
                 <div class="charBtnContainer">
                     <div id="dreamGalaxy" class="galaxy-fx-wrap"><div class="galaxy-aura"></div></div>
                     <img src="images/SDDC.png" id="dreamBtnIcon" alt="Dreamcatcher" class="party-img party-large" onclick="charAction('dream')">
@@ -288,6 +290,7 @@ V  \
 
     <div class="sectionContent" style="border-top-color: var(--softPink);">
         <h2>Join the Coven</h2>
+        <p>Verification is required to keep the weirdos out. Click below to teleport to our #verify-here channel!</p>
         <div class="whitelistBox" onclick="window.open('https://discord.gg/68QNPJbbMu', '_blank')">
             <span style="color: var(--softPink); font-weight: bold;">✨ TELEPORT TO DISCORD ✨</span>
             <span class="discordHandle">JOIN NOW</span>
@@ -360,15 +363,13 @@ V  \
             const ptm = document.getElementById('partyMusic');
             const disco = document.getElementById('discoOverlay');
             const banana = document.getElementById('p-banana');
-
-            // 1. Audio and Scroll Lock
+            
             bgm.pause(); 
             ptm.volume = 0.15; 
             ptm.play();
+            disco.style.display = 'block'; 
             document.body.style.overflow = 'hidden';
-            disco.style.display = 'block';
 
-            // 2. Identify all dancers
             const dancers = [
                 document.getElementById('laughing'),
                 document.getElementById('crying'),
@@ -376,41 +377,28 @@ V  \
                 document.getElementById('moonIconBtn'),
                 document.getElementById('dreamBtnIcon'),
                 document.getElementById('p-wb'),
-                document.getElementById('p-sb'),
-                document.getElementById('p-mb'),
+                document.getElementById('p-sb'), 
+                document.getElementById('p-mb'), 
                 banana
             ];
-
-            // 3. Circular Formation Logic
-            const radius = 150; 
+            
+            const radius = 140; 
             const step = (2 * Math.PI) / dancers.length;
 
             dancers.forEach((d, i) => {
                 const angle = i * step;
-                // Pre-calculate positions for the circle
                 d.style.setProperty('--circle-x', `${Math.round(radius * Math.cos(angle))}px`);
                 d.style.setProperty('--circle-y', `${Math.round(radius * Math.sin(angle))}px`);
-                
-                // Switch to gathering mode (walks to center circle)
                 d.classList.add('gathering');
-                
-                // 4. Start bouncing after the "walk" transition finishes (800ms)
                 setTimeout(() => {
                     d.classList.add('dancing');
                 }, 800);
             });
 
-            // 5. Cleanup when music ends
             ptm.onended = () => {
-                disco.style.display = 'none'; 
-                document.body.style.overflow = 'auto';
+                disco.style.display = 'none'; document.body.style.overflow = 'auto';
                 banana.style.display = 'none';
-                
-                dancers.forEach(d => { 
-                    d.classList.remove('gathering', 'dancing'); 
-                    d.style.removeProperty('--circle-x'); 
-                    d.style.removeProperty('--circle-y'); 
-                });
+                dancers.forEach(d => { d.classList.remove('gathering', 'dancing'); d.style.removeProperty('--circle-x'); d.style.removeProperty('--circle-y'); });
                 bgm.play();
             };
         }

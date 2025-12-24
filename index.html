@@ -49,7 +49,7 @@ V  \
             -webkit-tap-highlight-color: transparent;
         }
 
-        /* Background System */
+        /* Background System - Layered for Crossfading */
         .bg-layer {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background-size: cover; background-position: center;
@@ -71,10 +71,10 @@ V  \
             width: 35px; height: auto; cursor: pointer;
             filter: drop-shadow(0 0 5px rgba(112, 214, 255, 0.4));
             transition: transform 0.2s ease, filter 0.3s;
+            background: transparent !important;
         }
         .tinyBucket:hover { transform: scale(1.2) rotate(-10deg); filter: drop-shadow(0 0 8px var(--magicBlue)); }
         
-        /* Banana Party Icon */
         .party-icon { display: none; }
         .party-icon:hover { animation: rgbGlow 1s infinite linear; }
         @keyframes rgbGlow {
@@ -84,48 +84,47 @@ V  \
             100% { filter: drop-shadow(0 0 10px red); }
         }
 
-        /* Minecraft Console */
+        /* Minecraft Console Styling */
         .mc-console {
-            width: 185px; /* Width of 4 buckets + gaps */
-            background: rgba(0, 0, 0, 0.6);
+            width: 185px; 
+            background: rgba(0, 0, 0, 0.7);
             border: 2px solid #555;
-            padding: 2px 5px;
+            padding: 3px 6px;
             display: flex; align-items: center;
         }
         .mc-console input {
             background: transparent; border: none; color: #fff;
-            width: 100%; outline: none; font-family: 'Poppins', sans-serif; font-size: 0.8rem;
+            width: 100%; outline: none; font-family: 'Poppins', sans-serif; font-size: 0.75rem;
         }
         .console-log {
-            position: absolute; top: 85px; color: #aaa; font-size: 0.7rem;
-            text-shadow: 1px 1px #000; pointer-events: none;
+            position: absolute; top: 90px; color: #ffff55; font-size: 0.75rem;
+            text-shadow: 1px 1px #000; pointer-events: none; font-family: 'Fredoka One';
         }
 
-        /* Party Sequence Effects */
+        /* Party Mode FX */
         .disco-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             z-index: 9999; pointer-events: none; display: none;
-            animation: discoFlash 0.5s infinite;
+            animation: discoFlash 0.4s infinite;
         }
         @keyframes discoFlash {
-            0% { background: rgba(255, 0, 0, 0.1); }
-            25% { background: rgba(0, 255, 0, 0.1); }
-            50% { background: rgba(0, 0, 255, 0.1); }
-            75% { background: rgba(255, 255, 0, 0.1); }
-            100% { background: rgba(255, 0, 255, 0.1); }
+            0% { background: rgba(255, 0, 0, 0.15); }
+            20% { background: rgba(0, 255, 0, 0.15); }
+            40% { background: rgba(0, 0, 255, 0.15); }
+            60% { background: rgba(255, 255, 0, 0.15); }
+            80% { background: rgba(255, 0, 255, 0.15); }
+            100% { background: rgba(0, 255, 255, 0.15); }
         }
 
-        .dancing { animation: bounceDance 0.6s infinite alternate ease-in-out !important; }
-        @keyframes bounceDance {
-            from { transform: translateY(0); }
-            to { transform: translateY(-20px); }
-        }
+        .dancing { animation: bounceDance 0.5s infinite alternate ease-in-out !important; }
+        @keyframes bounceDance { from { transform: translateY(0); } to { transform: translateY(-30px); } }
+        
         .gathering {
             position: fixed !important; top: 50% !important; left: 50% !important;
             margin: 0 !important; z-index: 10000 !important;
         }
 
-        /* Rest of Styles */
+        /* Character Buttons & Galaxy */
         .charBtnContainer { position: relative; display: flex; justify-content: center; align-items: center; margin-top: 15px; height: 120px; }
         .charBtn { width: 60px; height: auto; cursor: pointer; transition: 0.3s; filter: drop-shadow(0 0 5px var(--softPink)); z-index: 10; }
         .galaxy-fx-wrap { position: absolute; top: 50%; left: 50%; width: 0; height: 0; transform: translate(-50%, -50%); pointer-events: none; z-index: 1; display: flex; justify-content: center; align-items: center; }
@@ -135,32 +134,21 @@ V  \
         .galaxy-active .galaxy-star { animation: nautilusCycle 5s ease-in-out forwards; }
         @keyframes auraCycle { 0% { width: 0; height: 0; opacity: 0; } 30% { width: 380px; height: 380px; opacity: 1; } 70% { width: 380px; height: 380px; opacity: 1; } 100% { width: 0; height: 0; opacity: 0; } }
         @keyframes nautilusCycle { 0% { transform: rotate(0deg) translateX(0) scale(0); opacity: 0; } 50% { transform: rotate(1080deg) translateX(var(--dist)) scale(1.2); opacity: 1; } 100% { transform: rotate(1440deg) translateX(0) scale(0); opacity: 0; } }
+        
         .shooting-star-fx { position: fixed; width: 250px; height: 2px; background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), white); pointer-events: none; z-index: 2000; animation: streakDiagonal 1.2s linear forwards; }
-        @keyframes streakDiagonal { 0% { transform: translate(0, 0) rotate(-45deg); opacity: 0; } 100% { transform: translate(-140vw, 140vh) rotate(-45deg); opacity: 0; } }
-        #splashOverlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10, 8, 20, 0.95); backdrop-filter: blur(15px); display: flex; justify-content: center; align-items: center; z-index: 10000; transition: opacity 0.8s ease; }
-        .splashBox { background: var(--glassBg); padding: 2.5rem; border-radius: 35px; border: 2px solid var(--beeYellow); text-align: center; max-width: 500px; width: 90%; box-shadow: 0 0 50px rgba(0,0,0,0.8); }
-        .splashBox h2 { font-family: 'Fredoka One', cursive; color: var(--beeYellow); font-size: 1.8rem; margin-bottom: 2rem; }
-        .splashBtns { display: flex; gap: 15px; justify-content: center; }
-        .enterBtn { font-family: 'Fredoka One', cursive; padding: 15px 35px; border-radius: 20px; border: none; font-size: 1.1rem; transition: 0.3s; }
-        .yesBtn { background: var(--beeYellow); color: var(--deepNight); }
-        .noBtn { background: var(--softPink); color: white; }
-        #moonPhaseContainer { position: fixed; top: 20px; left: 20px; z-index: 999; background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); padding: 10px 15px; border-radius: 50px; border: 1px solid rgba(255, 215, 0, 0.3); display: flex; align-items: center; gap: 10px; color: var(--beeYellow); font-family: 'Fredoka One'; }
+        @keyframes streakDiagonal { 0% { transform: translate(0, 0) rotate(-45deg); opacity: 0; } 100% { transform: translate(-150vw, 150vh) rotate(-45deg); opacity: 0; } }
+
+        /* Main Content Styling */
+        .card, .sectionContent { background: var(--glassBg); backdrop-filter: blur(20px); padding: 3rem; border-radius: 35px; border: 2px solid rgba(255, 215, 0, 0.4); text-align: center; width: 90%; max-width: 650px; margin-bottom: 60px; transition: 0.3s; }
+        .card { margin-top: 120px; }
+        .heroImg { width: 100%; border-radius: 25px; border: 4px solid var(--beeYellow); margin-bottom: 2rem; animation: rectangularBreathingGlow 4s infinite ease-in-out; }
+        .profileImg { height: 400px; width: auto; max-width: 100%; display: block; margin: 0 auto 1.5rem auto; object-fit: contain; animation: imageOutlineGlowYellow 4s infinite ease-in-out; }
         #particles { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
         .particle { position: absolute; width: 6px; height: 6px; background: var(--beeYellow); border-radius: 50%; animation: floatDown 10s infinite linear; opacity: 0; }
         @keyframes floatDown { 0% { transform: translateY(-10vh) translateX(0); opacity: 0; } 10% { opacity: 0.7; } 90% { opacity: 0.7; } 100% { transform: translateY(110vh) translateX(50px); opacity: 0; } }
-        .card, .sectionContent { background: var(--glassBg); backdrop-filter: blur(20px); padding: 3rem; border-radius: 35px; border: 2px solid rgba(255, 215, 0, 0.4); text-align: center; width: 90%; max-width: 650px; margin-bottom: 60px; transition: 0.3s; }
-        .card { margin-top: 120px; }
-        .profileCard { background: rgba(255, 255, 255, 0.05); border-radius: 25px; padding: 2rem; position: relative; transition: 0.5s; perspective: 1000px; border: 1px solid rgba(255,255,255,0.1); }
-        .heroImg { width: 100%; border-radius: 25px; border: 4px solid var(--beeYellow); margin-bottom: 2rem; animation: rectangularBreathingGlow 4s infinite ease-in-out; }
-        .profileImg { height: 400px; width: auto; max-width: 100%; display: block; margin: 0 auto 1.5rem auto; object-fit: contain; animation: imageOutlineGlowYellow 4s infinite ease-in-out; }
-        h1, h2, h3 { font-family: 'Fredoka One', cursive; color: var(--beeYellow); margin: 0 0 1rem 0; }
-        h1 { font-size: 3.5rem; text-shadow: 2px 2px 0px #000; }
-        #chatFeed { height: 350px; overflow-y: auto; margin-top: 20px; padding: 20px; background: rgba(0, 0, 0, 0.4); border-radius: 20px; display: flex; flex-direction: column; gap: 15px; }
-        .mirrorMsg { display: flex; align-items: center; gap: 15px; animation: slideIn 0.4s ease-out forwards; }
-        .mirrorAvatar { width: 45px; height: 45px; border-radius: 50%; border: 2px solid var(--beeYellow); }
-        .whitelistBox { background: rgba(255, 107, 149, 0.1); border: 2px dashed var(--softPink); padding: 2.5rem; border-radius: 25px; transition: 0.3s; }
-        .discordHandle { display: block; margin-top: 10px; font-family: 'Fredoka One'; color: var(--softPink); font-size: 1.8rem; }
-        footer { margin: 40px 0; font-size: 0.75rem; color: rgba(255,255,255,0.4); text-align: center; }
+        #splashOverlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10, 8, 20, 0.95); backdrop-filter: blur(15px); display: flex; justify-content: center; align-items: center; z-index: 10000; transition: opacity 0.8s ease; }
+        .splashBox { background: var(--glassBg); padding: 2.5rem; border-radius: 35px; border: 2px solid var(--beeYellow); text-align: center; max-width: 500px; width: 90%; box-shadow: 0 0 50px rgba(0,0,0,0.8); }
+        .splashBtns { display: flex; gap: 15px; justify-content: center; margin-top: 2rem; }
     </style>
 </head>
 <body>
@@ -185,17 +173,12 @@ V  \
         <div id="bg2" class="bg-layer"></div>
     </div>
 
-    <div id="moonPhaseContainer">
-        <span id="moonIcon">🌑</span>
-        <span id="moonLabel">Calculating...</span>
-    </div>
-
     <div id="splashOverlay">
         <div class="splashBox">
-            <h2>Are you ready to explore with us Pookie?</h2>
+            <h2 style="font-family: 'Fredoka One'; color: var(--beeYellow);">Are you ready to explore with us Pookie?</h2>
             <div class="splashBtns">
-                <button class="enterBtn yesBtn" onclick="bananaEnter(event)">YES</button>
-                <button class="enterBtn noBtn" onclick="bananaExit()">NO</button>
+                <button class="enterBtn yesBtn" style="font-family: 'Fredoka One'; padding: 15px 35px; border-radius: 20px; background: var(--beeYellow); color: var(--deepNight); cursor: pointer;" onclick="bananaEnter(event)">YES</button>
+                <button class="enterBtn noBtn" style="font-family: 'Fredoka One'; padding: 15px 35px; border-radius: 20px; background: var(--softPink); color: white; cursor: pointer;" onclick="bananaExit()">NO</button>
             </div>
         </div>
     </div>
@@ -207,19 +190,17 @@ V  \
     <div id="particles"></div>
 
     <div class="card">
-        <img src="images/hero.png" id="heroPoster" alt="Firefly Dreams Sanctuary" class="heroImg">
-        <h1>Firefly Dreams</h1>
+        <img src="images/hero.png" id="heroPoster" alt="Hero Poster" class="heroImg">
+        <h1 id="titleText">Firefly Dreams</h1>
         <p>A whimsical survival community for girls.</p>
-        <div style="font-family: 'Fredoka One'; color: var(--beeYellow); font-size: 0.9rem;">IP: FIREFLYDREAMS.WORLD</div>
+        <div style="font-family: 'Fredoka One'; color: var(--beeYellow);">IP: FIREFLYDREAMS.WORLD</div>
     </div>
 
     <div class="sectionContent">
-        <h2>Meet the Crew</h2>
         <div class="loreGrid">
             <div class="profileCard" id="card-bunny">
                 <img src="images/Willow.png" alt="BunnyWifRabies" class="profileImg">
                 <h3>Bunnywifrabies</h3>
-                <p>window shopping for stuffed animals...</p>
             </div>
             <div class="profileCard" id="card-moondrop">
                 <img src="images/MD.png" alt="Moondrop" class="profileImg pink-outline">
@@ -239,35 +220,19 @@ V  \
         </div>
     </div>
 
-    <div class="sectionContent">
-        <div class="whitelistBox" onclick="bananaJoin(event)">
-            <span class="discordHandle">JOIN NOW</span>
-        </div>
-    </div>
-
-    <footer>Fireflydreams ™ All rights reserved 2025</footer>
-
     <script>
-        // --- NYC Time & Theme Management ---
+        // --- Corrected Cheat Sheet Mapping ---
         const themes = {
             day: { hero: 'images/hero.png', bg: ['bg dt.png', 'bg dt2.png'] },
             sunset: { hero: 'images/hero sunset.jpg', bg: ['bg ss.png', 'bg ss2.png'] },
-            night: { hero: 'images/bg nt.png', bg: ['bg nt.png', 'bg nt2.png'] } // Using bg nt as hero night per files
+            night: { hero: 'images/hero night.jpg', bg: ['bg nt.png', 'bg nt2.png'] }
         };
 
         let currentTheme = 'day';
         let bgCycleIdx = 0;
 
         function getNYCHour() {
-            const nycDate = new Date(new Date().toLocaleString("en-US", {timeZone: "America/New_York"}));
-            return nycDate.getHours();
-        }
-
-        function updateThemeBasedOnTime() {
-            const hour = getNYCHour();
-            if (hour >= 6 && hour < 17) applyTheme('day');
-            else if (hour >= 17 && hour < 20) applyTheme('sunset');
-            else applyTheme('night');
+            return new Date(new Date().toLocaleString("en-US", {timeZone: "America/New_York"})).getHours();
         }
 
         function applyTheme(theme) {
@@ -279,79 +244,73 @@ V  \
         function cycleBackground() {
             const bg1 = document.getElementById('bg1');
             const bg2 = document.getElementById('bg2');
-            const newImg = `images/${themes[currentTheme].bg[bgCycleIdx]}`;
+            const nextImg = themes[currentTheme].bg[bgCycleIdx];
             
             if (bg1.classList.contains('bg-active')) {
-                bg2.style.backgroundImage = `url('${newImg}')`;
+                bg2.style.backgroundImage = `url('images/${nextImg}')`;
                 bg2.classList.add('bg-active');
                 bg1.classList.remove('bg-active');
             } else {
-                bg1.style.backgroundImage = `url('${newImg}')`;
+                bg1.style.backgroundImage = `url('images/${nextImg}')`;
                 bg1.classList.add('bg-active');
                 bg2.classList.remove('bg-active');
             }
             bgCycleIdx = (bgCycleIdx + 1) % 2;
         }
 
-        setInterval(cycleBackground, 15000); // Cross-fade background every 15s
-        updateThemeBasedOnTime();
+        function checkTime() {
+            const hour = getNYCHour();
+            let newTheme = 'night';
+            if (hour >= 6 && hour < 17) newTheme = 'day';
+            else if (hour >= 17 && hour < 20) newTheme = 'sunset';
+            
+            if (newTheme !== currentTheme) applyTheme(newTheme);
+        }
 
-        // --- Console Logic ---
+        // Minecraft Command Console
         function handleConsole(e) {
             if (e.key === 'Enter') {
-                const input = e.target.value.trim().toLowerCase();
+                const val = e.target.value.trim().toLowerCase();
                 const log = document.getElementById('consoleLog');
                 e.target.value = '';
-
-                if (input === '/time set day') {
-                    applyTheme('day'); log.innerText = 'Time set to Day!';
-                } else if (input === '/time set noon') {
-                    applyTheme('sunset'); log.innerText = 'Time set to Noon!';
-                } else if (input === '/time set night') {
-                    applyTheme('night'); log.innerText = 'Time set to Night!';
-                } else if (input === '/partytime') {
-                    document.getElementById('banana-party').style.display = 'block';
-                    log.innerText = 'Party mode enabled!';
-                }
+                if (val === '/time set day') { applyTheme('day'); log.innerText = 'Time set to Day!'; }
+                else if (val === '/time set noon') { applyTheme('sunset'); log.innerText = 'Time set to Noon!'; }
+                else if (val === '/time set night') { applyTheme('night'); log.innerText = 'Time set to Night!'; }
+                else if (val === '/partytime') { document.getElementById('banana-party').style.display = 'block'; log.innerText = 'Party mode enabled!'; }
                 setTimeout(() => log.innerText = '', 3000);
             }
         }
 
-        // --- Party Time Sequence ---
+        // Party Time Logic
         function startParty() {
-            const bgMusic = document.getElementById('bgMusic');
-            const partyMusic = document.getElementById('partyMusic');
+            const bgm = document.getElementById('bgMusic');
+            const ptm = document.getElementById('partyMusic');
             const disco = document.getElementById('discoOverlay');
-            const banana = document.getElementById('banana-party');
-
-            bgMusic.pause();
-            partyMusic.volume = 0.15;
-            partyMusic.play();
-
+            bgm.pause();
+            ptm.volume = 0.15;
+            ptm.play();
             disco.style.display = 'block';
-            document.body.style.overflow = 'hidden'; // Lock screen
-
-            // Gather and Dance
-            const icons = [
+            document.body.style.overflow = 'hidden';
+            
+            const dancers = [
                 document.getElementById('bucket-water'), document.getElementById('bucket-snow'), document.getElementById('bucket-milk'),
-                document.getElementById('moonBtn'), document.getElementById('dreamBtn'), banana
+                document.getElementById('moonBtn'), document.getElementById('dreamBtn'), document.getElementById('banana-party')
             ];
-
-            icons.forEach((icon, i) => {
-                icon.classList.add('gathering', 'dancing');
-                icon.style.marginLeft = `${(i - 2.5) * 60}px`; // Spread them in center
+            dancers.forEach((d, i) => {
+                d.classList.add('gathering', 'dancing');
+                d.style.marginLeft = `${(i - 2.5) * 60}px`;
             });
 
-            partyMusic.onended = () => {
+            ptm.onended = () => {
                 disco.style.display = 'none';
                 document.body.style.overflow = 'auto';
-                banana.style.display = 'none';
-                icons.forEach(icon => icon.classList.remove('gathering', 'dancing'));
-                bgMusic.play();
+                document.getElementById('banana-party').style.display = 'none';
+                dancers.forEach(d => d.classList.remove('gathering', 'dancing'));
+                bgm.play();
             };
         }
 
-        // --- Core Site Logic (Particles, Buttons, etc.) ---
+        // --- Core Magic ---
         const particleContainer = document.getElementById('particles');
         for (let i = 0; i < 150; i++) {
             const p = document.createElement('div');
@@ -363,44 +322,44 @@ V  \
         }
 
         function bucketAction(type) {
-            const rainAudio = document.getElementById('rainAudio');
-            const parts = document.querySelectorAll('.particle');
+            const rain = document.getElementById('rainAudio');
+            const pts = document.querySelectorAll('.particle');
             if (type === 'water') {
-                parts.forEach(p => { p.style.background = '#70d6ff'; p.style.width = '2px'; p.style.height = '15px'; p.style.animationDuration = '1s'; });
-                rainAudio.volume = 0.1; rainAudio.play();
+                pts.forEach(p => { p.style.background = '#70d6ff'; p.style.width = '2px'; p.style.height = '15px'; p.style.animationDuration = '1s'; });
+                rain.volume = 0.1; rain.play();
             } else if (type === 'snow') {
-                parts.forEach(p => { p.style.background = '#fff'; p.style.width = '6px'; p.style.height = '6px'; p.style.animationDuration = '5s'; });
-                rainAudio.pause();
+                pts.forEach(p => { p.style.background = '#fff'; p.style.width = '6px'; p.style.height = '6px'; p.style.animationDuration = '5s'; });
+                rain.pause();
             } else {
-                parts.forEach(p => { p.style.background = '#ffd700'; p.style.width = '6px'; p.style.height = '6px'; p.style.animationDuration = '10s'; });
-                rainAudio.pause();
+                pts.forEach(p => { p.style.background = '#ffd700'; p.style.width = '6px'; p.style.height = '6px'; p.style.animationDuration = '10s'; });
+                rain.pause();
             }
         }
 
-        function charAction(type, event) {
+        function charAction(type) {
             if (type === 'moon') createShootingStars();
-            else if (type === 'dream') {
-                const gal = document.getElementById('dreamGalaxy');
-                gal.classList.add('galaxy-active');
-                setTimeout(() => gal.classList.remove('galaxy-active'), 5000);
+            else {
+                const g = document.getElementById('dreamGalaxy');
+                g.classList.add('galaxy-active');
+                setTimeout(() => g.classList.remove('galaxy-active'), 5000);
             }
         }
 
         function createShootingStars() {
             for (let i = 0; i < 20; i++) {
                 setTimeout(() => {
-                    const star = document.createElement('div');
-                    star.className = 'shooting-star-fx';
-                    star.style.top = (Math.random() * 60 - 20) + 'vh';
-                    star.style.right = '-250px';
-                    document.body.appendChild(star);
-                    setTimeout(() => star.remove(), 1200);
+                    const s = document.createElement('div');
+                    s.className = 'shooting-star-fx';
+                    s.style.top = (Math.random() * 60 - 20) + 'vh';
+                    s.style.right = '-250px';
+                    document.body.appendChild(s);
+                    setTimeout(() => s.remove(), 1200);
                 }, i * 120);
             }
         }
 
-        // Galaxy star generation
-        const galaxyWrap = document.getElementById('dreamGalaxy');
+        // Galaxy Setup
+        const gWrap = document.getElementById('dreamGalaxy');
         for (let i = 0; i < 45; i++) {
             const s = document.createElement('div');
             s.className = 'galaxy-star';
@@ -408,15 +367,16 @@ V  \
             s.style.height = s.style.width;
             s.style.setProperty('--dist', (i * 3.5 + 25) + 'px');
             s.style.animationDelay = (i * 0.04) + 's';
-            galaxyWrap.appendChild(s);
+            gWrap.appendChild(s);
         }
 
-        function bananaEnter(event) {
-            document.getElementById('bgMusic').play();
-            document.getElementById('splashOverlay').style.opacity = '0';
-            setTimeout(() => document.getElementById('splashOverlay').style.display = 'none', 800);
-        }
+        function bananaEnter() { document.getElementById('bgMusic').volume = 0.2; document.getElementById('bgMusic').play(); document.getElementById('splashOverlay').style.opacity = '0'; setTimeout(() => document.getElementById('splashOverlay').style.display = 'none', 800); }
         function bananaExit() { window.location.href = "https://www.google.com"; }
+
+        // Initial Setup
+        checkTime();
+        setInterval(checkTime, 60000);
+        setInterval(cycleBackground, 15000);
     </script>
 </body>
 </html>

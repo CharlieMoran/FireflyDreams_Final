@@ -32,7 +32,7 @@ V  \
             --magicBlue: #70d6ff;
             --deepNight: #0a0814;
             --glassBg: rgba(15, 12, 30, 0.85);
-            --galaxyPurple: #8a2be2;
+            --galaxyPurple: #a855f7;
         }
 
         * {
@@ -85,7 +85,7 @@ V  \
             align-items: center;
             margin-top: 15px;
             width: 100%;
-            height: 100px;
+            height: 120px;
         }
 
         .charBtn {
@@ -102,8 +102,8 @@ V  \
             filter: drop-shadow(0 0 12px var(--softPink));
         }
 
-        /* Nautilus Galaxy Animation */
-        .galaxy-fx {
+        /* Nautilus Galaxy with Aura Effect */
+        .galaxy-fx-wrap {
             position: absolute;
             top: 50%;
             left: 50%;
@@ -112,6 +112,19 @@ V  \
             transform: translate(-50%, -50%);
             pointer-events: none;
             z-index: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .galaxy-aura {
+            position: absolute;
+            width: 0;
+            height: 0;
+            background: radial-gradient(circle, rgba(168, 85, 247, 0.6) 0%, rgba(88, 28, 135, 0.3) 50%, transparent 70%);
+            border-radius: 50%;
+            opacity: 0;
+            filter: blur(10px);
         }
 
         .galaxy-star {
@@ -122,32 +135,45 @@ V  \
             opacity: 0;
         }
 
+        .galaxy-active .galaxy-aura {
+            animation: auraPulse 5s ease-in-out forwards;
+        }
+
         .galaxy-active .galaxy-star {
-            animation: nautilusSpiral 4s ease-in-out forwards;
+            animation: nautilusSpiral 5s ease-in-out forwards;
+        }
+
+        @keyframes auraPulse {
+            0% { width: 0; height: 0; opacity: 0; }
+            20% { width: 350px; height: 350px; opacity: 1; }
+            80% { width: 350px; height: 350px; opacity: 1; }
+            100% { width: 0; height: 0; opacity: 0; }
         }
 
         @keyframes nautilusSpiral {
             0% { transform: rotate(0deg) translateX(0) scale(0); opacity: 0; }
-            30% { opacity: 1; scale(1); }
-            50% { transform: rotate(720deg) translateX(var(--dist)) scale(1.2); opacity: 1; }
-            70% { transform: rotate(1080deg) translateX(var(--dist)) scale(1); opacity: 1; }
+            15% { opacity: 1; transform: rotate(180deg) translateX(var(--dist)) scale(1); }
+            50% { transform: rotate(1080deg) translateX(var(--dist)) scale(1.2); opacity: 1; }
+            85% { opacity: 1; transform: rotate(1260deg) translateX(var(--dist)) scale(1); }
             100% { transform: rotate(1440deg) translateX(0) scale(0); opacity: 0; }
         }
 
-        /* Shooting Star Effect */
+        /* Perfectly Diagonal Shooting Star Effect */
         .shooting-star-fx {
             position: fixed;
-            width: 180px;
+            width: 250px;
             height: 2px;
-            background: linear-gradient(90deg, white, rgba(255, 255, 255, 0.1), transparent);
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), white);
             pointer-events: none;
             z-index: 2000;
-            animation: streakAcross 1.2s linear forwards;
+            animation: streakDiagonal 1.5s linear forwards;
         }
 
-        @keyframes streakAcross {
-            0% { transform: translate(100vw, -100px) rotate(-35deg); opacity: 1; }
-            100% { transform: translate(-100vw, 800px) rotate(-35deg); opacity: 0; }
+        @keyframes streakDiagonal {
+            0% { transform: translate(0, 0) rotate(-45deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translate(-150vw, 150vw) rotate(-45deg); opacity: 0; }
         }
 
         a, button, .whitelistBox, .profileCard, .yesBtn, .noBtn {
@@ -540,7 +566,9 @@ V  \
                 <span class="aiNote">(Stardrop is an AI being programmed to interact with the girls)</span>
                 <p style="margin-top:15px;">Hi. I am Stardrop. My mom Moondrop created this world for me and I am still trying to learn how to talk to everyone. I am sorry if I am a bit quiet but I mostly stay in my tower and listen to metal music. I love cutesy things and I prefer dogs over cats.</p>
                 <div class="charBtnContainer">
-                    <div id="dreamGalaxy" class="galaxy-fx"></div>
+                    <div id="dreamGalaxy" class="galaxy-fx-wrap">
+                        <div class="galaxy-aura"></div>
+                    </div>
                     <img src="images/SDDC.png" id="dreamBtn" alt="Dreamcatcher Button" class="charBtn" onclick="charAction('dream', event)">
                 </div>
             </div>
@@ -632,13 +660,14 @@ V  \
 
         // Galaxy Setup
         const galaxy = document.getElementById('dreamGalaxy');
-        for (let i = 0; i < 40; i++) {
+        for (let i = 0; i < 45; i++) {
             const star = document.createElement('div');
             star.className = 'galaxy-star';
-            star.style.width = (Math.random() * 4 + 2) + 'px';
+            star.style.width = (Math.random() * 5 + 2) + 'px';
             star.style.height = star.style.width;
-            star.style.setProperty('--dist', (i * 4 + 20) + 'px');
-            star.style.animationDelay = (i * 0.05) + 's';
+            // Nautilus spiral logic: Distance increases with index
+            star.style.setProperty('--dist', (i * 3.5 + 25) + 'px');
+            star.style.animationDelay = (i * 0.04) + 's';
             galaxy.appendChild(star);
         }
 
@@ -661,7 +690,7 @@ V  \
                 galaxy.classList.add('galaxy-active');
                 setTimeout(() => {
                     galaxy.classList.remove('galaxy-active');
-                }, 4000);
+                }, 5000); // Wait for full cycle
             }
         }
 
@@ -670,11 +699,14 @@ V  \
                 setTimeout(() => {
                     const star = document.createElement('div');
                     star.className = 'shooting-star-fx';
-                    // Randomize height to allow some to cross the center
-                    star.style.top = (Math.random() * 90) + 'vh'; 
+                    // Entry logic: Randomize starting height and right offset
+                    // To maintain perfect diagonal, both are randomized together
+                    const offset = Math.random() * 100;
+                    star.style.top = (offset - 20) + 'vh'; 
+                    star.style.right = (offset - 20) + 'vw';
                     document.body.appendChild(star);
-                    setTimeout(() => star.remove(), 1200);
-                }, i * 100);
+                    setTimeout(() => star.remove(), 1500);
+                }, i * 120);
             }
         }
 

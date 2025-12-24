@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Firefly Dreams | Official Sanctuary</title>
+    <link rel="icon" type="image/png" href="images/FFDF.png">
+    
     <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
     <style>
@@ -209,9 +211,16 @@
             text-align: center; font-size: 0.7rem; color: var(--softPink);
             letter-spacing: 2px; margin-bottom: 10px; opacity: 0.6; font-weight: bold;
         }
+        /* Hide the audio player controls */
+        #bgMusic { display: none; }
     </style>
 </head>
 <body>
+
+    <audio id="bgMusic" loop>
+        <source src="audio/bgmusic.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
 
     <div class="bgImage"></div>
     <div id="particles"></div>
@@ -296,7 +305,7 @@
         <h2>Join the Coven</h2>
         <p>Verification is required to enter our sanctuary and keep the weirdos out. Click below to teleport to our #verify-here channel!</p>
         <div class="whitelistBox" onclick="bananaJoin(event)">
-            <span style="color: var(--softPink); font-weight: bold;">✨ TELEPORT TO DISCORD ✨</span>
+            <span style="color: var(--softPink); font-weight: bold;">✨ CLICK TO TELEPORT ✨</span>
             <span class="discordHandle">JOIN NOW</span>
             <span id="hint" style="font-size:0.8rem; opacity:0.6;">Verification gate active</span>
         </div>
@@ -314,15 +323,16 @@ V  \
  \  \_
   \,'.`-.
    |\ `. `.       
-   ( \  `. `-.                        _,.-:\
-    \ \   `.  `-._             __..--' ,-'; /
+   ( \  `. `-.                         _,.-:\
+    \ \   `.  `-._                __..--' ,-';/
      \ `.   `-.   `-..___..---'   _.--'  ,'/
       `. `.    `-._        __..--'     ,' /
-        `. `-_     ``--..''        _.-' ,'
+        `. `-_     ``--..''         _.-'  ,'
           `-_ `-.___          __,--'  ,'
               `-.__  `----"""    __.-'
                    `--..____..--'
 */
+
         // Particles
         const banana = document.getElementById('particles');
         for (let banana1 = 0; banana1 < 40; banana1++) {
@@ -343,8 +353,22 @@ V  \
             setTimeout(() => { banana4.remove(); }, 1000);
         });
 
-        // Join Logic: Burst and Sound
+        // === BACKGROUND MUSIC SETUP ===
+        const bgAudio = document.getElementById('bgMusic');
+        bgAudio.volume = 0.2; // Set volume to 20% (nice and low)
+
+        // Try to autoplay (some browsers block this)
+        bgAudio.play().catch(error => {
+            console.log("Autoplay prevented by browser policy. Music will start on first interaction.");
+        });
+
+        // Join Logic: Burst, Sound, and ensure music starts
         function bananaJoin(event) {
+            // Ensure background music is playing if it was blocked initially
+            if (bgAudio.paused) {
+                bgAudio.play();
+            }
+
             // Chime Effect using Web Audio
             const bananaCtx = new (window.AudioContext || window.webkitAudioContext)();
             const bananaOsc = bananaCtx.createOscillator();
@@ -476,11 +500,13 @@ V  \
 
         function updateFakeChat() {
             chatFeed.innerHTML = '';
+            // Get a slice of 10 messages
             const displayLines = chatScript.slice(currentIdx, currentIdx + 10);
             
             displayLines.forEach((item, i) => {
                 const msgDiv = document.createElement('div');
                 msgDiv.className = 'mirrorMsg';
+                // Fake avatars using a placeholder that looks like a witchy orb
                 const avatarUrl = `https://api.dicebear.com/7.x/bottts/svg?seed=${item.name}`;
                 
                 msgDiv.innerHTML = `
@@ -492,14 +518,16 @@ V  \
                 chatFeed.appendChild(msgDiv);
             });
 
+            // Advance the index by 10 for the next cycle
             currentIdx += 10;
             if (currentIdx >= chatScript.length) {
-                currentIdx = 0;
+                currentIdx = 0; // Loop back
             }
             
             chatFeed.scrollTop = chatFeed.scrollHeight;
         }
 
+        // Initial load and set interval to 30 seconds
         updateFakeChat();
         setInterval(updateFakeChat, 30000);
 
@@ -510,11 +538,11 @@ V  \
  \  \_
   \,'.`-.
    |\ `. `.       
-   ( \  `. `-.                        _,.-:\
-    \ \   `.  `-._             __..--' ,-'; /
+   ( \  `. `-.                         _,.-:\
+    \ \   `.  `-._                __..--' ,-';/
      \ `.   `-.   `-..___..---'   _.--'  ,'/
       `. `.    `-._        __..--'     ,' /
-        `. `-_     ``--..''        _.-' ,'
+        `. `-_     ``--..''         _.-'  ,'
           `-_ `-.___          __,--'  ,'
               `-.__  `----"""    __.-'
                    `--..____..--'

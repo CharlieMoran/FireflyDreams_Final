@@ -56,9 +56,27 @@
             animation: starFade 1s linear forwards;
         }
 
+        /* Burst Star Styling */
+        .burstStar {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: var(--beeYellow);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--beeYellow);
+            pointer-events: none;
+            z-index: 1000;
+            animation: burstFade 0.8s ease-out forwards;
+        }
+
         @keyframes starFade {
             0% { opacity: 1; transform: scale(1); }
             100% { opacity: 0; transform: scale(0.3) translateY(20px); }
+        }
+
+        @keyframes burstFade {
+            0% { opacity: 1; transform: scale(1) translate(0, 0); }
+            100% { opacity: 0; transform: scale(0) translate(var(--x), var(--y)); }
         }
 
         .card, .sectionContent {
@@ -173,11 +191,13 @@
         .whitelistBox { 
             background: rgba(255, 107, 149, 0.1); 
             border: 2px dashed var(--softPink); 
-            padding: 2rem; border-radius: 25px; cursor: pointer; 
+            padding: 2.5rem; border-radius: 25px; cursor: pointer; 
             transition: 0.3s;
+            position: relative;
+            overflow: hidden;
         }
         .whitelistBox:hover { background: rgba(255, 107, 149, 0.2); transform: scale(1.02); }
-        .discordHandle { display: block; margin-top: 10px; font-family: 'Fredoka One', cursive; color: var(--softPink); font-size: 1.5rem; }
+        .discordHandle { display: block; margin-top: 10px; font-family: 'Fredoka One', cursive; color: var(--softPink); font-size: 1.8rem; text-shadow: 0 0 10px rgba(255, 107, 149, 0.5); }
 
         #chatFeed::-webkit-scrollbar { width: 6px; }
         #chatFeed::-webkit-scrollbar-thumb { background: var(--softPink); border-radius: 10px; }
@@ -273,12 +293,12 @@
     </div>
 
     <div class="sectionContent" style="border-top-color: var(--softPink);">
-        <h2>Join the Whitelist</h2>
-        <p>To join our private sanctuary click below to copy my handle and add me on Discord for a chat!</p>
-        <div class="whitelistBox" onclick="banana20()">
-            <span style="color: var(--softPink); font-weight: bold;">CLICK TO COPY</span>
-            <span class="discordHandle" id="handle">bunnywifrabies2</span>
-            <span id="hint" style="font-size:0.8rem; opacity:0.6;">Click to copy handle</span>
+        <h2>Join the Coven</h2>
+        <p>Verification is required to enter our sanctuary and keep the weirdos out. Click below to teleport to our #verify-here channel!</p>
+        <div class="whitelistBox" onclick="bananaJoin(event)">
+            <span style="color: var(--softPink); font-weight: bold;">✨ TELEPORT TO DISCORD ✨</span>
+            <span class="discordHandle">JOIN NOW</span>
+            <span id="hint" style="font-size:0.8rem; opacity:0.6;">Verification gate active</span>
         </div>
     </div>
 
@@ -287,22 +307,22 @@
     </footer>
 
     <script>
-        /*
-          .
-         //\
-        V  \
-        |  |
-        |  |
-        |  |
-        /  /
-       /  /
-      /  /
-     /  /
-    (  (
-     \  \
-      '--'
-        */
-
+/*
+ _
+//\
+V  \
+ \  \_
+  \,'.`-.
+   |\ `. `.       
+   ( \  `. `-.                        _,.-:\
+    \ \   `.  `-._             __..--' ,-'; /
+     \ `.   `-.   `-..___..---'   _.--'  ,'/
+      `. `.    `-._        __..--'     ,' /
+        `. `-_     ``--..''        _.-' ,'
+          `-_ `-.___          __,--'  ,'
+              `-.__  `----"""    __.-'
+                   `--..____..--'
+*/
         // Particles
         const banana = document.getElementById('particles');
         for (let banana1 = 0; banana1 < 40; banana1++) {
@@ -322,6 +342,42 @@
             document.body.appendChild(banana4);
             setTimeout(() => { banana4.remove(); }, 1000);
         });
+
+        // Join Logic: Burst and Sound
+        function bananaJoin(event) {
+            // Chime Effect using Web Audio
+            const bananaCtx = new (window.AudioContext || window.webkitAudioContext)();
+            const bananaOsc = bananaCtx.createOscillator();
+            const bananaGain = bananaCtx.createGain();
+            bananaOsc.connect(bananaGain);
+            bananaGain.connect(bananaCtx.destination);
+            bananaOsc.type = 'sine';
+            bananaOsc.frequency.setValueAtTime(880, bananaCtx.currentTime);
+            bananaOsc.frequency.exponentialRampToValueAtTime(1320, bananaCtx.currentTime + 0.1);
+            bananaGain.gain.setValueAtTime(0.1, bananaCtx.currentTime);
+            bananaGain.gain.exponentialRampToValueAtTime(0.01, bananaCtx.currentTime + 0.5);
+            bananaOsc.start();
+            bananaOsc.stop(bananaCtx.currentTime + 0.5);
+
+            // Burst Effect
+            for (let i = 0; i < 15; i++) {
+                const bStar = document.createElement('div');
+                bStar.className = 'burstStar';
+                bStar.style.left = event.pageX + 'px';
+                bStar.style.top = event.pageY + 'px';
+                const x = (Math.random() - 0.5) * 300;
+                const y = (Math.random() - 0.5) * 300;
+                bStar.style.setProperty('--x', `${x}px`);
+                bStar.style.setProperty('--y', `${y}px`);
+                document.body.appendChild(bStar);
+                setTimeout(() => bStar.remove(), 800);
+            }
+
+            // Redirect after slight delay
+            setTimeout(() => {
+                window.open("https://discord.gg/68QNPJbbMu", "_blank");
+            }, 400);
+        }
 
         // Birthday/Age Logic
         function bananaUpdateTimers() {
@@ -349,15 +405,6 @@
         }
         bananaUpdateTimers();
         setInterval(bananaUpdateTimers, 3600000);
-
-        // Copy Handle
-        function banana20() {
-            const handleText = document.getElementById('handle').innerText;
-            navigator.clipboard.writeText(handleText).then(() => {
-                document.getElementById('hint').innerText = "✨ Handle Copied! ✨";
-                setTimeout(() => { document.getElementById('hint').innerText = "Click to copy handle"; }, 2000);
-            });
-        }
 
         // FAKE CHAT SYSTEM
         const namesPool = [
@@ -429,13 +476,11 @@
 
         function updateFakeChat() {
             chatFeed.innerHTML = '';
-            // Get a slice of 10 messages
             const displayLines = chatScript.slice(currentIdx, currentIdx + 10);
             
             displayLines.forEach((item, i) => {
                 const msgDiv = document.createElement('div');
                 msgDiv.className = 'mirrorMsg';
-                // Fake avatars using a placeholder that looks like a witchy orb
                 const avatarUrl = `https://api.dicebear.com/7.x/bottts/svg?seed=${item.name}`;
                 
                 msgDiv.innerHTML = `
@@ -447,34 +492,33 @@
                 chatFeed.appendChild(msgDiv);
             });
 
-            // Advance the index by 10 for the next cycle
             currentIdx += 10;
             if (currentIdx >= chatScript.length) {
-                currentIdx = 0; // Loop back
+                currentIdx = 0;
             }
             
             chatFeed.scrollTop = chatFeed.scrollHeight;
         }
 
-        // Initial load and set interval to 30 seconds
         updateFakeChat();
         setInterval(updateFakeChat, 30000);
 
-        /*
-          .
-         //\
-        V  \
-        |  |
-        |  |
-        |  |
-        /  /
-       /  /
-      /  /
-     /  /
-    (  (
-     \  \
-      '--'
-        */
+/*
+ _
+//\
+V  \
+ \  \_
+  \,'.`-.
+   |\ `. `.       
+   ( \  `. `-.                        _,.-:\
+    \ \   `.  `-._             __..--' ,-'; /
+     \ `.   `-.   `-..___..---'   _.--'  ,'/
+      `. `.    `-._        __..--'     ,' /
+        `. `-_     ``--..''        _.-' ,'
+          `-_ `-.___          __,--'  ,'
+              `-.__  `----"""    __.-'
+                   `--..____..--'
+*/
     </script>
 </body>
 </html>

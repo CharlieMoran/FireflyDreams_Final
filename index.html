@@ -32,14 +32,13 @@ V  \
             --magicBlue: #70d6ff;
             --deepNight: #0a0814;
             --glassBg: rgba(15, 12, 30, 0.85);
+            --galaxyPurple: #8a2be2;
         }
 
-        /* Ensures borders stay inside the width on mobile */
         * {
             box-sizing: border-box;
         }
 
-        /* Custom Wand Cursor */
         body {
             margin: 0; padding: 0;
             font-family: 'Poppins', sans-serif;
@@ -85,6 +84,8 @@ V  \
             justify-content: center;
             align-items: center;
             margin-top: 15px;
+            width: 100%;
+            height: 100px;
         }
 
         .charBtn {
@@ -93,9 +94,7 @@ V  \
             cursor: pointer;
             transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             filter: drop-shadow(0 0 5px var(--softPink));
-            display: block;
-            margin: 0 auto;
-            z-index: 5;
+            z-index: 10;
         }
 
         .charBtn:hover {
@@ -103,50 +102,58 @@ V  \
             filter: drop-shadow(0 0 12px var(--softPink));
         }
 
-        /* Galaxy Swirl Animation */
+        /* Nautilus Galaxy Animation */
         .galaxy-fx {
             position: absolute;
+            top: 50%;
+            left: 50%;
             width: 0;
             height: 0;
-            background: radial-gradient(circle, rgba(168, 85, 247, 0.8) 0%, rgba(88, 28, 135, 0.4) 40%, transparent 70%);
-            border-radius: 50%;
+            transform: translate(-50%, -50%);
             pointer-events: none;
             z-index: 1;
+        }
+
+        .galaxy-star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            box-shadow: 0 0 8px white, 0 0 12px var(--galaxyPurple);
             opacity: 0;
         }
 
-        .galaxy-active {
-            animation: swirlGalaxy 4s ease-in-out forwards;
+        .galaxy-active .galaxy-star {
+            animation: nautilusSpiral 4s ease-in-out forwards;
         }
 
-        @keyframes swirlGalaxy {
-            0% { width: 0; height: 0; opacity: 0; transform: rotate(0deg); }
-            50% { width: 300px; height: 300px; opacity: 1; transform: rotate(720deg); }
-            100% { width: 0; height: 0; opacity: 0; transform: rotate(1440deg); }
+        @keyframes nautilusSpiral {
+            0% { transform: rotate(0deg) translateX(0) scale(0); opacity: 0; }
+            30% { opacity: 1; scale(1); }
+            50% { transform: rotate(720deg) translateX(var(--dist)) scale(1.2); opacity: 1; }
+            70% { transform: rotate(1080deg) translateX(var(--dist)) scale(1); opacity: 1; }
+            100% { transform: rotate(1440deg) translateX(0) scale(0); opacity: 0; }
         }
 
         /* Shooting Star Effect */
         .shooting-star-fx {
             position: fixed;
-            width: 150px;
+            width: 180px;
             height: 2px;
-            background: linear-gradient(90deg, white, transparent);
+            background: linear-gradient(90deg, white, rgba(255, 255, 255, 0.1), transparent);
             pointer-events: none;
             z-index: 2000;
-            animation: streakAcross 1s linear forwards;
+            animation: streakAcross 1.2s linear forwards;
         }
 
         @keyframes streakAcross {
-            0% { transform: translate(0, 0) rotate(-45deg); opacity: 1; }
-            100% { transform: translate(-1000px, 1000px) rotate(-45deg); opacity: 0; }
+            0% { transform: translate(100vw, -100px) rotate(-35deg); opacity: 1; }
+            100% { transform: translate(-100vw, 800px) rotate(-35deg); opacity: 0; }
         }
 
-        /* Hover Wand Cursor */
         a, button, .whitelistBox, .profileCard, .yesBtn, .noBtn {
             cursor: url('images/wand1.png'), pointer !important;
         }
 
-        /* Splash Screen Overlay */
         #splashOverlay {
             position: fixed;
             top: 0; left: 0;
@@ -200,7 +207,6 @@ V  \
         .yesBtn { background: var(--beeYellow); color: var(--deepNight); box-shadow: 0 0 15px var(--beeYellow); }
         .noBtn { background: var(--softPink); color: white; opacity: 0.9; }
 
-        /* Moon Phase Indicator */
         #moonPhaseContainer {
             position: fixed;
             top: 20px;
@@ -224,7 +230,6 @@ V  \
 
         #moonIcon { font-size: 1.4rem; filter: drop-shadow(0 0 5px var(--beeYellow)); }
 
-        /* Main Page Layout */
         .bgImage {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: url('images/background.png') no-repeat center center/cover;
@@ -240,16 +245,16 @@ V  \
             position: absolute; width: 6px; height: 6px;
             background: var(--beeYellow); border-radius: 50%;
             box-shadow: 0 0 15px var(--beeYellow);
-            animation: float 15s infinite linear; opacity: 0.7;
+            animation: floatDown 10s infinite linear; opacity: 0;
         }
 
-        @keyframes float {
-            0% { transform: translateY(110vh) translateX(0); opacity: 0; }
-            20% { opacity: 1; }
-            100% { transform: translateY(-10vh) translateX(100px); opacity: 0; }
+        @keyframes floatDown {
+            0% { transform: translateY(-10vh) translateX(0); opacity: 0; }
+            10% { opacity: 0.7; }
+            90% { opacity: 0.7; }
+            100% { transform: translateY(110vh) translateX(50px); opacity: 0; }
         }
 
-        /* Cursor Trail Stars */
         .trailStar {
             position: absolute; width: 8px; height: 8px;
             border-radius: 50%;
@@ -257,16 +262,11 @@ V  \
             animation: starFade 1s linear forwards;
         }
 
-        /* Explosion Burst Stars */
         .burstStar {
-            position: absolute;
-            width: 8px;
-            height: 8px;
-            background: var(--beeYellow);
-            border-radius: 50%;
+            position: absolute; width: 8px; height: 8px;
+            background: var(--beeYellow); border-radius: 50%;
             box-shadow: 0 0 10px var(--beeYellow);
-            pointer-events: none;
-            z-index: 1000;
+            pointer-events: none; z-index: 1000;
             animation: burstFade 0.8s ease-out forwards;
         }
 
@@ -299,7 +299,6 @@ V  \
             border-color: var(--beeYellow);
         }
 
-        /* Enchanted 3D Cards */
         .profileCard {
             background: rgba(255, 255, 255, 0.05);
             border-radius: 25px;
@@ -397,11 +396,6 @@ V  \
         }
         .emotionImg:hover { transform: scale(1.1) rotate(3deg); }
 
-        @keyframes breathingGlowPink {
-            0%, 100% { filter: drop-shadow(0 0 5px var(--softPink)); }
-            50% { filter: drop-shadow(0 0 20px var(--softPink)); }
-        }
-
         .whitelistBox { 
             background: rgba(255, 107, 149, 0.1); 
             border: 2px dashed var(--softPink); 
@@ -415,7 +409,6 @@ V  \
         .aiNote { font-size: 0.75rem; display: block; margin-top: 5px; opacity: 0.8; font-style: italic; }
         #bgMusic, #rainAudio { display: none; }
 
-        /* Mobile Fixes */
         @media (max-width: 600px) {
             h1 { font-size: 2.2rem; }
             h2 { font-size: 1.6rem; }
@@ -427,12 +420,7 @@ V  \
                 border-radius: 25px;
             }
             .card { margin-top: 80px; }
-            #moonPhaseContainer { 
-                top: 10px; 
-                left: 10px; 
-                font-size: 0.7rem; 
-                padding: 6px 10px; 
-            }
+            #moonPhaseContainer { top: 10px; left: 10px; font-size: 0.7rem; padding: 6px 10px; }
             #moonIcon { font-size: 1rem; }
             .heroImg { margin-bottom: 1.5rem; border-width: 3px; }
             .profileImg { height: 280px; }
@@ -592,59 +580,73 @@ V  \
                    `--..____..--'
 */
 
-        // Particles
+        // Substantial Particles
         const banana = document.getElementById('particles');
-        for (let banana1 = 0; banana1 < 30; banana1++) {
-            const banana2 = document.createElement('div');
-            banana2.className = 'particle';
-            banana2.style.left = Math.random() * 100 + 'vw';
-            banana2.style.animationDelay = Math.random() * 10 + 's';
-            banana2.style.animationDuration = (Math.random() * 10 + 10) + 's';
-            banana.appendChild(banana2);
+        const particleCount = 150; 
+        for (let i = 0; i < particleCount; i++) {
+            const p = document.createElement('div');
+            p.className = 'particle';
+            p.style.left = Math.random() * 100 + 'vw';
+            p.style.animationDelay = Math.random() * 8 + 's';
+            p.style.animationDuration = (Math.random() * 3 + 2) + 's'; 
+            banana.appendChild(p);
         }
 
-        // Audio Elements
         const rainAudio = document.getElementById('rainAudio');
 
-        // Action Logic for Buckets
         function bucketAction(type) {
             const parts = document.querySelectorAll('.particle');
             if (type === 'water') {
                 parts.forEach(p => { 
                     p.style.background = '#70d6ff'; 
                     p.style.boxShadow = '0 0 15px #70d6ff'; 
-                    p.style.animationDuration = '3s'; // Faster for rain
+                    p.style.width = '2px';
+                    p.style.height = '15px';
+                    p.style.animationDuration = (Math.random() * 1 + 0.8) + 's';
                 });
                 rainAudio.play();
             } else if (type === 'snow') {
                 parts.forEach(p => { 
                     p.style.background = '#ffffff'; 
                     p.style.boxShadow = '0 0 15px #ffffff'; 
-                    p.style.animationDuration = '20s'; // Slower for snow
+                    p.style.width = '6px';
+                    p.style.height = '6px';
+                    p.style.animationDuration = (Math.random() * 5 + 4) + 's';
                 });
                 rainAudio.pause();
             } else if (type === 'milk') {
                 parts.forEach(p => { 
                     p.style.background = '#ffd700'; 
                     p.style.boxShadow = '0 0 15px #ffd700'; 
-                    p.style.animationDuration = '15s';
+                    p.style.width = '6px';
+                    p.style.height = '6px';
+                    p.style.animationDuration = (Math.random() * 10 + 10) + 's';
                 });
                 rainAudio.pause();
                 rainAudio.currentTime = 0;
             }
         }
 
-        // Action Logic for Character Buttons
         let moonClickCount = 0;
         let moonCooldown = false;
+
+        // Galaxy Setup
+        const galaxy = document.getElementById('dreamGalaxy');
+        for (let i = 0; i < 40; i++) {
+            const star = document.createElement('div');
+            star.className = 'galaxy-star';
+            star.style.width = (Math.random() * 4 + 2) + 'px';
+            star.style.height = star.style.width;
+            star.style.setProperty('--dist', (i * 4 + 20) + 'px');
+            star.style.animationDelay = (i * 0.05) + 's';
+            galaxy.appendChild(star);
+        }
 
         function charAction(type, event) {
             if (type === 'moon') {
                 if (moonCooldown) return;
-
                 moonClickCount++;
                 createShootingStars();
-
                 if (moonClickCount >= 3) {
                     moonCooldown = true;
                     document.getElementById('moonBtn').style.opacity = '0.4';
@@ -652,12 +654,10 @@ V  \
                         moonCooldown = false;
                         moonClickCount = 0;
                         document.getElementById('moonBtn').style.opacity = '1';
-                    }, 60000); // 1 minute cooldown
+                    }, 60000);
                 }
             } else if (type === 'dream') {
-                const galaxy = document.getElementById('dreamGalaxy');
                 if (galaxy.classList.contains('galaxy-active')) return;
-
                 galaxy.classList.add('galaxy-active');
                 setTimeout(() => {
                     galaxy.classList.remove('galaxy-active');
@@ -666,19 +666,18 @@ V  \
         }
 
         function createShootingStars() {
-            for (let i = 0; i < 5; i++) {
+            for (let i = 0; i < 20; i++) { 
                 setTimeout(() => {
                     const star = document.createElement('div');
                     star.className = 'shooting-star-fx';
-                    star.style.top = Math.random() * 80 + 'vh';
-                    star.style.right = '-150px';
+                    // Randomize height to allow some to cross the center
+                    star.style.top = (Math.random() * 90) + 'vh'; 
                     document.body.appendChild(star);
-                    setTimeout(() => star.remove(), 1000);
-                }, i * 150);
+                    setTimeout(() => star.remove(), 1200);
+                }, i * 100);
             }
         }
 
-        // Rainbow Wand Star Trail
         const starColors = [ '#ffd700', '#ff6b95', '#70d6ff', '#ffffff', '#e0aaff' ];
         document.addEventListener('mousemove', function(e) {
             const star = document.createElement('div');
@@ -692,7 +691,6 @@ V  \
             setTimeout(() => { star.remove(); }, 1000);
         });
 
-        // MOON PHASE LOGIC
         function getMoonPhase() {
             const date = new Date();
             let year = date.getFullYear(), month = date.getMonth() + 1, day = date.getDate();
@@ -713,11 +711,9 @@ V  \
         }
         getMoonPhase();
 
-        // SPLASH SCREEN LOGIC
         function bananaEnter(event) {
             const bgAudio = document.getElementById('bgMusic');
             bgAudio.volume = 0.2; bgAudio.play();
-
             const bananaCtx = new (window.AudioContext || window.webkitAudioContext)();
             const bananaOsc = bananaCtx.createOscillator();
             const bananaGain = bananaCtx.createGain();
@@ -727,7 +723,6 @@ V  \
             bananaGain.gain.setValueAtTime(0.1, bananaCtx.currentTime);
             bananaGain.gain.exponentialRampToValueAtTime(0.01, bananaCtx.currentTime + 0.5);
             bananaOsc.start(); bananaOsc.stop(bananaCtx.currentTime + 0.5);
-
             for (let i = 0; i < 20; i++) {
                 const bStar = document.createElement('div');
                 bStar.className = 'burstStar'; bStar.style.left = event.pageX + 'px'; bStar.style.top = event.pageY + 'px';
@@ -751,7 +746,6 @@ V  \
             bananaGain.gain.setValueAtTime(0.1, bananaCtx.currentTime);
             bananaGain.gain.exponentialRampToValueAtTime(0.01, bananaCtx.currentTime + 0.5);
             bananaOsc.start(); bananaOsc.stop(bananaCtx.currentTime + 0.5);
-
             for (let i = 0; i < 15; i++) {
                 const bStar = document.createElement('div');
                 bStar.className = 'burstStar'; bStar.style.left = event.pageX + 'px'; bStar.style.top = event.pageY + 'px';
@@ -762,7 +756,6 @@ V  \
             setTimeout(() => { window.open("https://discord.gg/68QNPJbbMu", "_blank"); }, 400);
         }
 
-        // Update Birthdays
         function bananaUpdateTimers() {
             const now = new Date();
             function calc(m, d, y, id, bId, skipAge = false) {
@@ -784,7 +777,6 @@ V  \
         }
         bananaUpdateTimers(); setInterval(bananaUpdateTimers, 3600000);
 
-        // Fake Chat
         const chatScript = [
             { name: "Ranouma", msg: "Hey has anyone seen the glowberry farm?" },
             { name: "FarmWerks", msg: "It is near the portal Ranouma! Just look for the pink sparkles." },

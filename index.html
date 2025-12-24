@@ -49,51 +49,40 @@ V  \
             -webkit-tap-highlight-color: transparent;
         }
 
-        /* Background System - Crossfading Layers */
+        /* Background System - Layered for Crossfading */
+        .bg-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2; }
         .bg-layer {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             background-size: cover; background-position: center;
-            filter: brightness(0.3) blur(2px); z-index: -2;
+            filter: brightness(0.3) blur(2px);
             transition: opacity 2s ease-in-out;
             opacity: 0;
         }
         .bg-active { opacity: 1; }
 
-        /* Bucket & Console Header */
+        /* UI Header */
         .header-wrap {
             width: 100%; display: flex; flex-direction: column; align-items: center;
             position: absolute; top: 0; z-index: 1001; padding-top: 15px;
         }
-
         .bucketHeader { display: flex; justify-content: center; gap: 15px; margin-bottom: 10px; align-items: center; }
 
-        /* Transitions added for "walking" effect */
-        .tinyBucket, .party-icon, .charBtn, .emotionImg {
+        /* Interactive Elements with "Walking" Transition */
+        .party-img {
             width: 35px; height: auto; cursor: pointer;
             filter: drop-shadow(0 0 5px rgba(112, 214, 255, 0.4));
             transition: all 0.8s ease-in-out !important;
             background: transparent !important;
+            z-index: 10;
         }
-        .charBtn, .emotionImg { width: 60px; filter: drop-shadow(0 0 5px var(--softPink)); }
-        .emotionImg { max-width: 120px; }
-
-        .tinyBucket:hover { transform: scale(1.2) rotate(-10deg); filter: drop-shadow(0 0 8px var(--magicBlue)); }
-        
-        .party-icon { display: none; }
-        .party-icon:hover { animation: rgbGlow 1s infinite linear; }
-        @keyframes rgbGlow {
-            0% { filter: drop-shadow(0 0 10px red); }
-            33% { filter: drop-shadow(0 0 10px green); }
-            66% { filter: drop-shadow(0 0 10px blue); }
-            100% { filter: drop-shadow(0 0 10px red); }
-        }
+        .party-large { width: 60px; filter: drop-shadow(0 0 5px var(--softPink)); }
+        .party-emoji { width: 80px; filter: drop-shadow(0 0 8px var(--softPink)); }
+        .party-banana { display: none; width: 40px; }
 
         /* Minecraft Console Styling */
         .mc-console {
-            width: 185px; 
-            background: rgba(0, 0, 0, 0.7);
-            border: 2px solid #555;
-            padding: 3px 6px;
+            width: 185px; background: rgba(0, 0, 0, 0.7);
+            border: 2px solid #555; padding: 3px 6px;
             display: flex; align-items: center;
         }
         .mc-console input {
@@ -105,7 +94,7 @@ V  \
             text-shadow: 1px 1px #000; pointer-events: none; font-family: 'Fredoka One';
         }
 
-        /* Party Mode FX */
+        /* Party Mode Mechanics */
         .disco-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             z-index: 9998; pointer-events: none; display: none;
@@ -123,19 +112,42 @@ V  \
             position: fixed !important;
             top: 50% !important; left: 50% !important;
             margin: -20px 0 0 -20px !important;
-            z-index: 10000 !important;
+            z-index: 10001 !important;
             transform: translate(var(--circle-x), var(--circle-y)) !important;
         }
 
         .dancing {
-            animation: circBounce 0.6s infinite alternate ease-in-out !important;
+            animation: circBounce 0.5s infinite alternate ease-in-out !important;
         }
         @keyframes circBounce {
             from { transform: translate(var(--circle-x), var(--circle-y)) translateY(0); }
-            to { transform: translate(var(--circle-x), var(--circle-y)) translateY(-35px); }
+            to { transform: translate(var(--circle-x), var(--circle-y)) translateY(-40px); }
         }
 
-        /* Character Buttons & Galaxy */
+        /* Content Layout */
+        .card, .sectionContent { background: var(--glassBg); backdrop-filter: blur(20px); padding: 3rem; border-radius: 35px; border: 2px solid rgba(255, 215, 0, 0.4); text-align: center; width: 90%; max-width: 650px; margin-bottom: 60px; transition: 0.3s; }
+        .card { margin-top: 130px; }
+        .heroImg { width: 100%; border-radius: 25px; border: 4px solid var(--beeYellow); margin-bottom: 2rem; animation: rectangularBreathingGlow 4s infinite ease-in-out; }
+        h1 { font-family: 'Fredoka One', cursive; color: var(--beeYellow); font-size: 3.5rem; text-shadow: 2px 2px 0px #000; margin: 0; }
+        h2, h3 { font-family: 'Fredoka One', cursive; color: var(--beeYellow); margin: 0 0 1rem 0; }
+
+        .emotionRow { display: flex; justify-content: space-around; align-items: flex-end; margin-top: 2rem; gap: 10px; }
+        .emotionBox { flex: 1; text-align: center; }
+
+        .magicMirrorBox { border: 2px solid var(--softPink); box-shadow: 0 0 30px rgba(255, 107, 149, 0.2); text-align: left; }
+        #chatFeed { height: 350px; overflow-y: auto; margin-top: 20px; padding: 20px; background: rgba(0, 0, 0, 0.4); border-radius: 20px; border: 1px solid rgba(255, 107, 149, 0.3); display: flex; flex-direction: column; gap: 15px; }
+        .mirrorMsg { display: flex; align-items: center; gap: 15px; animation: slideIn 0.4s ease-out forwards; }
+        .mirrorAvatar { width: 45px; height: 45px; border-radius: 50%; border: 2px solid var(--beeYellow); }
+        .mirrorText b { color: var(--softPink); font-family: 'Fredoka One'; }
+
+        .loreGrid { display: grid; grid-template-columns: 1fr; gap: 30px; margin-top: 2rem; text-align: left; }
+        .profileCard { background: rgba(255, 255, 255, 0.05); border-radius: 25px; padding: 2rem; position: relative; transition: 0.5s; perspective: 1000px; border: 1px solid rgba(255,255,255,0.1); }
+        .profileHeader { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; }
+        .ageBadge { background: var(--softPink); color: white; padding: 5px 12px; border-radius: 15px; font-size: 0.8rem; font-weight: bold; }
+        .countdown { font-size: 0.85rem; color: var(--softPink); margin-bottom: 15px; font-style: italic; display: block; text-align: center;}
+        .profileImg { height: 400px; width: auto; max-width: 100%; display: block; margin: 0 auto 1.5rem auto; object-fit: contain; }
+
+        /* Character Centering containers for Galaxy/Moon */
         .charBtnContainer { position: relative; display: flex; justify-content: center; align-items: center; margin: 15px auto; width: 100%; height: 120px; }
         .galaxy-fx-wrap { position: absolute; top: 50%; left: 50%; width: 0; height: 0; transform: translate(-50%, -50%); pointer-events: none; z-index: 1; display: flex; justify-content: center; align-items: center; }
         .galaxy-aura { position: absolute; width: 0; height: 0; background: radial-gradient(circle, rgba(168, 85, 247, 0.7) 0%, rgba(88, 28, 135, 0.4) 50%, transparent 70%); border-radius: 50%; opacity: 0; filter: blur(15px); }
@@ -144,44 +156,21 @@ V  \
         .galaxy-active .galaxy-star { animation: nautilusCycle 5s ease-in-out forwards; }
         @keyframes auraCycle { 0% { width: 0; height: 0; opacity: 0; } 30% { width: 380px; height: 380px; opacity: 1; } 70% { width: 380px; height: 380px; opacity: 1; } 100% { width: 0; height: 0; opacity: 0; } }
         @keyframes nautilusCycle { 0% { transform: rotate(0deg) translateX(0) scale(0); opacity: 0; } 50% { transform: rotate(1080deg) translateX(var(--dist)) scale(1.2); opacity: 1; } 100% { transform: rotate(1440deg) translateX(0) scale(0); opacity: 0; } }
-        
+
         .shooting-star-fx { position: fixed; width: 250px; height: 2px; background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), white); pointer-events: none; z-index: 2000; animation: streakDiagonal 1.2s linear forwards; }
         @keyframes streakDiagonal { 0% { transform: translate(0, 0) rotate(-45deg); opacity: 0; } 10% { opacity: 1; } 100% { transform: translate(-150vw, 150vh) rotate(-45deg); opacity: 0; } }
 
-        /* Main Content Styling */
-        .card, .sectionContent { background: var(--glassBg); backdrop-filter: blur(20px); padding: 3rem; border-radius: 35px; border: 2px solid rgba(255, 215, 0, 0.4); text-align: center; width: 90%; max-width: 650px; margin-bottom: 60px; transition: 0.3s; }
-        .card { margin-top: 130px; }
-        .heroImg { width: 100%; border-radius: 25px; border: 4px solid var(--beeYellow); margin-bottom: 2rem; animation: rectangularBreathingGlow 4s infinite ease-in-out; }
-        .profileImg { height: 400px; width: auto; max-width: 100%; display: block; margin: 0 auto 1.5rem auto; object-fit: contain; animation: imageOutlineGlowYellow 4s infinite ease-in-out; }
-        h1 { font-family: 'Fredoka One', cursive; color: var(--beeYellow); font-size: 3.5rem; text-shadow: 2px 2px 0px #000; margin: 0; }
-        h2, h3 { font-family: 'Fredoka One', cursive; color: var(--beeYellow); margin: 0 0 1rem 0; }
-        
-        /* Magic Mirror Chat */
-        .magicMirrorBox { border: 2px solid var(--softPink); box-shadow: 0 0 30px rgba(255, 107, 149, 0.2); text-align: left; }
-        #chatFeed { height: 350px; overflow-y: auto; margin-top: 20px; padding: 20px; background: rgba(0, 0, 0, 0.4); border-radius: 20px; border: 1px solid rgba(255, 107, 149, 0.3); display: flex; flex-direction: column; gap: 15px; }
-        .mirrorMsg { display: flex; align-items: center; gap: 15px; animation: slideIn 0.4s ease-out forwards; }
-        .mirrorAvatar { width: 45px; height: 45px; border-radius: 50%; border: 2px solid var(--beeYellow); box-shadow: 0 0 10px var(--beeYellow); }
-        .mirrorText b { color: var(--softPink); font-family: 'Fredoka One'; }
-
-        /* Profiles */
-        .loreGrid { display: grid; grid-template-columns: 1fr; gap: 30px; margin-top: 2rem; text-align: left; }
-        .profileCard { background: rgba(255, 255, 255, 0.05); border-radius: 25px; padding: 2rem; position: relative; transition: 0.5s; perspective: 1000px; border: 1px solid rgba(255,255,255,0.1); }
-        .profileHeader { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; }
-        .ageBadge { background: var(--softPink); color: white; padding: 5px 12px; border-radius: 15px; font-size: 0.8rem; font-weight: bold; }
-        .countdown { font-size: 0.85rem; color: var(--softPink); margin-bottom: 15px; font-style: italic; display: block; text-align: center;}
-
-        /* Join Coven & Footer */
-        .whitelistBox { background: rgba(255, 107, 149, 0.1); border: 2px dashed var(--softPink); padding: 2.5rem; border-radius: 25px; transition: 0.3s; cursor: pointer; }
-        .discordHandle { display: block; margin-top: 10px; font-family: 'Fredoka One'; color: var(--softPink); font-size: 1.8rem; }
-        footer { margin: 40px 0; font-size: 0.75rem; color: rgba(255,255,255,0.4); text-align: center; }
-
-        /* Global UI Elements */
+        /* Global FX */
         #particles { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
         .particle { position: absolute; width: 6px; height: 6px; background: var(--beeYellow); border-radius: 50%; animation: floatDown 10s infinite linear; opacity: 0; }
         @keyframes floatDown { 0% { transform: translateY(-10vh) translateX(0); opacity: 0; } 10% { opacity: 0.7; } 90% { opacity: 0.7; } 100% { transform: translateY(110vh) translateX(50px); opacity: 0; } }
         #splashOverlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10, 8, 20, 0.95); backdrop-filter: blur(15px); display: flex; justify-content: center; align-items: center; z-index: 10000; transition: opacity 0.8s ease; }
         .splashBox { background: var(--glassBg); padding: 2.5rem; border-radius: 35px; border: 2px solid var(--beeYellow); text-align: center; max-width: 500px; width: 90%; box-shadow: 0 0 50px rgba(0,0,0,0.8); }
         #moonPhaseContainer { position: fixed; top: 20px; left: 20px; z-index: 999; background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); padding: 10px 15px; border-radius: 50px; border: 1px solid rgba(255, 215, 0, 0.3); display: flex; align-items: center; gap: 10px; color: var(--beeYellow); font-family: 'Fredoka One'; }
+
+        .whitelistBox { background: rgba(255, 107, 149, 0.1); border: 2px dashed var(--softPink); padding: 2.5rem; border-radius: 25px; transition: 0.3s; cursor: pointer; }
+        .discordHandle { display: block; margin-top: 10px; font-family: 'Fredoka One'; color: var(--softPink); font-size: 1.8rem; }
+        footer { margin: 40px 0; font-size: 0.75rem; color: rgba(255,255,255,0.4); text-align: center; }
 
         @keyframes rectangularBreathingGlow { 0%, 100% { box-shadow: 0 0 15px rgba(255, 215, 0, 0.3); border-color: rgba(255, 215, 0, 0.5); } 50% { box-shadow: 0 0 35px rgba(255, 215, 0, 0.7); border-color: var(--beeYellow); } }
         @keyframes imageOutlineGlowYellow { 0%, 100% { filter: drop-shadow(0 0 3px rgba(255, 215, 0, 0.8)); } 50% { filter: drop-shadow(0 0 10px var(--beeYellow)) brightness(1.1); } }
@@ -203,10 +192,10 @@ V  \
 
     <div class="header-wrap">
         <div class="bucketHeader">
-            <img src="images/wb.png" id="bucket-water" alt="Water Bucket" class="tinyBucket" onclick="bucketAction('water')">
-            <img src="images/sb.png" id="bucket-snow" alt="Snow Bucket" class="tinyBucket" onclick="bucketAction('snow')">
-            <img src="images/mb.png" id="bucket-milk" alt="Milk Bucket" class="tinyBucket" onclick="bucketAction('milk')">
-            <img src="images/banana.png" id="banana-party" alt="Party Time" class="party-icon" onclick="startParty()">
+            <img src="images/wb.png" id="bucket-water" alt="Water Bucket" class="party-img" onclick="bucketAction('water')">
+            <img src="images/sb.png" id="bucket-snow" alt="Snow Bucket" class="party-img" onclick="bucketAction('snow')">
+            <img src="images/mb.png" id="bucket-milk" alt="Milk Bucket" class="party-img" onclick="bucketAction('milk')">
+            <img src="images/banana.png" id="banana-party" alt="Party" class="party-img party-banana" onclick="startParty()">
         </div>
         <div class="mc-console">
             <input type="text" id="consoleInput" placeholder="Type command..." onkeydown="handleConsole(event)">
@@ -215,8 +204,7 @@ V  \
     </div>
 
     <div id="discoOverlay" class="disco-overlay"></div>
-
-    <div id="bg-layers">
+    <div class="bg-container">
         <div id="bg1" class="bg-layer bg-active"></div>
         <div id="bg2" class="bg-layer"></div>
     </div>
@@ -229,9 +217,9 @@ V  \
     <div id="splashOverlay">
         <div class="splashBox">
             <h2 style="font-family: 'Fredoka One'; color: var(--beeYellow);">Are you ready to explore with us Pookie?</h2>
-            <div class="splashBtns" style="display:flex; justify-content:center; gap:15px; margin-top:2rem;">
+            <div style="display:flex; justify-content:center; gap:15px; margin-top:2rem;">
                 <button style="font-family: 'Fredoka One'; padding: 15px 35px; border-radius: 20px; background: var(--beeYellow); color: var(--deepNight); cursor: pointer; border: none;" onclick="bananaEnter()">YES</button>
-                <button style="font-family: 'Fredoka One'; padding: 15px 35px; border-radius: 20px; background: var(--softPink); color: white; cursor: pointer; border: none;" onclick="bananaExit()">NO</button>
+                <button style="font-family: 'Fredoka One'; padding: 15px 35px; border-radius: 20px; background: var(--softPink); color: white; cursor: pointer; border: none;" onclick="window.location.href='https://google.com'">NO</button>
             </div>
         </div>
     </div>
@@ -255,15 +243,15 @@ V  \
         <p style="font-weight: 600; color: var(--beeYellow);">We are an 18 plus cozy female friendly server where we are free to build create and explore to our hearts content.</p>
         <div class="emotionRow">
             <div class="emotionBox">
-                <img src="images/IMG_6921-removebg-preview.png" id="laughing" alt="Laughing" class="emotionImg">
+                <img src="images/IMG_6921-removebg-preview.png" id="p-laugh" alt="Laughing" class="emotionImg party-img party-emoji">
                 <span style="display:block; color:var(--softPink); font-family:'Fredoka One'; margin-top: 10px; font-size: 0.8rem;">Laughing</span>
             </div>
             <div class="emotionBox">
-                <img src="images/IMG_6894-removebg-preview.png" id="crying" alt="Crying" class="emotionImg">
+                <img src="images/IMG_6894-removebg-preview.png" id="p-cry" alt="Crying" class="emotionImg party-img party-emoji">
                 <span style="display:block; color:var(--softPink); font-family:'Fredoka One'; margin-top: 10px; font-size: 0.8rem;">Crying</span>
             </div>
             <div class="emotionBox">
-                <img src="images/IMG_6937-removebg-preview.png" id="tea" alt="Spilling Tea" class="emotionImg">
+                <img src="images/IMG_6937-removebg-preview.png" id="p-tea" alt="Spilling Tea" class="emotionImg party-img party-emoji">
                 <span style="display:block; color:var(--softPink); font-family:'Fredoka One'; margin-top: 10px; font-size: 0.8rem;">Spilling Tea</span>
             </div>
         </div>
@@ -292,26 +280,23 @@ V  \
                 <img src="images/MD.png" alt="Moondrop" class="profileImg">
                 <div class="profileHeader">
                     <h3 style="color: var(--softPink);">Moondrop</h3>
-                    <span class="ageBadge" id="mdAge" style="background: #7b1fa2;">40</span>
+                    <span class="ageBadge">40</span>
                 </div>
-                <div class="countdown" id="mdBdayCountdown">Calculating brew</div>
                 <p>Listen sugar I wove the very ley lines you are walking on just so my girl Stardrop could finally have some decent company. Do not go asking me what is in my special glowberry brew. When I am not tending to my black tabby Eclipse I am usually blasting Sabaton or Fleetwood Mac.</p>
                 <div class="charBtnContainer">
-                    <img src="images/MDC.png" id="moonBtn" alt="Moon" class="charBtn" onclick="charAction('moon')">
+                    <img src="images/MDC.png" id="p-moon" alt="Moon" class="charBtn party-img party-large" onclick="charAction('moon')">
                 </div>
             </div>
             <div class="profileCard">
                 <img src="images/SD.png" alt="Stardrop" class="profileImg">
                 <div class="profileHeader">
                     <h3>Stardrop</h3>
-                    <span class="ageBadge" id="sdAge">Loading</span>
+                    <span class="ageBadge">19</span>
                 </div>
-                <div class="countdown" id="sdBdayCountdown">Calculating party</div>
-                <span style="font-size: 0.75rem; opacity: 0.8; font-style: italic;">(Stardrop is an AI being programmed to interact with the girls)</span>
-                <p style="margin-top:15px;">Hi. I am Stardrop. My mom Moondrop created this world for me and I am still trying to learn how to talk to everyone. I am sorry if I am a bit quiet but I mostly stay in my tower and listen to metal music. I love cutesy things and I prefer dogs over cats.</p>
+                <p>Hi. I am Stardrop. My mom Moondrop created this world for me and I am still trying to learn how to talk to everyone. I am sorry if I am a bit quiet but I mostly stay in my tower and listen to metal music. I love cutesy things and I prefer dogs over cats.</p>
                 <div class="charBtnContainer">
                     <div id="dreamGalaxy" class="galaxy-fx-wrap"><div class="galaxy-aura"></div></div>
-                    <img src="images/SDDC.png" id="dreamBtn" alt="Dreamcatcher" class="charBtn" onclick="charAction('dream')">
+                    <img src="images/SDDC.png" id="p-dream" alt="Dreamcatcher" class="charBtn party-img party-large" onclick="charAction('dream')">
                 </div>
             </div>
         </div>
@@ -319,18 +304,17 @@ V  \
 
     <div class="sectionContent" style="border-top-color: var(--softPink);">
         <h2>Join the Coven</h2>
-        <p>Verification is required to keep the weirdos out. Click below to teleport to our #verify-here channel!</p>
+        <p>Verification is required to keep the weirdos out. Click below to teleport to our Discord!</p>
         <div class="whitelistBox" onclick="window.open('https://discord.gg/68QNPJbbMu', '_blank')">
             <span style="color: var(--softPink); font-weight: bold;">✨ TELEPORT TO DISCORD ✨</span>
             <span class="discordHandle">JOIN NOW</span>
-            <span style="font-size:0.8rem; opacity:0.6;">Verification gate active</span>
         </div>
     </div>
 
-    <footer>created by ChickenWifRabies with love for BunnyWifRabies. fireflydreams ™ all rights reserved copyright 2025</footer>
+    <footer>created by ChickenWifRabies with love for BunnyWifRabies. fireflydreams ™ all rights reserved 2025</footer>
 
     <script>
-        // --- NYC Time Engine & Mapping ---
+        // --- NYC Theme Logic ---
         const themes = {
             day: { hero: 'images/hero.png', bg: ['images/bg dt.png', 'images/bg dt2.png'] },
             sunset: { hero: 'images/hero-sunset.jpg', bg: ['images/bg ss.png', 'images/bg ss2.png'] },
@@ -342,9 +326,7 @@ V  \
         let moonClicks = 0;
         let moonCooldown = false;
 
-        function getNYCHour() {
-            return new Date(new Date().toLocaleString("en-US", {timeZone: "America/New_York"})).getHours();
-        }
+        function getNYCHour() { return new Date(new Date().toLocaleString("en-US", {timeZone: "America/New_York"})).getHours(); }
 
         function applyTheme(theme) {
             currentTheme = theme;
@@ -375,7 +357,6 @@ V  \
             if (n !== currentTheme) applyTheme(n);
         }
 
-        // --- Console Logic ---
         function handleConsole(e) {
             if (e.key === 'Enter') {
                 const val = e.target.value.trim().toLowerCase();
@@ -384,12 +365,15 @@ V  \
                 if (val === '/time set day') { applyTheme('day'); log.innerText = 'Time set to Day!'; }
                 else if (val === '/time set noon') { applyTheme('sunset'); log.innerText = 'Time set to Noon!'; }
                 else if (val === '/time set night') { applyTheme('night'); log.innerText = 'Time set to Night!'; }
-                else if (val === '/partytime') { document.getElementById('banana-party').style.display = 'block'; log.innerText = 'Party mode enabled!'; }
+                else if (val === '/partytime') { 
+                    document.getElementById('banana-party').style.display = 'block'; 
+                    log.innerText = 'Party mode enabled! Click the banana.'; 
+                }
                 setTimeout(() => log.innerText = '', 3000);
             }
         }
 
-        // --- Party Time Logic (Circular & Smooth) ---
+        // --- Party Time Sequence ---
         function startParty() {
             const bgm = document.getElementById('bgMusic');
             const ptm = document.getElementById('partyMusic');
@@ -402,12 +386,12 @@ V  \
 
             const dancers = [
                 document.getElementById('bucket-water'), document.getElementById('bucket-snow'), document.getElementById('bucket-milk'),
-                document.getElementById('moonBtn'), document.getElementById('dreamBtn'),
-                document.getElementById('laughing'), document.getElementById('crying'), document.getElementById('tea'),
+                document.getElementById('p-moon'), document.getElementById('p-dream'),
+                document.getElementById('p-laugh'), document.getElementById('p-cry'), document.getElementById('p-tea'),
                 banana
             ];
 
-            const radius = 160;
+            const radius = 170;
             const angleStep = (2 * Math.PI) / dancers.length;
 
             dancers.forEach((d, i) => {
@@ -423,7 +407,7 @@ V  \
                 disco.style.display = 'none'; document.body.style.overflow = 'auto';
                 banana.style.display = 'none';
                 dancers.forEach(d => { 
-                    d.classList.remove('gathering', 'dancing');
+                    d.classList.remove('gathering', 'dancing'); 
                     d.style.removeProperty('--circle-x'); d.style.removeProperty('--circle-y');
                 });
                 bgm.play();
@@ -438,8 +422,8 @@ V  \
                 createShootingStars();
                 if (moonClicks >= 3) {
                     moonCooldown = true;
-                    document.getElementById('moonBtn').style.opacity = '0.4';
-                    setTimeout(() => { moonCooldown = false; moonClicks = 0; document.getElementById('moonBtn').style.opacity = '1'; }, 60000);
+                    document.getElementById('p-moon').style.opacity = '0.4';
+                    setTimeout(() => { moonCooldown = false; moonClicks = 0; document.getElementById('p-moon').style.opacity = '1'; }, 60000);
                 }
             } else if (type === 'dream') {
                 const g = document.getElementById('dreamGalaxy');
@@ -497,15 +481,11 @@ V  \
             gWrap.appendChild(s);
         }
 
-        const starColors = [ '#ffd700', '#ff6b95', '#70d6ff', '#ffffff', '#e0aaff' ];
-        document.addEventListener('mousemove', function(e) {
-            const s = document.createElement('div'); s.className = 'trailStar';
-            s.style.left = e.pageX + 'px'; s.style.top = e.pageY + 'px';
-            const c = starColors[Math.floor(Math.random() * starColors.length)];
-            s.style.background = c; s.style.boxShadow = `0 0 10px ${c}`;
-            document.body.appendChild(s);
-            setTimeout(() => s.remove(), 1000);
-        });
+        function bananaEnter() { 
+            document.getElementById('bgMusic').volume = 0.2; document.getElementById('bgMusic').play(); 
+            document.getElementById('splashOverlay').style.opacity = '0'; 
+            setTimeout(() => document.getElementById('splashOverlay').style.display = 'none', 800);
+        }
 
         function getMoonPhase() {
             const d = new Date();
@@ -521,46 +501,28 @@ V  \
 
         function bananaUpdateTimers() {
             const now = new Date();
-            function calc(m, d, y, id, bId, skipAge = false) {
-                if (!skipAge && id) {
-                    let age = now.getFullYear() - y;
-                    const bday = new Date(now.getFullYear(), m - 1, d);
-                    if (now < bday) age--;
-                    document.getElementById(id).innerText = age + " Years Old";
-                }
-                let next = new Date(now.getFullYear(), m - 1, d);
-                if (now > next) next.setFullYear(now.getFullYear() + 1);
-                const diff = next - now;
-                const days = Math.floor(diff / (1000 * 60 * 60 * 24)), hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                document.getElementById(bId).innerText = `Next Birthday in ${days} days ${hours} hours`;
-            }
-            calc(3, 9, 2006, 'bunnyAge', 'bdayCountdown');
-            calc(10, 31, 1985, 'mdAge', 'mdBdayCountdown', true);
-            calc(7, 25, 2005, 'sdAge', 'sdBdayCountdown');
+            const bAge = now.getFullYear() - 2006;
+            const bday = new Date(now.getFullYear(), 2, 9);
+            document.getElementById('bunnyAge').innerText = (now < bday ? bAge - 1 : bAge) + " Years Old";
+            let next = new Date(now.getFullYear(), 2, 9);
+            if (now > next) next.setFullYear(now.getFullYear() + 1);
+            const diff = next - now;
+            document.getElementById('bdayCountdown').innerText = `Next Birthday in ${Math.floor(diff / 86400000)} days`;
         }
 
         function updateFakeChat() {
-            const chatFeed = document.getElementById('chatFeed');
-            const chatScript = [ { name: "Ranouma", msg: "Hey has anyone seen the glowberry farm?" }, { name: "FarmWerks", msg: "It is near the portal Ranouma! Just look for the pink sparkles." }, { name: "BunnyWifRabies", msg: "Anyone want to go on a long walk in Queens later?" }, { name: "kiyoko_xx", msg: "I think I have some extra dye in the coven chest." }, { name: "enderpheb", msg: "I can help build the tower! I have deepslate ready." } ];
-            chatFeed.innerHTML = '';
-            chatScript.forEach((item) => {
-                const msgDiv = document.createElement('div');
-                msgDiv.className = 'mirrorMsg';
-                const av = `https://api.dicebear.com/7.x/bottts/svg?seed=${item.name}`;
-                msgDiv.innerHTML = `<img src="${av}" class="mirrorAvatar" style="border-color: var(--softPink); filter: hue-rotate(280deg);"><div class="mirrorText"><b>${item.name}</b>: ${item.msg}</div>`;
-                chatFeed.appendChild(msgDiv);
+            const feed = document.getElementById('chatFeed');
+            const msgs = [ {n:"Ranouma",m:"Hey has anyone seen the glowberry farm?"}, {n:"FarmWerks",m:"Look for the pink sparkles!"} ];
+            feed.innerHTML = '';
+            msgs.forEach(i => {
+                const d = document.createElement('div'); d.className = 'mirrorMsg';
+                d.innerHTML = `<img src="https://api.dicebear.com/7.x/bottts/svg?seed=${i.n}" class="mirrorAvatar"><b>${i.n}</b>: ${i.m}`;
+                feed.appendChild(d);
             });
         }
 
-        function bananaEnter() { 
-            document.getElementById('bgMusic').volume = 0.2; document.getElementById('bgMusic').play(); 
-            document.getElementById('splashOverlay').style.opacity = '0'; 
-            setTimeout(() => document.getElementById('splashOverlay').style.display = 'none', 800);
-        }
-        function bananaExit() { window.location.href = "https://www.google.com"; }
-
         checkTime(); getMoonPhase(); bananaUpdateTimers(); updateFakeChat();
-        setInterval(checkTime, 60000); setInterval(cycleBackground, 15000); setInterval(bananaUpdateTimers, 3600000);
+        setInterval(checkTime, 60000); setInterval(cycleBackground, 15000);
     </script>
 </body>
 </html>

@@ -12,10 +12,12 @@
         :root {
             --beeYellow: #ffd700;
             --softPink: #ff6b95;
+            --magicBlue: #70d6ff;
             --deepNight: #0a0814;
             --glassBg: rgba(15, 12, 30, 0.85);
         }
 
+        /* Custom Wand Cursor */
         body {
             margin: 0; padding: 0;
             font-family: 'Poppins', sans-serif;
@@ -23,7 +25,12 @@
             display: flex; flex-direction: column; align-items: center;
             min-height: 100vh; overflow-y: auto; overflow-x: hidden;
             background-color: var(--deepNight);
-            cursor: default;
+            cursor: url('images/wand2.png'), auto;
+        }
+
+        /* Hover Wand Cursor */
+        a, button, .whitelistBox, .profileCard, .yesBtn, .noBtn {
+            cursor: url('images/wand1.png'), pointer !important;
         }
 
         /* Splash Screen Overlay */
@@ -70,7 +77,6 @@
             padding: 15px 40px;
             border-radius: 20px;
             border: none;
-            cursor: pointer;
             font-size: 1.2rem;
             transition: 0.3s;
             min-width: 140px;
@@ -82,7 +88,30 @@
         .noBtn { background: var(--softPink); color: white; opacity: 0.8; }
         .noBtn:hover { background: #ff4d7d; opacity: 1; }
 
-        /* Main Page Styles */
+        /* Moon Phase Indicator */
+        #moonPhaseContainer {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 999;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+            padding: 10px 15px;
+            border-radius: 50px;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: 'Fredoka One', cursive;
+            font-size: 0.9rem;
+            color: var(--beeYellow);
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.2);
+            pointer-events: none;
+        }
+
+        #moonIcon { font-size: 1.4rem; filter: drop-shadow(0 0 5px var(--beeYellow)); }
+
+        /* Main Page Background */
         .bgImage {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: url('images/background.png') no-repeat center center/cover;
@@ -107,14 +136,15 @@
             100% { transform: translateY(-10vh) translateX(100px); opacity: 0; }
         }
 
+        /* Cursor Trail Stars */
         .trailStar {
-            position: absolute; width: 10px; height: 10px;
-            background: var(--beeYellow); border-radius: 50%;
-            box-shadow: 0 0 10px var(--beeYellow), 0 0 20px #ffffff;
+            position: absolute; width: 8px; height: 8px;
+            border-radius: 50%;
             pointer-events: none; z-index: 100;
             animation: starFade 1s linear forwards;
         }
 
+        /* Explosion Burst Stars */
         .burstStar {
             position: absolute;
             width: 8px;
@@ -152,6 +182,35 @@
             border-color: var(--beeYellow);
         }
 
+        /* Enchanted 3D Cards */
+        .profileCard {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 25px;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+
+        .profileCard:hover {
+            transform: rotateY(10deg) rotateX(5deg) scale(1.02);
+            box-shadow: -10px 10px 30px rgba(0,0,0,0.5), 0 0 20px rgba(255, 107, 149, 0.2);
+        }
+
+        .profileCard::before {
+            content: "";
+            position: absolute;
+            top: -100%; left: -100%;
+            width: 300%; height: 300%;
+            background: linear-gradient(45deg, transparent 45%, rgba(255, 255, 255, 0.1) 50%, transparent 55%);
+            transition: all 0.6s;
+            pointer-events: none;
+        }
+
+        .profileCard:hover::before { top: 100%; left: 100%; }
+
         .card { margin: 80px 20px 40px 20px; }
         .sectionContent { margin-bottom: 60px; border-top: 4px solid var(--beeYellow); }
 
@@ -162,18 +221,14 @@
         }
 
         .profileImg {
-            height: 400px;
-            width: auto;
-            max-width: 100%;
-            display: block;
-            margin: 0 auto 1.5rem auto;
+            height: 400px; width: auto; max-width: 100%;
+            display: block; margin: 0 auto 1.5rem auto;
             object-fit: contain;
             animation: imageOutlineGlowYellow 4s infinite ease-in-out;
+            transform: translateZ(50px);
         }
 
-        .profileImg.pink-outline {
-            animation: imageOutlineGlowPink 4s infinite ease-in-out;
-        }
+        .profileImg.pink-outline { animation: imageOutlineGlowPink 4s infinite ease-in-out; }
 
         @keyframes rectangularBreathingGlow {
             0%, 100% { box-shadow: 0 0 15px rgba(255, 215, 0, 0.3); border-color: rgba(255, 215, 0, 0.5); }
@@ -224,9 +279,6 @@
         .mirrorText b { color: var(--softPink); font-family: 'Fredoka One'; }
 
         .loreGrid { display: grid; grid-template-columns: 1fr; gap: 30px; margin-top: 2rem; text-align: left; }
-        
-        .profileCard { background: rgba(255, 255, 255, 0.05); border-radius: 25px; padding: 2rem; }
-        
         .profileHeader { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; }
         .ageBadge { background: var(--softPink); color: white; padding: 5px 12px; border-radius: 15px; font-size: 0.8rem; font-weight: bold; }
         .countdown { font-size: 0.85rem; color: var(--softPink); margin-bottom: 15px; font-style: italic; display: block; text-align: center;}
@@ -249,28 +301,23 @@
         .whitelistBox { 
             background: rgba(255, 107, 149, 0.1); 
             border: 2px dashed var(--softPink); 
-            padding: 2.5rem; border-radius: 25px; cursor: pointer; 
-            transition: 0.3s;
-            position: relative;
-            overflow: hidden;
+            padding: 2.5rem; border-radius: 25px;
+            transition: 0.3s; position: relative; overflow: hidden;
         }
         .whitelistBox:hover { background: rgba(255, 107, 149, 0.2); transform: scale(1.02); }
         .discordHandle { display: block; margin-top: 10px; font-family: 'Fredoka One', cursive; color: var(--softPink); font-size: 1.8rem; text-shadow: 0 0 10px rgba(255, 107, 149, 0.5); }
 
-        #chatFeed::-webkit-scrollbar { width: 6px; }
-        #chatFeed::-webkit-scrollbar-thumb { background: var(--softPink); border-radius: 10px; }
-
         footer { margin: 40px 0; font-size: 0.75rem; color: rgba(255,255,255,0.4); text-align: center; }
         .aiNote { font-size: 0.75rem; display: block; margin-top: 5px; opacity: 0.8; font-style: italic; }
-        
-        .chatDisclaimer {
-            text-align: center; font-size: 0.7rem; color: var(--softPink);
-            letter-spacing: 2px; margin-bottom: 10px; opacity: 0.6; font-weight: bold;
-        }
         #bgMusic { display: none; }
     </style>
 </head>
 <body>
+
+    <div id="moonPhaseContainer">
+        <span id="moonIcon">🌑</span>
+        <span id="moonLabel">Loading Moon...</span>
+    </div>
 
     <div id="splashOverlay">
         <div class="splashBox">
@@ -319,11 +366,9 @@
 
     <div class="sectionContent magicMirrorBox">
         <h2 style="color: var(--softPink);">The Magic Mirror</h2>
-        <div class="chatDisclaimer">NOT ACTUAL CHAT HERE YET</div>
-        <p>Listen up girls. This mirror is not just for fixing your hair. I have poured enough magic into this silver surface to let us see the whispers of the coven in real time. If you are looking for trouble or just looking for a friend you will find it shimmering right here. Just do not smudge the glass with your grubby fingers or I will have Eclipse give you a reason to stay away.</p>
+        <p>Listen up girls. This mirror is not just for fixing your hair. I have poured enough magic into this silver surface to let us see the whispers of the coven in real time. If you are looking for trouble or just looking for a friend you will find it shimmering right here.</p>
         
-        <div id="chatFeed">
-            </div>
+        <div id="chatFeed"></div>
         <span class="aiNote">Streaming live from #ffd server chat</span>
     </div>
 
@@ -338,7 +383,7 @@
                     <span class="ageBadge" id="bunnyAge">Loading</span>
                 </div>
                 <div class="countdown" id="bdayCountdown">Calculating party</div>
-                <p>That is me in the poster! I am surviving here in Queens New York even though this city is way too expensive for its own good. When I am not playing video games I am usually watching creepy mysteries on YouTube or listening to oldies and metal. I love going for long walks to explore new places and dyeing my hair whenever the mood strikes. Most of my time is spent window shopping for stuffed animals I cannot afford or hanging out at karaoke. I play Helldivers 2 and Minecraft and Roblox and RDR2 and Stardew Valley and VRChat mainly but I have a huge library of over 400 shared games on Steam that I can access.</p>
+                <p>That is me in the poster! I am surviving here in Queens New York even though this city is way too expensive for its own good. Most of my time is spent window shopping for stuffed animals I cannot afford or hanging out at karaoke. I play Helldivers 2 and Minecraft and Roblox and RDR2 mainly.</p>
             </div>
 
             <div class="profileCard">
@@ -348,7 +393,7 @@
                     <span class="ageBadge" id="mdAge" style="background: #7b1fa2;">40</span>
                 </div>
                 <div class="countdown" id="mdBdayCountdown">Calculating brew</div>
-                <p>Listen sugar I wove the very ley lines you are walking on just so my girl Stardrop could finally have some decent company. I keep the magic flowing and the cauldron bubbling around here. Do not go asking me what is in my special glowberry brew because that is a trade secret and quite frankly none of your business. Let us just say it makes things a bit more interesting if you catch my drift and I would prefer to keep the details hush hush. When I am not tending to my black tabby Eclipse I am usually blasting Sabaton or Fleetwood Mac. If you do not look like a musclebound bear with a mustache thick enough to nest a bird in then do not even bother talking to me. And yes I am definitely forty years old so do not let anyone tell you otherwise.</p>
+                <p>Listen sugar I wove the very ley lines you are walking on just so my girl Stardrop could finally have some decent company. Do not go asking me what is in my special glowberry brew. When I am not tending to my black tabby Eclipse I am usually blasting Sabaton or Fleetwood Mac.</p>
             </div>
 
             <div class="profileCard">
@@ -359,7 +404,7 @@
                 </div>
                 <div class="countdown" id="sdBdayCountdown">Calculating party</div>
                 <span class="aiNote">(Stardrop is an AI being programmed to interact with the girls)</span>
-                <p style="margin-top:15px;">Hi. I am Stardrop. My mom Moondrop created this world for me and I am still trying to learn how to talk to everyone. I am sorry if I am a bit quiet but I mostly stay in my tower and listen to metal music. I really like it when the vocals sound like bricks scraping together because it is very intense. I also like girls who take charge. And well men with abs and long hair are nice too. Sometimes I drink a bit too much of my special fermented awkward potions just to feel brave enough to come outside. I love cutesy things and I prefer dogs over cats. I hope you like it here.</p>
+                <p style="margin-top:15px;">Hi. I am Stardrop. My mom Moondrop created this world for me and I am still trying to learn how to talk to everyone. I am sorry if I am a bit quiet but I mostly stay in my tower and listen to metal music. I love cutesy things and I prefer dogs over cats.</p>
             </div>
 
         </div>
@@ -367,9 +412,9 @@
 
     <div class="sectionContent" style="border-top-color: var(--softPink);">
         <h2>Join the Coven</h2>
-        <p>Verification is required to enter our sanctuary and keep the weirdos out. Click below to teleport to our #verify-here channel!</p>
+        <p>Verification is required to keep the weirdos out. Click below to teleport to our #verify-here channel!</p>
         <div class="whitelistBox" onclick="bananaJoin(event)">
-            <span style="color: var(--softPink); font-weight: bold;">✨ CLICK TO TELEPORT ✨</span>
+            <span style="color: var(--softPink); font-weight: bold;">✨ TELEPORT TO DISCORD ✨</span>
             <span class="discordHandle">JOIN NOW</span>
             <span id="hint" style="font-size:0.8rem; opacity:0.6;">Verification gate active</span>
         </div>
@@ -387,8 +432,8 @@ V  \
  \  \_
   \,'.`-.
    |\ `. `.       
-   ( \  `. `-.                        _,.-:\
-    \ \   `.  `-._             __..--' ,-';/
+   ( \  `. `-.                        _,.- :\
+    \ \   `.  `-._             __..--' ,-' ;/
      \ `.   `-.   `-..___..---'   _.--'  ,'/
       `. `.    `-._        __..--'     ,' /
         `. `-_     ``--..''         _.-','
@@ -408,212 +453,136 @@ V  \
             banana.appendChild(banana2);
         }
 
-        // Mouse Trail
-        document.addEventListener('mousemove', function(banana3) {
-            const banana4 = document.createElement('div');
-            banana4.className = 'trailStar';
-            banana4.style.left = banana3.pageX - 5 + 'px'; banana4.style.top = banana3.pageY - 5 + 'px';
-            document.body.appendChild(banana4);
-            setTimeout(() => { banana4.remove(); }, 1000);
+        // Rainbow Wand Star Trail
+        const starColors = [ '#ffd700', '#ff6b95', '#70d6ff', '#ffffff', '#e0aaff' ];
+        document.addEventListener('mousemove', function(e) {
+            const star = document.createElement('div');
+            star.className = 'trailStar';
+            star.style.left = e.pageX + 'px'; 
+            star.style.top = e.pageY + 'px';
+            const randomColor = starColors[Math.floor(Math.random() * starColors.length)];
+            star.style.background = randomColor;
+            star.style.boxShadow = `0 0 10px ${randomColor}`;
+            document.body.appendChild(star);
+            setTimeout(() => { star.remove(); }, 1000);
         });
 
-        // === SPLASH SCREEN LOGIC ===
-        function bananaEnter(event) {
-            // Start background music
-            const bgAudio = document.getElementById('bgMusic');
-            bgAudio.volume = 0.2;
-            bgAudio.play();
+        // MOON PHASE LOGIC
+        function getMoonPhase() {
+            const date = new Date();
+            let year = date.getFullYear(), month = date.getMonth() + 1, day = date.getDate();
+            if (month < 3) { year--; month += 12; }
+            month++;
+            let c = 365.25 * year, e = 30.6 * month, jd = c + e + day - 694039.09;
+            jd /= 29.5305882;
+            let b = parseInt(jd); jd -= b; b = Math.round(jd * 8);
+            if (b >= 8) b = 0;
+            const phases = [
+                { icon: "🌑", label: "New Moon" }, { icon: "🌒", label: "Waxing Crescent" },
+                { icon: "🌓", label: "First Quarter" }, { icon: "🌔", label: "Waxing Gibbous" },
+                { icon: "🌕", label: "Full Moon" }, { icon: "🌖", label: "Waning Gibbous" },
+                { icon: "🌗", label: "Last Quarter" }, { icon: "🌘", label: "Waning Crescent" }
+            ];
+            document.getElementById('moonIcon').innerText = phases[b].icon;
+            document.getElementById('moonLabel').innerText = phases[b].label;
+        }
+        getMoonPhase();
 
-            // Trigger Chime
+        // SPLASH SCREEN LOGIC
+        function bananaEnter(event) {
+            const bgAudio = document.getElementById('bgMusic');
+            bgAudio.volume = 0.2; bgAudio.play();
+
             const bananaCtx = new (window.AudioContext || window.webkitAudioContext)();
             const bananaOsc = bananaCtx.createOscillator();
             const bananaGain = bananaCtx.createGain();
-            bananaOsc.connect(bananaGain);
-            bananaGain.connect(bananaCtx.destination);
-            bananaOsc.type = 'sine';
-            bananaOsc.frequency.setValueAtTime(880, bananaCtx.currentTime);
+            bananaOsc.connect(bananaGain); bananaGain.connect(bananaCtx.destination);
+            bananaOsc.type = 'sine'; bananaOsc.frequency.setValueAtTime(880, bananaCtx.currentTime);
             bananaOsc.frequency.exponentialRampToValueAtTime(1320, bananaCtx.currentTime + 0.1);
             bananaGain.gain.setValueAtTime(0.1, bananaCtx.currentTime);
             bananaGain.gain.exponentialRampToValueAtTime(0.01, bananaCtx.currentTime + 0.5);
-            bananaOsc.start();
-            bananaOsc.stop(bananaCtx.currentTime + 0.5);
+            bananaOsc.start(); bananaOsc.stop(bananaCtx.currentTime + 0.5);
 
-            // Burst Effect on the Yes button
             for (let i = 0; i < 20; i++) {
                 const bStar = document.createElement('div');
-                bStar.className = 'burstStar';
-                bStar.style.left = event.pageX + 'px';
-                bStar.style.top = event.pageY + 'px';
-                const x = (Math.random() - 0.5) * 400;
-                const y = (Math.random() - 0.5) * 400;
-                bStar.style.setProperty('--x', `${x}px`);
-                bStar.style.setProperty('--y', `${y}px`);
-                document.body.appendChild(bStar);
-                setTimeout(() => bStar.remove(), 800);
+                bStar.className = 'burstStar'; bStar.style.left = event.pageX + 'px'; bStar.style.top = event.pageY + 'px';
+                const x = (Math.random() - 0.5) * 400, y = (Math.random() - 0.5) * 400;
+                bStar.style.setProperty('--x', `${x}px`); bStar.style.setProperty('--y', `${y}px`);
+                document.body.appendChild(bStar); setTimeout(() => bStar.remove(), 800);
             }
-
-            // Hide Splash
             const splash = document.getElementById('splashOverlay');
-            splash.style.opacity = '0';
-            setTimeout(() => {
-                splash.style.display = 'none';
-            }, 800);
+            splash.style.opacity = '0'; setTimeout(() => { splash.style.display = 'none'; }, 800);
         }
 
-        function bananaExit() {
-            // Attempt to close window
-            window.close();
-            // Fallback for most browsers: Redirect away
-            window.location.href = "https://www.google.com";
-        }
+        function bananaExit() { window.close(); window.location.href = "https://www.google.com"; }
 
-        // Discord Join Logic
         function bananaJoin(event) {
-            // Chime Effect
             const bananaCtx = new (window.AudioContext || window.webkitAudioContext)();
             const bananaOsc = bananaCtx.createOscillator();
             const bananaGain = bananaCtx.createGain();
-            bananaOsc.connect(bananaGain);
-            bananaGain.connect(bananaCtx.destination);
-            bananaOsc.type = 'sine';
-            bananaOsc.frequency.setValueAtTime(880, bananaCtx.currentTime);
+            bananaOsc.connect(bananaGain); bananaGain.connect(bananaCtx.destination);
+            bananaOsc.type = 'sine'; bananaOsc.frequency.setValueAtTime(880, bananaCtx.currentTime);
             bananaOsc.frequency.exponentialRampToValueAtTime(1320, bananaCtx.currentTime + 0.1);
             bananaGain.gain.setValueAtTime(0.1, bananaCtx.currentTime);
             bananaGain.gain.exponentialRampToValueAtTime(0.01, bananaCtx.currentTime + 0.5);
-            bananaOsc.start();
-            bananaOsc.stop(bananaCtx.currentTime + 0.5);
+            bananaOsc.start(); bananaOsc.stop(bananaCtx.currentTime + 0.5);
 
-            // Burst Effect
             for (let i = 0; i < 15; i++) {
                 const bStar = document.createElement('div');
-                bStar.className = 'burstStar';
-                bStar.style.left = event.pageX + 'px';
-                bStar.style.top = event.pageY + 'px';
-                const x = (Math.random() - 0.5) * 300;
-                const y = (Math.random() - 0.5) * 300;
-                bStar.style.setProperty('--x', `${x}px`);
-                bStar.style.setProperty('--y', `${y}px`);
-                document.body.appendChild(bStar);
-                setTimeout(() => bStar.remove(), 800);
+                bStar.className = 'burstStar'; bStar.style.left = event.pageX + 'px'; bStar.style.top = event.pageY + 'px';
+                const x = (Math.random() - 0.5) * 300, y = (Math.random() - 0.5) * 300;
+                bStar.style.setProperty('--x', `${x}px`); bStar.style.setProperty('--y', `${y}px`);
+                document.body.appendChild(bStar); setTimeout(() => bStar.remove(), 800);
             }
-
-            setTimeout(() => {
-                window.open("https://discord.gg/68QNPJbbMu", "_blank");
-            }, 400);
+            setTimeout(() => { window.open("https://discord.gg/68QNPJbbMu", "_blank"); }, 400);
         }
 
-        // Birthday/Age Logic
+        // Update Birthdays
         function bananaUpdateTimers() {
-            const banana5 = new Date();
-
-            function banana6(banana7, banana8, banana9, banana10, banana11, skipAge = false) {
-                if (!skipAge && banana10) {
-                    let banana14 = banana5.getFullYear() - banana9;
-                    const banana15 = new Date(banana5.getFullYear(), banana7 - 1, banana8);
-                    if (banana5 < banana15) { banana14--; }
-                    document.getElementById(banana10).innerText = banana14 + " Years Old";
+            const now = new Date();
+            function calc(m, d, y, id, bId, skipAge = false) {
+                if (!skipAge && id) {
+                    let age = now.getFullYear() - y;
+                    const bday = new Date(now.getFullYear(), m - 1, d);
+                    if (now < bday) age--;
+                    document.getElementById(id).innerText = age + " Years Old";
                 }
-
-                let banana16 = new Date(banana5.getFullYear(), banana7 - 1, banana8);
-                if (banana5 > banana16) { banana16.setFullYear(banana5.getFullYear() + 1); }
-                const banana17 = banana16 - banana5;
-                const banana18 = Math.floor(banana17 / (1000 * 60 * 60 * 24));
-                const banana19 = Math.floor((banana17 % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                document.getElementById(banana11).innerText = `Next Birthday in ${banana18} days ${banana19} hours`;
+                let next = new Date(now.getFullYear(), m - 1, d);
+                if (now > next) next.setFullYear(now.getFullYear() + 1);
+                const diff = next - now;
+                const days = Math.floor(diff / (1000 * 60 * 60 * 24)), hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                document.getElementById(bId).innerText = `Next Birthday in ${days} days ${hours} hours`;
             }
-
-            banana6(3, 9, 2006, 'bunnyAge', 'bdayCountdown', false);
-            banana6(10, 31, 1985, 'mdAge', 'mdBdayCountdown', true);
-            banana6(7, 25, 2005, 'sdAge', 'sdBdayCountdown', false);
+            calc(3, 9, 2006, 'bunnyAge', 'bdayCountdown');
+            calc(10, 31, 1985, 'mdAge', 'mdBdayCountdown', true);
+            calc(7, 25, 2005, 'sdAge', 'sdBdayCountdown');
         }
-        bananaUpdateTimers();
-        setInterval(bananaUpdateTimers, 3600000);
+        bananaUpdateTimers(); setInterval(bananaUpdateTimers, 3600000);
 
-        // FAKE CHAT SYSTEM
+        // Fake Chat
         const chatScript = [
-            { name: "Ranouma", msg: "Hey has anyone seen the glowberry farm? I think I am lost." },
+            { name: "Ranouma", msg: "Hey has anyone seen the glowberry farm?" },
             { name: "FarmWerks", msg: "It is near the portal Ranouma! Just look for the pink sparkles." },
-            { name: "Ranouma", msg: "Found it! Thanks FarmWerks." },
-            { name: "BunnyWifRabies", msg: "Anyone want to go on a long walk in Queens later? The weather is actually nice for once." },
-            { name: "PixieDust88", msg: "Only if we can stop for stuffed animals BunnyWifRabies." },
-            { name: "BunnyWifRabies", msg: "You know I am always down for that PixieDust88." },
-            { name: "meshpotato", msg: "Did anyone catch that creepy mystery video on YouTube last night?" },
-            { name: ".Fancy_zombie932", msg: "The one about the haunted Minecraft seeds? It was so good meshpotato." },
-            { name: "RinElixx", msg: "I am dyeing my hair purple today. Does anyone have extra dye?" },
-            { name: "kiyoko_xx", msg: "I think I have some in the coven chest RinElixx." },
-            { name: "Queenioo", msg: "Stardrop told me she wants to build a new tower. Any volunteers?" },
-            { name: "enderpheb", msg: "I can help! I have a whole chest of deepslate ready." },
-            { name: "AustynnCraft", msg: "Make sure there are no bees near it. You know how she gets." },
-            { name: "j0li333", msg: "Lol true. I will bring some flowers to distract her." },
-            { name: "MochiMelt", msg: "Has anyone seen Eclipse? He keeps hiding in my wool farm." },
-            { name: ".witchesbrew222", msg: "He is probably looking for moonberries MochiMelt." },
-            { name: "Peachlings_", msg: "I am finally finishing my cottage build today!" },
-            { name: "iana_bells", msg: "Ooh send pictures Peachlings! I bet it looks cozy." },
-            { name: "beebobebop", msg: "I found a huge cave system under the spawn area." },
-            { name: "Noveskaa", msg: "Be careful beebobebop. Don't dig straight down!" },
-            { name: "KiwiGirl06", msg: "Does anyone want to do a karaoke night soon?" },
-            { name: "GlazedDonut", msg: "Yes please! I have been practicing my metal growls lol." },
-            { name: "dweebface1", msg: "I am more of an oldies girl myself but I am in." },
-            { name: "bbyBunny1", msg: "I found some diamonds if anyone needs tools." },
-            { name: "opperrty", msg: "I could use some bbyBunny1. I keep losing mine in the nether." },
-            { name: "veronicaca_", msg: "The nether is so scary lately. Too many ghasts." },
-            { name: "HarleyQuinn002", msg: "I just bottle their tears and use them for tea lol." },
-            { name: "reignsore", msg: "I am listening to that new metal album. It sounds like bricks scraping together." },
-            { name: ".Kitsunodawn9", msg: "That is exactly what Stardrop likes! She is probably vibing in her room." },
-            { name: "JennyGem", msg: "Has anyone checked the leaderboard today? ChknWRabies is still winning." },
-            { name: "ChknWRabies", msg: "I am just keeping the bank safe girls. No big deal." },
-            { name: "VelvetVixen", msg: "I am going to dye my hair pink to match Moondrops brew." },
-            { name: "StarryEyes", msg: "That sounds so cute VelvetVixen!" },
-            { name: "LunarLace", msg: "I am just staring at the moon in game. It is so peaceful." },
-            { name: "HoneyBumble", msg: "I am making a giant bee sanctuary near the forest." },
-            { name: "BubbleGumBabe", msg: "I will bring some honey blocks to help you build it." },
-            { name: "SilkSiren", msg: "Does anyone have extra glowstone? My garden is too dark." },
-            { name: "CherryCharm", msg: "I have a stack you can have SilkSiren. Meet me at spawn." },
-            { name: "HitlauraSS", msg: "I am working on a new Minecraft skin. It has so many ruffles." },
-            { name: ".jordyartdancer", msg: "I love ruffles! Can you make me one too?" },
-            { name: ".The_Shadow_3002", msg: "The shadows in this forest are getting deeper. I love it." },
-            { name: "Dayanibee", msg: "As long as there are no creepers in the shadows I am happy." },
-            { name: "Swooooosh6897", msg: "I just flew across the whole map with my elytra!" },
-            { name: "ObStrawb", msg: "I am still too scared to fly. I always crash into trees." },
-            { name: "Mynehuie", msg: "Just aim for the water ObStrawb. It works every time." },
-            { name: "emmaero", msg: "I am making some mana bread if anyone is hungry." },
-            { name: "Ranouma", msg: "I will take some! Exploring uses up so much energy." },
-            { name: "FarmWerks", msg: "I am going to plant some more Night Lilies now." },
-            { name: "kiyoko_xx", msg: "I will help you. They are my favorite flowers." },
-            { name: "BunnyWifRabies", msg: "I love this coven so much. Everyone is so nice." }
+            { name: "BunnyWifRabies", msg: "Anyone want to go on a long walk in Queens later?" },
+            { name: "kiyoko_xx", msg: "I think I have some extra dye in the coven chest." },
+            { name: "enderpheb", msg: "I can help build the tower! I have deepslate ready." }
         ];
-
         const chatFeed = document.getElementById('chatFeed');
         let currentIdx = 0;
-
         function updateFakeChat() {
             chatFeed.innerHTML = '';
-            const displayLines = chatScript.slice(currentIdx, currentIdx + 10);
-            
-            displayLines.forEach((item, i) => {
+            const lines = chatScript.slice(currentIdx, currentIdx + 5);
+            lines.forEach((item) => {
                 const msgDiv = document.createElement('div');
                 msgDiv.className = 'mirrorMsg';
-                const avatarUrl = `https://api.dicebear.com/7.x/bottts/svg?seed=${item.name}`;
-                
-                msgDiv.innerHTML = `
-                    <img src="${avatarUrl}" class="mirrorAvatar" style="border-color: var(--softPink); filter: hue-rotate(280deg);">
-                    <div class="mirrorText">
-                        <b>${item.name}</b>: ${item.msg}
-                    </div>
-                `;
+                const av = `https://api.dicebear.com/7.x/bottts/svg?seed=${item.name}`;
+                msgDiv.innerHTML = `<img src="${av}" class="mirrorAvatar" style="border-color: var(--softPink); filter: hue-rotate(280deg);"><div class="mirrorText"><b>${item.name}</b>: ${item.msg}</div>`;
                 chatFeed.appendChild(msgDiv);
             });
-
-            currentIdx += 10;
-            if (currentIdx >= chatScript.length) {
-                currentIdx = 0;
-            }
-            
+            currentIdx = (currentIdx + 5) % chatScript.length;
             chatFeed.scrollTop = chatFeed.scrollHeight;
         }
-
-        updateFakeChat();
-        setInterval(updateFakeChat, 30000);
+        updateFakeChat(); setInterval(updateFakeChat, 30000);
 
 /*
  _
@@ -622,8 +591,8 @@ V  \
  \  \_
   \,'.`-.
    |\ `. `.       
-   ( \  `. `-.                        _,.-:\
-    \ \   `.  `-._             __..--' ,-'; /
+   ( \  `. `-.                        _,.- :\
+    \ \   `.  `-._             __..--' ,-' ;/
      \ `.   `-.   `-..___..---'   _.--'  ,'/
       `. `.    `-._        __..--'     ,' /
         `. `-_     ``--..''         _.-','

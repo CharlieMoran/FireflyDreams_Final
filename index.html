@@ -49,11 +49,12 @@ V  \
             -webkit-tap-highlight-color: transparent;
         }
 
-        a, button, .whitelistBox, .profileCard, .yesBtn, .noBtn, .party-img, .party-large {
+        /* Hover Wand Cursor for all interactive elements */
+        a, button, .whitelistBox, .profileCard, .yesBtn, .noBtn, .party-img, .party-large, .emotionImg {
             cursor: url('images/wand1.png'), pointer !important;
         }
 
-        /* Background System - Dual layers for theme fading */
+        /* Background System - Dual layers for clean fading */
         .bg-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2; }
         .bg-layer {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
@@ -64,13 +65,24 @@ V  \
         }
         .bg-active { opacity: 1; }
 
-        /* UI Header & Console */
+        /* UI Header & Minecraft Style Console */
         .header-wrap {
             width: 100%; display: flex; flex-direction: column; align-items: center;
             position: absolute; top: 0; z-index: 1001; padding-top: 15px;
         }
+
         .bucketHeader { display: flex; justify-content: center; gap: 15px; margin-bottom: 10px; align-items: center; }
-        
+
+        .party-img {
+            width: 35px; height: auto;
+            filter: drop-shadow(0 0 5px rgba(112, 214, 255, 0.4));
+            transition: all 0.8s ease-in-out !important;
+            background: transparent !important;
+            z-index: 10;
+        }
+        .party-banana { display: none; width: 40px; }
+        .party-large { width: 60px; filter: drop-shadow(0 0 5px var(--softPink)); z-index: 10; }
+
         .mc-console {
             width: 185px; background: rgba(0, 0, 0, 0.7);
             border: 2px solid #555; padding: 3px 6px;
@@ -85,31 +97,7 @@ V  \
             text-shadow: 1px 1px #000; pointer-events: none; font-family: 'Fredoka One';
         }
 
-        /* Splash Screen Overlay */
-        #splashOverlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(10, 8, 20, 0.95); backdrop-filter: blur(15px);
-            display: flex; justify-content: center; align-items: center;
-            z-index: 10000; transition: opacity 0.8s ease;
-        }
-        .splashBox {
-            background: var(--glassBg); padding: 2.5rem; border-radius: 35px;
-            border: 2px solid var(--beeYellow); text-align: center;
-            max-width: 500px; width: 90%; box-shadow: 0 0 50px rgba(0,0,0,0.8);
-        }
-
-        /* Party Icons Styling */
-        .party-img {
-            width: 35px; height: auto;
-            filter: drop-shadow(0 0 5px rgba(112, 214, 255, 0.4));
-            transition: all 0.8s ease-in-out !important;
-            background: transparent !important;
-            z-index: 10;
-        }
-        .party-banana { display: none; width: 40px; }
-        .party-large { width: 60px; filter: drop-shadow(0 0 5px var(--softPink)); z-index: 10; }
-
-        /* Party Dance States */
+        /* Party Animation State */
         .disco-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             z-index: 9998; pointer-events: none; display: none;
@@ -128,32 +116,14 @@ V  \
             pointer-events: none !important;
             transform: translate(var(--circle-x), var(--circle-y)) !important;
         }
+
         .dancing { animation: bounceCircle 0.6s infinite alternate ease-in-out !important; }
         @keyframes bounceCircle {
             from { transform: translate(var(--circle-x), var(--circle-y)) translateY(0); }
             to { transform: translate(var(--circle-x), var(--circle-y)) translateY(-60px); }
         }
 
-        /* Particles & FX */
-        #particles { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
-        .particle {
-            position: absolute; width: 6px; height: 6px;
-            background: var(--beeYellow); border-radius: 50%;
-            box-shadow: 0 0 15px var(--beeYellow);
-            animation: floatUp 15s infinite linear; opacity: 0.7;
-        }
-        @keyframes floatUp {
-            0% { transform: translateY(110vh) translateX(0); opacity: 0; }
-            20% { opacity: 1; }
-            100% { transform: translateY(-10vh) translateX(100px); opacity: 0; }
-        }
-
-        .trailStar { position: absolute; width: 8px; height: 8px; border-radius: 50%; pointer-events: none; z-index: 100; animation: starFade 1s linear forwards; }
-        .burstStar { position: absolute; width: 8px; height: 8px; background: var(--beeYellow); border-radius: 50%; box-shadow: 0 0 10px var(--beeYellow); pointer-events: none; z-index: 1000; animation: burstFade 0.8s ease-out forwards; }
-        @keyframes starFade { 0% { opacity: 1; transform: scale(1); } 100% { opacity: 0; transform: scale(0.3) translateY(20px); } }
-        @keyframes burstFade { 0% { opacity: 1; transform: scale(1) translate(0, 0); } 100% { opacity: 0; transform: scale(0) translate(var(--x), var(--y)); } }
-
-        /* Main Content Styling */
+        /* Main Content Cards */
         .card, .sectionContent {
             background: var(--glassBg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
             padding: 3rem; border-radius: 35px; border: 2px solid rgba(255, 215, 0, 0.4);
@@ -167,41 +137,45 @@ V  \
         h1 { font-family: 'Fredoka One', cursive; color: var(--beeYellow); font-size: 3.5rem; text-shadow: 2px 2px 0px #000; margin: 0; }
         h2, h3 { font-family: 'Fredoka One', cursive; color: var(--beeYellow); margin: 0 0 1rem 0; }
 
-        /* Profile Cards & 3D Tilt */
+        /* Profile Cards with 3D Tilt Logic */
         .loreGrid { display: grid; grid-template-columns: 1fr; gap: 30px; margin-top: 2rem; text-align: left; }
         .profileCard {
             background: rgba(255, 255, 255, 0.05); border-radius: 25px; padding: 2rem;
             position: relative; overflow: hidden; transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1);
             transform-style: preserve-3d; perspective: 1000px; border: 1px solid rgba(255,255,255,0.1);
         }
-        .profileCard:hover { transform: rotateY(10deg) rotateX(5deg) scale(1.02); box-shadow: -10px 10px 30px rgba(0,0,0,0.5), 0 0 20px rgba(255, 107, 149, 0.2); }
+        .profileCard:hover {
+            transform: rotateY(10deg) rotateX(5deg) scale(1.02);
+            box-shadow: -10px 10px 30px rgba(0,0,0,0.5), 0 0 20px rgba(255, 107, 149, 0.2);
+        }
         .profileHeader { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; }
         .ageBadge { background: var(--softPink); color: white; padding: 5px 12px; border-radius: 15px; font-size: 0.8rem; font-weight: bold; }
         .countdown { font-size: 0.85rem; color: var(--softPink); margin-bottom: 15px; font-style: italic; display: block; text-align: center;}
         .profileImg { height: 400px; width: auto; max-width: 100%; display: block; margin: 0 auto 1.5rem auto; object-fit: contain; transform: translateZ(50px); animation: imageOutlineGlowYellow 4s infinite ease-in-out; }
         .profileImg.pink-outline { animation: imageOutlineGlowPink 4s infinite ease-in-out; }
 
-        /* Magic Mirror Chat */
+        /* Emotion Row Scaling & Glows */
+        .emotionRow { display: flex; justify-content: space-around; align-items: flex-end; margin-top: 2rem; gap: 10px; }
+        .emotionBox { flex: 1; text-align: center; }
+        .emotionImg { 
+            width: 100%; max-width: 120px; 
+            filter: drop-shadow(0 0 10px var(--softPink)); 
+            transition: all 0.8s ease-in-out; 
+            animation: breathingGlowPink 5s infinite ease-in-out; 
+        }
+        .emotionImg:hover { transform: scale(1.1) rotate(3deg); filter: drop-shadow(0 0 20px var(--softPink)) brightness(1.1); }
+
+        /* Magic Mirror System */
         .magicMirrorBox { border: 2px solid var(--softPink); box-shadow: 0 0 30px rgba(255, 107, 149, 0.2); text-align: left; }
         #chatFeed { height: 350px; overflow-y: auto; margin-top: 20px; padding: 20px; background: rgba(0, 0, 0, 0.4); border-radius: 20px; border: 1px solid rgba(255, 107, 149, 0.3); display: flex; flex-direction: column; gap: 15px; }
         .mirrorMsg { display: flex; align-items: center; gap: 15px; animation: slideIn 0.4s ease-out forwards; }
         .mirrorAvatar { width: 45px; height: 45px; border-radius: 50%; border: 2px solid var(--beeYellow); }
         .mirrorText b { color: var(--softPink); font-family: 'Fredoka One'; }
 
-        /* Emotions Row */
-        .emotionRow { display: flex; justify-content: space-around; align-items: flex-end; margin-top: 2rem; gap: 10px; }
-        .emotionBox { flex: 1; text-align: center; }
-        .emotionImg { width: 100%; max-width: 120px; filter: drop-shadow(0 0 10px var(--softPink)); transition: all 0.8s ease-in-out; animation: breathingGlowPink 5s infinite ease-in-out; }
-
-        /* Whitelist Box */
-        .whitelistBox { background: rgba(255, 107, 149, 0.1); border: 2px dashed var(--softPink); padding: 2.5rem; border-radius: 25px; transition: 0.3s; cursor: pointer; position: relative; overflow: hidden; }
-        .whitelistBox:hover { background: rgba(255, 107, 149, 0.2); transform: scale(1.02); }
-        .discordHandle { display: block; margin-top: 10px; font-family: 'Fredoka One'; color: var(--softPink); font-size: 1.8rem; }
-
-        /* Character Centering */
+        /* Character Ability Containers */
         .charBtnContainer { position: relative; display: flex; justify-content: center; align-items: center; margin: 15px auto; width: 100%; height: 120px; }
 
-        /* Galaxy FX */
+        /* FX Systems: Galaxy, Particles, Trails */
         .galaxy-fx-wrap { position: absolute; top: 50%; left: 50%; width: 0; height: 0; transform: translate(-50%, -50%); pointer-events: none; z-index: 1; display: flex; justify-content: center; align-items: center; }
         .galaxy-aura { position: absolute; width: 0; height: 0; background: radial-gradient(circle, rgba(168, 85, 247, 0.7) 0%, rgba(88, 28, 135, 0.4) 50%, transparent 70%); border-radius: 50%; opacity: 0; filter: blur(15px); }
         .galaxy-star { position: absolute; background: white; border-radius: 50%; box-shadow: 0 0 8px white, 0 0 12px var(--galaxyPurple); opacity: 0; }
@@ -213,24 +187,32 @@ V  \
         .shooting-star-fx { position: fixed; width: 250px; height: 2px; background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), white); pointer-events: none; z-index: 2000; animation: streakDiagonal 1.2s linear forwards; }
         @keyframes streakDiagonal { 0% { transform: translate(0, 0) rotate(-45deg); opacity: 0; } 10% { opacity: 1; } 100% { transform: translate(-150vw, 150vh) rotate(-45deg); opacity: 0; } }
 
-        /* Global Moon Phase Display */
+        #particles { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
+        .particle { position: absolute; width: 6px; height: 6px; background: var(--beeYellow); border-radius: 50%; box-shadow: 0 0 15px var(--beeYellow); animation: floatUp 15s infinite linear; opacity: 0.7; }
+        @keyframes floatUp { 0% { transform: translateY(110vh) translateX(0); opacity: 0; } 20% { opacity: 1; } 100% { transform: translateY(-10vh) translateX(100px); opacity: 0; } }
+
+        .trailStar { position: absolute; width: 8px; height: 8px; border-radius: 50%; pointer-events: none; z-index: 100; animation: starFade 1s linear forwards; }
+        .burstStar { position: absolute; width: 8px; height: 8px; background: var(--beeYellow); border-radius: 50%; box-shadow: 0 0 10px var(--beeYellow); pointer-events: none; z-index: 1000; animation: burstFade 0.8s ease-out forwards; }
+        @keyframes starFade { 0% { opacity: 1; transform: scale(1); } 100% { opacity: 0; transform: scale(0.3) translateY(20px); } }
+        @keyframes burstFade { 0% { opacity: 1; transform: scale(1) translate(0, 0); } 100% { opacity: 0; transform: scale(0) translate(var(--x), var(--y)); } }
+
+        /* Splash & Global UI */
+        #splashOverlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10, 8, 20, 0.95); backdrop-filter: blur(15px); display: flex; justify-content: center; align-items: center; z-index: 10000; transition: opacity 0.8s ease; }
+        .splashBox { background: var(--glassBg); padding: 2.5rem; border-radius: 35px; border: 2px solid var(--beeYellow); text-align: center; max-width: 500px; width: 90%; box-shadow: 0 0 50px rgba(0,0,0,0.8); }
         #moonPhaseContainer { position: fixed; top: 20px; left: 20px; z-index: 999; background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); padding: 10px 15px; border-radius: 50px; border: 1px solid rgba(255, 215, 0, 0.3); display: flex; align-items: center; gap: 10px; color: var(--beeYellow); font-family: 'Fredoka One'; box-shadow: 0 0 15px rgba(0,0,0,0.5); pointer-events: none; }
 
-        /* Keyframes Restored */
+        .whitelistBox { background: rgba(255, 107, 149, 0.1); border: 2px dashed var(--softPink); padding: 2.5rem; border-radius: 25px; transition: 0.3s; position: relative; overflow: hidden; }
+        .discordHandle { display: block; margin-top: 10px; font-family: 'Fredoka One'; color: var(--softPink); font-size: 1.8rem; }
+        footer { margin: 40px 0; font-size: 0.75rem; color: rgba(255,255,255,0.4); text-align: center; }
+
+        /* Shared Keyframes */
         @keyframes rectangularBreathingGlow { 0%, 100% { box-shadow: 0 0 15px rgba(255, 215, 0, 0.3); border-color: rgba(255, 215, 0, 0.5); } 50% { box-shadow: 0 0 35px rgba(255, 215, 0, 0.7); border-color: var(--beeYellow); } }
         @keyframes imageOutlineGlowYellow { 0%, 100% { filter: drop-shadow(0 0 3px rgba(255, 215, 0, 0.8)); } 50% { filter: drop-shadow(0 0 10px var(--beeYellow)) brightness(1.1); } }
         @keyframes imageOutlineGlowPink { 0%, 100% { filter: drop-shadow(0 0 3px rgba(255, 107, 149, 0.8)); } 50% { filter: drop-shadow(0 0 10px var(--softPink)) brightness(1.1); } }
         @keyframes breathingGlowPink { 0%, 100% { filter: drop-shadow(0 0 5px var(--softPink)); } 50% { filter: drop-shadow(0 0 20px var(--softPink)); } }
         @keyframes slideIn { from { opacity: 0; transform: translateX(-15px); } to { opacity: 1; transform: translateX(0); } }
 
-        footer { margin: 40px 0; font-size: 0.75rem; color: rgba(255,255,255,0.4); text-align: center; }
-
-        @media (max-width: 600px) {
-            h1 { font-size: 2.2rem; }
-            .card, .sectionContent { padding: 1.5rem; width: 90%; }
-            .profileImg { height: 280px; }
-            .emotionImg { max-width: 75px; }
-        }
+        @media (max-width: 600px) { h1 { font-size: 2.2rem; } .card, .sectionContent { padding: 1.5rem; width: 90%; } .profileImg { height: 280px; } .emotionImg { max-width: 75px; } }
     </style>
 </head>
 <body>
@@ -256,9 +238,9 @@ V  \
     <div id="discoOverlay" class="disco-overlay"></div>
     <div id="splashOverlay">
         <div class="splashBox">
-            <h2>Are you ready to explore with us Pookie?</h2>
+            <h2 style="font-family: 'Fredoka One'; color: var(--beeYellow);">Are you ready to explore with us Pookie?</h2>
             <div style="display:flex; justify-content:center; gap:15px; margin-top:2rem;">
-                <button class="yesBtn" style="font-family: 'Fredoka One'; padding: 15px 35px; border-radius: 20px; background: var(--beeYellow); color: var(--deepNight); border: none; box-shadow: 0 0 15px var(--beeYellow);" onclick="bananaEnter(event)">YES</button>
+                <button class="yesBtn" style="font-family: 'Fredoka One'; padding: 15px 35px; border-radius: 20px; background: var(--beeYellow); color: var(--deepNight); border: none;" onclick="bananaEnter(event)">YES</button>
                 <button class="noBtn" style="font-family: 'Fredoka One'; padding: 15px 35px; border-radius: 20px; background: var(--softPink); color: white; border: none;" onclick="window.location.href='https://google.com'">NO</button>
             </div>
         </div>
@@ -277,7 +259,7 @@ V  \
 
     <div class="card">
         <img src="images/hero.png" id="heroPoster" alt="Hero" class="heroImg">
-        <h1 id="titleText">Firefly Dreams</h1>
+        <h1>Firefly Dreams</h1>
         <p>A whimsical survival community for girls.</p>
         <div style="font-family: 'Fredoka One'; color: var(--beeYellow);">IP: FIREFLYDREAMS.WORLD</div>
     </div>
@@ -287,9 +269,18 @@ V  \
         <p>Moondrop the Moon Witch wove magical ley lines across the digital realm to create a sanctuary for the girls of Firefly Dreams. We share adventures and moonlit magic across any distance.</p>
         <p style="font-weight: 600; color: var(--beeYellow);">We are an 18 plus cozy female friendly server where we are free to build create and explore to our hearts content.</p>
         <div class="emotionRow">
-            <div class="emotionBox"><img src="images/IMG_6921-removebg-preview.png" id="laughing" alt="Laughing" class="emotionImg"> <span style="display:block; color:var(--softPink); font-family:'Fredoka One'; margin-top: 10px; font-size: 0.8rem;">Laughing</span></div>
-            <div class="emotionBox"><img src="images/IMG_6894-removebg-preview.png" id="crying" alt="Crying" class="emotionImg"> <span style="display:block; color:var(--softPink); font-family:'Fredoka One'; margin-top: 10px; font-size: 0.8rem;">Crying</span></div>
-            <div class="emotionBox"><img src="images/IMG_6937-removebg-preview.png" id="tea" alt="Spilling Tea" class="emotionImg"> <span style="display:block; color:var(--softPink); font-family:'Fredoka One'; margin-top: 10px; font-size: 0.8rem;">Spilling Tea</span></div>
+            <div class="emotionBox">
+                <img src="images/IMG_6921-removebg-preview.png" id="laughing" alt="Laughing" class="emotionImg"> 
+                <span style="display:block; color:var(--softPink); font-family:'Fredoka One'; margin-top: 10px; font-size: 0.8rem;">Laughing</span>
+            </div>
+            <div class="emotionBox">
+                <img src="images/IMG_6894-removebg-preview.png" id="crying" alt="Crying" class="emotionImg"> 
+                <span style="display:block; color:var(--softPink); font-family:'Fredoka One'; margin-top: 10px; font-size: 0.8rem;">Crying</span>
+            </div>
+            <div class="emotionBox">
+                <img src="images/IMG_6937-removebg-preview.png" id="tea" alt="Spilling Tea" class="emotionImg"> 
+                <span style="display:block; color:var(--softPink); font-family:'Fredoka One'; margin-top: 10px; font-size: 0.8rem;">Spilling Tea</span>
+            </div>
         </div>
     </div>
 
@@ -312,7 +303,6 @@ V  \
                 <div class="countdown" id="bdayCountdown">Calculating party</div>
                 <p>That is me in the poster! I am surviving here in Queens New York even though this city is way too expensive for its own good. Most of my time is spent window shopping for stuffed animals I cannot afford or hanging out at karaoke. I play Helldivers 2 and Minecraft and Roblox and RDR2 mainly.</p>
             </div>
-
             <div class="profileCard">
                 <img src="images/MD.png" alt="Moondrop" class="profileImg pink-outline">
                 <div class="profileHeader">
@@ -325,7 +315,6 @@ V  \
                     <img src="images/MDC.png" id="moonIconBtn" alt="Moon" class="party-img party-large" onclick="charAction('moon')">
                 </div>
             </div>
-
             <div class="profileCard">
                 <img src="images/SD.png" alt="Stardrop" class="profileImg">
                 <div class="profileHeader">
@@ -345,7 +334,6 @@ V  \
 
     <div class="sectionContent" style="border-top-color: var(--softPink);">
         <h2>Join the Coven</h2>
-        <p>Verification is required to keep the weirdos out. Click below to teleport to our #verify-here channel!</p>
         <div class="whitelistBox" onclick="bananaJoin(event)">
             <span style="color: var(--softPink); font-weight: bold;">✨ TELEPORT TO DISCORD ✨</span>
             <span class="discordHandle">JOIN NOW</span>
@@ -356,7 +344,7 @@ V  \
 
     <script>
         /* =========================================
-           CORE DATA & THEME LOGIC
+           CORE CONFIG & DATA
            ========================================= */
         const themes = {
             day: { hero: 'images/hero.png', bg: ['images/bg dt.png', 'images/bg dt2.png'] },
@@ -372,11 +360,7 @@ V  \
             { name: "enderpheb", msg: "I can help build the tower! I have deepslate ready." }
         ];
 
-        let currentTheme = 'day';
-        let bgCycleIdx = 0;
-        let moonClicks = 0;
-        let moonCooldown = false;
-        let chatIdx = 0;
+        let currentTheme = 'day', bgCycleIdx = 0, moonClicks = 0, moonCooldown = false, chatIdx = 0;
 
         function getNYCHour() { return new Date(new Date().toLocaleString("en-US", {timeZone: "America/New_York"})).getHours(); }
 
@@ -389,7 +373,7 @@ V  \
         }
 
         function cycleBackground() {
-            const bg1 = document.getElementById('bg1'); const bg2 = document.getElementById('bg2');
+            const bg1 = document.getElementById('bg1'), bg2 = document.getElementById('bg2');
             const nextImg = themes[currentTheme].bg[bgCycleIdx];
             if (bg1.classList.contains('bg-active')) {
                 bg2.style.backgroundImage = `url('${nextImg}')`; bg2.classList.add('bg-active'); bg1.classList.remove('bg-active');
@@ -406,10 +390,10 @@ V  \
         }
 
         /* =========================================
-           INTERACTIVE EFFECTS (STAR TRAILS & BURSTS)
+           INTERACTIVE STAR EFFECTS
            ========================================= */
         const starColors = ['#ffd700', '#ff6b95', '#70d6ff', '#ffffff', '#e0aaff'];
-        document.addEventListener('mousemove', function(e) {
+        document.addEventListener('mousemove', (e) => {
             const star = document.createElement('div');
             star.className = 'trailStar';
             star.style.left = e.pageX + 'px'; star.style.top = e.pageY + 'px';
@@ -429,18 +413,15 @@ V  \
         }
 
         /* =========================================
-           PARTY TIME SEQUENCE
+           PARTY TIME DANCE LOGIC
            ========================================= */
         function startParty() {
-            const bgm = document.getElementById('bgMusic');
-            const ptm = document.getElementById('partyMusic');
-            const disco = document.getElementById('discoOverlay');
-            const banana = document.getElementById('p-banana');
+            const bgm = document.getElementById('bgMusic'), ptm = document.getElementById('partyMusic');
+            const disco = document.getElementById('discoOverlay'), banana = document.getElementById('p-banana');
             
             bgm.pause(); ptm.volume = 0.15; ptm.play();
             disco.style.display = 'block'; document.body.style.overflow = 'hidden';
 
-            // Targeted Dancers
             const dancers = [
                 document.getElementById('laughing'), document.getElementById('crying'), document.getElementById('tea'),
                 document.getElementById('moonIconBtn'), document.getElementById('dreamBtnIcon'),
@@ -448,35 +429,47 @@ V  \
                 banana
             ];
             
-            const radius = 150; const step = (2 * Math.PI) / dancers.length;
+            const radius = 150, step = (2 * Math.PI) / dancers.length;
 
             dancers.forEach((d, i) => {
+                // Initial Off-Screen Position
+                const side = i % 2 === 0 ? -150 : 150;
+                d.style.setProperty('--circle-x', `${side}vw`); 
+                d.style.setProperty('--circle-y', `-120vh`);
+                d.classList.add('gathering');
+                
+                // Force layout calculation
+                d.offsetHeight;
+
+                // Move to Circle Formation
                 const angle = i * step;
                 d.style.setProperty('--circle-x', `${Math.round(radius * Math.cos(angle))}px`);
                 d.style.setProperty('--circle-y', `${Math.round(radius * Math.sin(angle))}px`);
-                d.classList.add('gathering');
+                
                 setTimeout(() => d.classList.add('dancing'), 800);
             });
 
             ptm.onended = () => {
                 disco.style.display = 'none'; document.body.style.overflow = 'auto';
                 banana.style.display = 'none';
-                dancers.forEach(d => { d.classList.remove('gathering', 'dancing'); d.style.removeProperty('--circle-x'); d.style.removeProperty('--circle-y'); });
+                dancers.forEach(d => { 
+                    d.classList.remove('gathering', 'dancing'); 
+                    d.style.removeProperty('--circle-x'); d.style.removeProperty('--circle-y'); 
+                });
                 bgm.play();
             };
         }
 
         /* =========================================
-           UI ACTIONS & CONSOLE
+           CORE FUNCTIONS & ABILITIES
            ========================================= */
         function handleConsole(e) {
             if (e.key === 'Enter') {
-                const val = e.target.value.trim().toLowerCase();
-                const log = document.getElementById('consoleLog');
+                const val = e.target.value.trim().toLowerCase(), log = document.getElementById('consoleLog');
                 e.target.value = '';
-                if (val === '/time set day') { applyTheme('day'); log.innerText = 'Time set to Day!'; }
-                else if (val === '/time set noon') { applyTheme('sunset'); log.innerText = 'Time set to Noon!'; }
-                else if (val === '/time set night') { applyTheme('night'); log.innerText = 'Time set to Night!'; }
+                if (val === '/time set day') applyTheme('day');
+                else if (val === '/time set noon') applyTheme('sunset');
+                else if (val === '/time set night') applyTheme('night');
                 else if (val === '/partytime') { 
                     document.getElementById('p-banana').style.display = 'block'; 
                     log.innerText = 'Party mode enabled! Click the banana.'; 
@@ -501,7 +494,7 @@ V  \
         }
 
         function bucketAction(type) {
-            const rain = document.getElementById('rainAudio'); const pts = document.querySelectorAll('.particle');
+            const rain = document.getElementById('rainAudio'), pts = document.querySelectorAll('.particle');
             if (type === 'water') {
                 pts.forEach(p => { p.style.background = '#70d6ff'; p.style.width = '2px'; p.style.height = '15px'; p.style.animationDuration = '1s'; });
                 rain.volume = 0.1; rain.play();
@@ -514,20 +507,9 @@ V  \
             }
         }
 
-        function bananaJoin(event) {
-            createBurst(event.pageX, event.pageY);
-            setTimeout(() => { window.open("https://discord.gg/68QNPJbbMu", "_blank"); }, 400);
-        }
+        function bananaJoin(event) { createBurst(event.pageX, event.pageY); setTimeout(() => window.open("https://discord.gg/68QNPJbbMu", "_blank"), 400); }
+        function bananaEnter(event) { createBurst(event.pageX, event.pageY); document.getElementById('bgMusic').volume = 0.2; document.getElementById('bgMusic').play(); document.getElementById('splashOverlay').style.opacity = '0'; setTimeout(() => document.getElementById('splashOverlay').style.display = 'none', 800); }
 
-        function bananaEnter(event) {
-            createBurst(event.pageX, event.pageY);
-            document.getElementById('bgMusic').volume = 0.2; document.getElementById('bgMusic').play(); 
-            document.getElementById('splashOverlay').style.opacity = '0'; setTimeout(() => document.getElementById('splashOverlay').style.display = 'none', 800);
-        }
-
-        /* =========================================
-           REAL-TIME TIMERS & CHAT
-           ========================================= */
         function bananaUpdateTimers() {
             const now = new Date();
             function calc(m, d, y, id, bId, skipAge = false) {
@@ -537,7 +519,7 @@ V  \
                 }
                 let next = new Date(now.getFullYear(), m - 1, d); if (now > next) next.setFullYear(now.getFullYear() + 1);
                 const diff = next - now;
-                const days = Math.floor(diff / (1000 * 60 * 60 * 24)), hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const days = Math.floor(diff / 86400000), hours = Math.floor((diff % 86400000) / 3600000);
                 document.getElementById(bId).innerText = `Next Birthday in ${days} days ${hours} hours`;
             }
             calc(3, 9, 2006, 'bunnyAge', 'bdayCountdown');
@@ -549,12 +531,13 @@ V  \
             const feed = document.getElementById('chatFeed'); feed.innerHTML = '';
             const slice = chatScript.slice(chatIdx, chatIdx + 5);
             slice.forEach(item => {
-                const d = document.createElement('div'); d.className = 'mirrorMsg';
-                const av = `https://api.dicebear.com/7.x/bottts/svg?seed=${item.name}`;
+                const d = document.createElement('div'), av = `https://api.dicebear.com/7.x/bottts/svg?seed=${item.name}`;
+                d.className = 'mirrorMsg';
                 d.innerHTML = `<img src="${av}" class="mirrorAvatar" style="border-color: var(--softPink); filter: hue-rotate(280deg);"><div class="mirrorText"><b>${item.name}</b>: ${item.msg}</div>`;
                 feed.appendChild(d);
             });
             chatIdx = (chatIdx + 5) % chatScript.length;
+            feed.scrollTop = feed.scrollHeight;
         }
 
         function getMoonPhase() {
@@ -583,16 +566,14 @@ V  \
         }
 
         /* =========================================
-           INITIALIZATION
+           INITIALIZATION FX
            ========================================= */
-        // Generate Particles
         for (let i = 0; i < 30; i++) {
             const p = document.createElement('div'); p.className = 'particle';
             p.style.left = Math.random() * 100 + 'vw'; p.style.animationDelay = Math.random() * 10 + 's';
             p.style.animationDuration = (Math.random() * 10 + 10) + 's'; document.getElementById('particles').appendChild(p);
         }
 
-        // Generate Galaxy Stars
         const gWrap = document.getElementById('dreamGalaxy');
         for (let i = 0; i < 45; i++) {
             const s = document.createElement('div'); s.className = 'galaxy-star';

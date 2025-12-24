@@ -632,6 +632,11 @@ V  \
                     p.style.height = '15px';
                     p.style.animationDuration = (Math.random() * 1 + 0.8) + 's';
                 });
+
+                if (type === 'water') {
+                rainAudio.volume = 0.1; // 0.1 is 10% volume, 1.0 is 100%
+                rainAudio.play();
+            }
                 rainAudio.play();
             } else if (type === 'snow') {
                 parts.forEach(p => { 

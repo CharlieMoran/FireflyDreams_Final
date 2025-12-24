@@ -67,16 +67,21 @@ V  \
 
         .bucketHeader { display: flex; justify-content: center; gap: 15px; margin-bottom: 10px; align-items: center; }
 
-        .tinyBucket, .party-icon {
+        /* Interactive Elements - Added transition for smooth "walking" */
+        .tinyBucket, .party-icon, .charBtn, .emotionImg {
             width: 35px; height: auto; cursor: pointer;
             filter: drop-shadow(0 0 5px rgba(112, 214, 255, 0.4));
-            transition: transform 0.2s ease, filter 0.3s;
+            transition: all 0.8s ease-in-out !important;
             background: transparent !important;
+            z-index: 10;
         }
+        .charBtn, .emotionImg { width: 60px; filter: drop-shadow(0 0 5px var(--softPink)); }
+        .emotionImg { max-width: 120px; }
+
         .tinyBucket:hover { transform: scale(1.2) rotate(-10deg); filter: drop-shadow(0 0 8px var(--magicBlue)); }
-        
         .party-icon { display: none; }
         .party-icon:hover { animation: rgbGlow 1s infinite linear; }
+        
         @keyframes rgbGlow {
             0% { filter: drop-shadow(0 0 10px red); }
             33% { filter: drop-shadow(0 0 10px green); }
@@ -101,7 +106,7 @@ V  \
             text-shadow: 1px 1px #000; pointer-events: none; font-family: 'Fredoka One';
         }
 
-        /* Party Mode FX */
+        /* Party Mode FX - Circular Gathering & Bouncing */
         .disco-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             z-index: 9998; pointer-events: none; display: none;
@@ -109,25 +114,33 @@ V  \
         }
         @keyframes discoFlash {
             0% { background: rgba(255, 0, 0, 0.15); }
-            20% { background: rgba(0, 255, 0, 0.15); }
-            40% { background: rgba(0, 0, 255, 0.15); }
-            60% { background: rgba(255, 255, 0, 0.15); }
-            80% { background: rgba(255, 0, 255, 0.15); }
-            100% { background: rgba(0, 255, 255, 0.15); }
+            25% { background: rgba(0, 255, 0, 0.15); }
+            50% { background: rgba(0, 0, 255, 0.15); }
+            75% { background: rgba(255, 255, 0, 0.15); }
+            100% { background: rgba(255, 0, 255, 0.15); }
         }
 
         .gathering {
-            position: fixed !important; top: 50% !important; left: var(--target-x) !important;
-            transform: translate(-50%, -50%) !important;
-            margin: 0 !important; z-index: 10000 !important;
+            position: fixed !important;
+            top: 50% !important; left: 50% !important;
+            margin: -20px 0 0 -20px !important; /* Offset for center alignment */
+            z-index: 10001 !important;
+            /* Move to calculated circle position using CSS variables set in JS */
+            transform: translate(var(--circle-x), var(--circle-y)) !important;
         }
 
-        .dancing { animation: bounceDance 0.5s infinite alternate ease-in-out !important; }
-        @keyframes bounceDance { from { transform: translate(-50%, -50%); } to { transform: translate(-50%, -85%); } }
-        
+        .dancing {
+            /* Bounce animation relative to the circular position */
+            animation: circBounce 0.5s infinite alternate ease-in-out !important;
+        }
+
+        @keyframes circBounce {
+            from { transform: translate(var(--circle-x), var(--circle-y)) translateY(0); }
+            to { transform: translate(var(--circle-x), var(--circle-y)) translateY(-30px); }
+        }
+
         /* Character Buttons & Galaxy */
         .charBtnContainer { position: relative; display: flex; justify-content: center; align-items: center; margin: 15px auto; width: 100%; height: 120px; }
-        .charBtn { width: 60px; height: auto; cursor: pointer; transition: 0.3s; filter: drop-shadow(0 0 5px var(--softPink)); z-index: 10; }
         .galaxy-fx-wrap { position: absolute; top: 50%; left: 50%; width: 0; height: 0; transform: translate(-50%, -50%); pointer-events: none; z-index: 1; display: flex; justify-content: center; align-items: center; }
         .galaxy-aura { position: absolute; width: 0; height: 0; background: radial-gradient(circle, rgba(168, 85, 247, 0.7) 0%, rgba(88, 28, 135, 0.4) 50%, transparent 70%); border-radius: 50%; opacity: 0; filter: blur(15px); }
         .galaxy-star { position: absolute; background: white; border-radius: 50%; box-shadow: 0 0 8px white, 0 0 12px var(--galaxyPurple); opacity: 0; }
@@ -150,9 +163,8 @@ V  \
         /* About Us Emotions */
         .emotionRow { display: flex; justify-content: space-around; align-items: flex-end; margin-top: 2rem; gap: 10px; }
         .emotionBox { flex: 1; text-align: center; }
-        .emotionImg { width: 100%; max-width: 120px; filter: drop-shadow(0 0 10px var(--softPink)); transition: 0.3s; animation: breathingGlowPink 5s infinite ease-in-out; }
-
-        /* Magic Mirror */
+        
+        /* Magic Mirror Chat */
         .magicMirrorBox { border: 2px solid var(--softPink); box-shadow: 0 0 30px rgba(255, 107, 149, 0.2); text-align: left; }
         #chatFeed { height: 350px; overflow-y: auto; margin-top: 20px; padding: 20px; background: rgba(0, 0, 0, 0.4); border-radius: 20px; border: 1px solid rgba(255, 107, 149, 0.3); display: flex; flex-direction: column; gap: 15px; }
         .mirrorMsg { display: flex; align-items: center; gap: 15px; animation: slideIn 0.4s ease-out forwards; }
@@ -184,6 +196,8 @@ V  \
         @keyframes imageOutlineGlowYellow { 0%, 100% { filter: drop-shadow(0 0 3px rgba(255, 215, 0, 0.8)); } 50% { filter: drop-shadow(0 0 10px var(--beeYellow)) brightness(1.1); } }
         @keyframes breathingGlowPink { 0%, 100% { filter: drop-shadow(0 0 5px var(--softPink)); } 50% { filter: drop-shadow(0 0 20px var(--softPink)); } }
         @keyframes slideIn { from { opacity: 0; transform: translateX(-15px); } to { opacity: 1; transform: translateX(0); } }
+        .trailStar { position: absolute; width: 8px; height: 8px; border-radius: 50%; pointer-events: none; z-index: 100; animation: starFade 1s linear forwards; }
+        @keyframes starFade { 0% { opacity: 1; transform: scale(1); } 100% { opacity: 0; transform: scale(0.3) translateY(20px); } }
 
         @media (max-width: 600px) {
             h1 { font-size: 2.2rem; } h2 { font-size: 1.6rem; }
@@ -384,31 +398,47 @@ V  \
             }
         }
 
-        // --- Party Time Logic ---
+        // --- Party Time Logic (Circular & Walking) ---
         function startParty() {
             const bgm = document.getElementById('bgMusic');
             const ptm = document.getElementById('partyMusic');
             const disco = document.getElementById('discoOverlay');
+            const banana = document.getElementById('banana-party');
+
             bgm.pause(); ptm.volume = 0.15; ptm.play();
             disco.style.display = 'block';
             document.body.style.overflow = 'hidden';
 
+            // Select all dancers
             const dancers = [
                 document.getElementById('bucket-water'), document.getElementById('bucket-snow'), document.getElementById('bucket-milk'),
                 document.getElementById('moonBtn'), document.getElementById('dreamBtn'),
                 document.getElementById('laughing'), document.getElementById('crying'), document.getElementById('tea'),
-                document.getElementById('banana-party')
+                banana
             ];
 
+            // Calculate circular positions based on trigonometry
+            const radius = 150; // Radius of the circle in pixels
+            const angleStep = (2 * Math.PI) / dancers.length;
+
             dancers.forEach((d, i) => {
+                const angle = i * angleStep;
+                const x = Math.round(radius * Math.cos(angle));
+                const y = Math.round(radius * Math.sin(angle));
+                // Set CSS variables for smooth transition to these coordinates
+                d.style.setProperty('--circle-x', `${x}px`);
+                d.style.setProperty('--circle-y', `${y}px`);
                 d.classList.add('gathering', 'dancing');
-                d.style.setProperty('--target-x', `${(i + 1) * (100 / (dancers.length + 1))}%`);
             });
 
             ptm.onended = () => {
                 disco.style.display = 'none'; document.body.style.overflow = 'auto';
-                document.getElementById('banana-party').style.display = 'none';
-                dancers.forEach(d => { d.classList.remove('gathering', 'dancing'); d.style.removeProperty('--target-x'); });
+                banana.style.display = 'none';
+                dancers.forEach(d => { 
+                    d.classList.remove('gathering', 'dancing'); 
+                    d.style.removeProperty('--circle-x');
+                    d.style.removeProperty('--circle-y');
+                });
                 bgm.play();
             };
         }
@@ -462,22 +492,19 @@ V  \
         }
 
         // --- Core Init ---
-        const particleContainer = document.getElementById('particles');
+        const pCon = document.getElementById('particles');
         for (let i = 0; i < 150; i++) {
-            const p = document.createElement('div');
-            p.className = 'particle';
+            const p = document.createElement('div'); p.className = 'particle';
             p.style.left = Math.random() * 100 + 'vw';
             p.style.animationDelay = Math.random() * 8 + 's';
             p.style.animationDuration = (Math.random() * 3 + 2) + 's'; 
-            particleContainer.appendChild(p);
+            pCon.appendChild(p);
         }
 
         const gWrap = document.getElementById('dreamGalaxy');
         for (let i = 0; i < 45; i++) {
-            const s = document.createElement('div');
-            s.className = 'galaxy-star';
-            s.style.width = (Math.random() * 5 + 2) + 'px';
-            s.style.height = s.style.width;
+            const s = document.createElement('div'); s.className = 'galaxy-star';
+            s.style.width = (Math.random() * 5 + 2) + 'px'; s.style.height = s.style.width;
             s.style.setProperty('--dist', (i * 3.5 + 25) + 'px');
             s.style.animationDelay = (i * 0.04) + 's';
             gWrap.appendChild(s);
@@ -485,8 +512,7 @@ V  \
 
         const starColors = [ '#ffd700', '#ff6b95', '#70d6ff', '#ffffff', '#e0aaff' ];
         document.addEventListener('mousemove', function(e) {
-            const s = document.createElement('div');
-            s.className = 'trailStar';
+            const s = document.createElement('div'); s.className = 'trailStar';
             s.style.left = e.pageX + 'px'; s.style.top = e.pageY + 'px';
             const c = starColors[Math.floor(Math.random() * starColors.length)];
             s.style.background = c; s.style.boxShadow = `0 0 10px ${c}`;

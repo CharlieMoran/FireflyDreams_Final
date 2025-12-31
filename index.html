@@ -622,12 +622,9 @@ V  \
         /* =========================================
            I. CONFIGURATION & STATE
            ========================================= */
-        const THEMES = {
-            day: { hero: 'images/hero.png', bg: ['images/bg dt.png', 'images/bg dt2.png'] },
-            sunset: { hero: 'images/hero-sunset.jpg', bg: ['images/bg ss.png', 'images/bg ss2.png'] },
-            night: { hero: 'images/hero-night.jpg', bg: ['images/bg nt.png', 'images/bg nt2.png'] }
-        };
-
+        const portalUrl = "https://moondrop-mirror-ffd.loca.lt"; 
+        
+        // RESTORED: The "Fake" Chat Logs
         const CHAT_LOGS = [
             { name: "Ranouma", msg: "Hey has anyone seen the glowberry farm?" },
             { name: "FarmWerks", msg: "It is near the portal Ranouma! Just look for the pink sparkles." },
@@ -636,16 +633,108 @@ V  \
             { name: "enderpheb", msg: "I can help build the tower! I have deepslate ready." }
         ];
 
+        const THEMES = {
+            day: { hero: 'images/hero.png', bg: ['images/bg dt.png', 'images/bg dt2.png'] },
+            sunset: { hero: 'images/hero-sunset.jpg', bg: ['images/bg ss.png', 'images/bg ss2.png'] },
+            night: { hero: 'images/hero-night.jpg', bg: ['images/bg nt.png', 'images/bg nt2.png'] }
+        };
+
         let state = {
             currentTheme: 'day',
             bgIdx: 0,
             moonClicks: 0,
             moonCooldown: false,
-            chatIdx: 0
+            chatIdx: 0,
+            isLive: false // Track if we are online or not
         };
 
+        const mirrorContainer = document.getElementById('chatFeed');
+
         /* =========================================
-           II. CORE UTILITIES
+           II. CHAT LOGIC (HYBRID SYSTEM)
+           ========================================= */
+        
+        // 1. HELPER: Adds a styled message to the box
+        function appendMessage(author, content) {
+            const msgElement = document.createElement('div');
+            msgElement.className = 'mirrorMsg';
+            const avatarUrl = `https://api.dicebear.com/7.x/bottts/svg?seed=${author}`;
+
+            msgElement.innerHTML = `
+                <img src="${avatarUrl}" class="mirrorAvatar" style="border-color: var(--softPink); filter: hue-rotate(280deg);">
+                <div class="mirrorText">
+                    <b>${author}</b>: ${content}
+                </div>
+            `;
+            mirrorContainer.appendChild(msgElement);
+            mirrorContainer.scrollTop = mirrorContainer.scrollHeight;
+        }
+
+        // 2. FAKE CHAT SYSTEM (The Backup)
+        function startFakeChat() {
+            console.log("Portal down. Engaging memory mode.");
+            updateFakeChat(); // Run once immediately
+            setInterval(updateFakeChat, 30000); // Then cycle every 30s
+        }
+
+        function updateFakeChat() {
+            // Clear container to cycle (Original behavior)
+            mirrorContainer.innerHTML = ''; 
+            const slice = CHAT_LOGS.slice(state.chatIdx, state.chatIdx + 5);
+            
+            // If we run out of messages (end of array), loop back or just show what we have
+            if(slice.length === 0) state.chatIdx = 0;
+
+            slice.forEach(item => {
+                appendMessage(item.name, item.msg);
+            });
+            
+            state.chatIdx = (state.chatIdx + 5) % CHAT_LOGS.length;
+            
+            // Add a little note that this is a memory
+            const note = document.createElement('div');
+            note.style.fontSize = '0.7rem'; note.style.opacity = '0.5'; note.style.textAlign='center';
+            note.innerText = "— Mirror Connection Lost: Replaying Memories —";
+            mirrorContainer.appendChild(note);
+        }
+
+        // 3. REAL CHAT SYSTEM (Socket.io)
+        try {
+            const socket = io(portalUrl);
+
+            socket.on('connect', () => {
+                state.isLive = true;
+                mirrorContainer.innerHTML = ''; // Clear any fake chat if we reconnect
+            });
+
+            socket.on('portal_update', (data) => {
+                if(state.isLive) appendMessage(data.author, data.content);
+                // Keep only last 20 lines for live chat
+                if (mirrorContainer.children.length > 20) {
+                    mirrorContainer.removeChild(mirrorContainer.firstChild);
+                }
+            });
+
+            // Initial Load
+            fetch(`${portalUrl}/mirror-history`)
+                .then(res => res.json())
+                .then(history => {
+                    state.isLive = true;
+                    mirrorContainer.innerHTML = ''; // Clear placeholder
+                    history.forEach(msg => appendMessage(msg.author, msg.content));
+                })
+                .catch(err => {
+                    // IF FETCH FAILS -> START FAKE CHAT
+                    startFakeChat();
+                });
+
+        } catch (e) {
+            // IF SOCKET CRASHES -> START FAKE CHAT
+            startFakeChat();
+        }
+
+        /* =========================================
+           III. CORE UTILITIES
            ========================================= */
         function getNYCTime() { 
             return new Date(new Date().toLocaleString("en-US", {timeZone: "America/New_York"})); 
@@ -679,7 +768,7 @@ V  \
         }
 
         /* =========================================
-           III. INTERACTIVE EFFECTS
+           IV. INTERACTIVE EFFECTS
            ========================================= */
         document.addEventListener('mousemove', (e) => {
             const star = document.createElement('div');
@@ -713,7 +802,7 @@ V  \
         }
 
         /* =========================================
-           IV. CHARACTER & BUCKET ACTIONS
+           V. CHARACTER & BUCKET ACTIONS
            ========================================= */
         function charAction(type) {
             if (type === 'moon') {
@@ -750,7 +839,7 @@ V  \
         }
 
         /* =========================================
-           V. UI & PARTY LOGIC
+           VI. UI & PARTY LOGIC
            ========================================= */
         function startParty() {
             const bgm = document.getElementById('bgMusic'), ptm = document.getElementById('partyMusic');
@@ -826,7 +915,7 @@ V  \
         function bananaJoin(e) { playSynthPop(e); setTimeout(() => window.open("https://discord.gg/68QNPJbbMu", "_blank"), 400); }
 
         /* =========================================
-           VI. DATA REFRESHERS (CHAT, TIMERS, MOON)
+           VII. DATA REFRESHERS (TIMERS, MOON)
            ========================================= */
         function updateTimers() {
             const now = new Date();
@@ -847,19 +936,6 @@ V  \
             calc(7, 25, 2005, 'sdAge', 'sdBdayCountdown');
         }
 
-        function updateChat() {
-            const feed = document.getElementById('chatFeed'); feed.innerHTML = '';
-            const slice = CHAT_LOGS.slice(state.chatIdx, state.chatIdx + 5);
-            slice.forEach(item => {
-                const d = document.createElement('div'), av = `https://api.dicebear.com/7.x/bottts/svg?seed=${item.name}`;
-                d.className = 'mirrorMsg';
-                d.innerHTML = `<img src="${av}" class="mirrorAvatar" style="border-color: var(--softPink); filter: hue-rotate(280deg);"><div class="mirrorText"><b>${item.name}</b>: ${item.msg}</div>`;
-                feed.appendChild(d);
-            });
-            state.chatIdx = (state.chatIdx + 5) % CHAT_LOGS.length;
-            feed.scrollTop = feed.scrollHeight;
-        }
-
         function calculateMoon() {
             const d = new Date(); let y = d.getFullYear(), m = d.getMonth() + 1, dy = d.getDate();
             if (m < 3) { y--; m += 12; } m++;
@@ -876,7 +952,7 @@ V  \
         }
 
         /* =========================================
-           VII. INITIALIZATION
+           VIII. INITIALIZATION
            ========================================= */
         window.onload = () => {
             // Particle Init
@@ -894,13 +970,12 @@ V  \
                 s.style.setProperty('--dist', (i * 3.5 + 25) + 'px'); s.style.animationDelay = (i * 0.04) + 's'; gWrap.appendChild(s);
             }
 
-            checkEnvironment(); updateTimers(); updateChat(); calculateMoon();
+            checkEnvironment(); updateTimers(); calculateMoon();
             
             // Intervals
             setInterval(checkEnvironment, 60000); 
             setInterval(cycleBackground, 15000);
             setInterval(updateTimers, 3600000); 
-            setInterval(updateChat, 30000);
         };
     </script>
 </body>
